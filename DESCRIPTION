@@ -10,7 +10,7 @@ Description: Tools for using different kinds of bootstrap
     data.  For now, only the rescaled bootstrap and the
     simple bootstrap are included.
 License: MIT
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppArmadillo
 Imports: Rcpp
 Suggests: knitr
 VignetteBuilder: knitr
