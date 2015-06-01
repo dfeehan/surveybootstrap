@@ -1,0 +1,16 @@
+Package: surveybootstrap
+Title: Tools for the bootstrap with survey data.
+Version: 0.0.1
+Authors@R: c(person("Dennis", middle="M.", "Feehan", email="dfeehan@princeton.edu", 
+                    role=c("aut", "cre")),
+             person("Matthew", middle="J.", "Salganik", email="mjs3@princeton.edu",
+                    role="ths"))
+Description: Tools for using different kinds of bootstrap
+    for estimating sampling variation using complex survey
+    data.  For now, only the rescaled bootstrap and the
+    simple bootstrap are included.
+License: MIT
+LinkingTo: Rcpp
+Imports: Rcpp
+Suggests: knitr
+VignetteBuilder: knitr
