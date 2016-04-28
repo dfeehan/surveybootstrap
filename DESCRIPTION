@@ -9,8 +9,9 @@ Description: Tools for using different kinds of bootstrap
     for estimating sampling variation using complex survey
     data.  For now, only the rescaled bootstrap and the
     simple bootstrap are included.
-License: MIT
+License: MIT + file LICENSE
 LinkingTo: Rcpp, RcppArmadillo
 Imports: Rcpp
-Suggests: knitr
+Suggests: knitr,
+    testthat
 VignetteBuilder: knitr
