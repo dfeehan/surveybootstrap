@@ -1,3 +1,5 @@
+
+
 #####################################################
 ##' draw RDS bootstrap resamples for one chain
 ##'
@@ -37,7 +39,7 @@ rds.boot.draw.chain <- function(chain, mm, dd, parent.trait, idvar="uid") {
 
     ## otherwise, if there are children, recursively get bootstrap
     ## draws for them
-    child.draws <- llply(chain$children,
+    child.draws <- plyr::llply(chain$children,
                          rds.boot.draw.chain,
                          mm=mm,
                          dd=dd,
@@ -81,7 +83,7 @@ rds.chain.boot.draws <- function(chains,
     traits <- mm$traits
 
     ## get the bootstrap resamples for each chain
-    res <- llply(chains,
+    res <- plyr::llply(chains,
                  function(this.chain) {
 
                      ## TODO -- should handle the case where there is
@@ -100,11 +102,11 @@ rds.chain.boot.draws <- function(chains,
     ## one for each repsondent, with one row for each bootstrap resample
     ## convert this into a list whose entries are dataframes, one for each
     ## bootstrap resample, and whose rows are respondents
-    res.byboot <- llply(res,
+    res.byboot <- plyr::llply(res,
                         function(this.chain.res) {
-                            by.rep <- llply(1:num.reps,
+                            by.rep <- plyr::llply(1:num.reps,
                                             function(this.rep.id) {
-                                                ldply(this.chain.res,
+                                                plyr::ldply(this.chain.res,
                                                       function(x) x[this.rep.id,])
                                             })
                             return(by.rep)
@@ -113,9 +115,9 @@ rds.chain.boot.draws <- function(chains,
     ## assemble the bootstrap resamples from each chain together
     ## to end up with a list whose entries are datasets, one for each bootstrap
     ## resample (across all chains)
-    res.dat <- llply(1:num.reps,
+    res.dat <- plyr::llply(1:num.reps,
                      function(this.rep.id) {
-                        ldply(res.byboot,
+                         plyr::ldply(res.byboot,
                               function(x) { 
                                   this.dat <- x[[this.rep.id]] 
                                   ## remove the .id column
@@ -165,19 +167,19 @@ rds.mc.boot.draws <- function(chains,
 
     traits <- mm$traits
 
-    all.data <- ldply(chains,
+    all.data <- plyr::ldply(chains,
                       chain.data)
 
     ## NB: only using traits that are nonmissing
     all.traits <- traits.to.string(all.data[,traits,drop=FALSE], traits)
     all.traits.str <- all.traits$traits
 
-    chain.sizes <- laply(chains,
+    chain.sizes <- plyr::laply(chains,
                          chain.size)
 
     num.chains <- length(chain.sizes)
 
-    res <- llply(1:num.reps,
+    res <- plyr::llply(1:num.reps,
                  function(this.rep) {
 
                      ## NB: an alternative would be do to the bootstrap this way,
@@ -217,4 +219,3 @@ rds.mc.boot.draws <- function(chains,
     return(res)
 
 }
-

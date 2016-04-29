@@ -1,3 +1,4 @@
+
 #####################################################
 ##' bootstrap.estimates
 ##'
@@ -41,7 +42,7 @@
 ##' @examples
 ##' \donttest{
 ##' # code goes here
-##' ...
+##' 
 ##' }
 bootstrap.estimates <- function(survey.data,
                                 survey.design,
@@ -99,7 +100,7 @@ bootstrap.estimates <- function(survey.data,
   boot.idx <- eval(boot.call, parent.frame())
 
   ## produce our estimate for each one
-  res <- llply(boot.idx,
+  res <- plyr::llply(boot.idx,
 
                function(this.rep) {
 

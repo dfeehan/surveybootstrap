@@ -1,10 +1,6 @@
-#####################################################
-## rescaled_bootstrap.
-##
-## code related to the rescaled bootstrap
 
 #####################################################
-##' rescaled.bootstrap.sample.cpp
+##' rescaled.bootstrap.sample
 ##'
 ##' C++ version: given a survey dataset and a description of the survey
 ##' design (ie, which combination of vars determines primary sampling
@@ -77,7 +73,7 @@ rescaled.bootstrap.sample <- function(survey.data,
   if (is.null(design$strata.formula)) {
     strata <- list(survey.data)
   } else {
-    strata <- dlply(survey.data, design$strata.formula, identity)
+    strata <- plyr::dlply(survey.data, design$strata.formula, identity)
   }
 
   ## get num.reps bootstrap resamples within each stratum,
@@ -87,7 +83,7 @@ rescaled.bootstrap.sample <- function(survey.data,
   ## this llply call returns a list, with one entry for each stratum
   ## each stratum's entry contains a list with the bootstrap resamples
   ## (see the note for the inner llply call below)
-  bs <- llply(strata,
+  bs <- plyr::llply(strata,
               function(stratum.data) {
 
                 ## (this part is written in c++)
@@ -111,7 +107,7 @@ rescaled.bootstrap.sample <- function(survey.data,
 
   bs.all <- do.call("rbind", bs)
 
-  res <- alply(bs.all[,-1],
+  res <- plyr::alply(bs.all[,-1],
                2,
                function(this_col) {
                    return(data.frame(index=bs.all[,1],
@@ -194,7 +190,7 @@ rescaled.bootstrap.sample.pureR <- function(survey.data,
   if (is.null(design$strata.formula)) {
     strata <- list(survey.data)
   } else {
-    strata <- dlply(survey.data, design$strata.formula, identity)
+    strata <- plyr::dlply(survey.data, design$strata.formula, identity)
   }
 
   ## get num.reps bootstrap resamples within each stratum,
@@ -204,7 +200,7 @@ rescaled.bootstrap.sample.pureR <- function(survey.data,
   ## this llply call returns a list, with one entry for each stratum
   ## each stratum's entry contains a list with the bootstrap resamples
   ## (see the note for the inner llply call below)
-  bs <- llply(strata,
+  bs <- plyr::llply(strata,
               function(stratum.data) {
 
                 ## figure out how many PSUs we have in our sample
@@ -223,7 +219,7 @@ rescaled.bootstrap.sample.pureR <- function(survey.data,
                 ## and with colums for 
                 ## the survey design variables, the .internal_id,
                 ## r.hi, and weight.scale
-                resamples <- llply(1:num.reps,
+                resamples <- plyr::llply(1:num.reps,
                                    ## for each bootstrap rep, this function returns
                                    function(rep) {
 
@@ -267,14 +263,14 @@ rescaled.bootstrap.sample.pureR <- function(survey.data,
               })
 
   # now reassemble each stratum...
-  res <- llply(1:num.reps,
+  res <- plyr::llply(1:num.reps,
                function(rep.idx) {
-                 this.rep <- ldply(bs,
+                 this.rep <- plyr::ldply(bs,
                                    function(this.stratum.samples) {
                                      return(this.stratum.samples[[rep.idx]])
                                    })
 
-                 this.rep <- rename(this.rep,
+                 this.rep <- plyr::rename(this.rep,
                                     c(".internal_id"="index"))
 
                  return(this.rep)
@@ -282,7 +278,4 @@ rescaled.bootstrap.sample.pureR <- function(survey.data,
 
   return(res)
 }
-
-
-
 

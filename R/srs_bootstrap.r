@@ -1,3 +1,4 @@
+
 #####################################################
 ##' srs.bootstrap.sample
 ##'
@@ -33,7 +34,7 @@ srs.bootstrap.sample <- function(survey.data,
 
   survey.data$.internal_id <- 1:nrow(survey.data)
 
-  res <- llply(1:num.reps,
+  res <- plyr::llply(1:num.reps,
                function(rep.idx) {
 
                  these.samples <- sample(1:nrow(survey.data),
@@ -50,5 +51,3 @@ srs.bootstrap.sample <- function(survey.data,
 
   return(res)
 }
-
-
