@@ -21,9 +21,6 @@
 ##' was resampled) and \code{weight.scale} (the factor by which to multiply the
 ##' sampling weights in the original dataset).
 ##'
-##' @details \code{survey.design} is not needed; it's included as an argument
-##' to make it easier to drop \code{srs.bootstrap.sample} into the place of
-##' other bootstrap functions, which do require information about the survey design
 ##' @export
 srs.bootstrap.sample <- function(survey.data,
                                  num.reps=1,

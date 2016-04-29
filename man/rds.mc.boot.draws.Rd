@@ -9,7 +9,7 @@ rds.mc.boot.draws(chains, mm, dd, num.reps)
 }
 \arguments{
 \item{chains}{a list with the chains constructed from the survey
-using \code{\link{make.chain}}}
+using \code{make.chain}}
 
 \item{mm}{the mixing model}
 
@@ -33,7 +33,7 @@ if you wish the bootstrap dataset to end up with
 variables from the original dataset other than the
 traits and degree, then you must specify this when
 you construct \code{dd} using the 
-'\code{\link{estimate.degree.distns}} function.
+'\code{estimate.degree.distns} function.
 
 TODO be sure to comment the broken-out trait variables
      (ie these could all be different from the originals)

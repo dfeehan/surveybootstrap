@@ -2,7 +2,7 @@
 % Please edit documentation in R/rescaled_bootstrap.r
 \name{rescaled.bootstrap.sample}
 \alias{rescaled.bootstrap.sample}
-\title{rescaled.bootstrap.sample.cpp}
+\title{rescaled.bootstrap.sample}
 \usage{
 rescaled.bootstrap.sample(survey.data, survey.design, parallel = FALSE,
   paropts = NULL, num.reps = 1)

@@ -7,11 +7,20 @@
 ##' @docType package
 ##' @name surveybootstrap
 ##' @aliases surveybootstrap package-surveybootstrap
-##' @import RcppArmadillo
+##' @import dplyr functional
 NULL
 
 ##' @useDynLib surveybootstrap
 ##' @importFrom Rcpp sourceCpp
+NULL
+
+##' @importFrom plyr llply
+##' @importFrom plyr .
+NULL
+
+##' @importFrom stringr str_match
+##' @importFrom stringr str_locate
+##' @importFrom stringr str_split
 NULL
 
 ##' MU284 population

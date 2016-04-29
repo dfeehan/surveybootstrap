@@ -64,7 +64,7 @@ OR\cr
 \examples{
 \donttest{
 # code goes here
-...
+
 }
 }
 

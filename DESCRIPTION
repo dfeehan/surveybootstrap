@@ -1,7 +1,7 @@
 Package: surveybootstrap
-Title: Tools for the bootstrap with survey data.
+Title: Tools for the bootstrap with survey data
 Version: 0.0.1
-Authors@R: c(person("Dennis", middle="M.", "Feehan", email="dfeehan@princeton.edu", 
+Authors@R: c(person("Dennis", middle="M.", "Feehan", email="feehan@berkeley.edu", 
                     role=c("aut", "cre")),
              person("Matthew", middle="J.", "Salganik", email="mjs3@princeton.edu",
                     role="ths"))
@@ -13,6 +13,11 @@ License: MIT + file LICENSE
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
     Rcpp
+Depends:
+    plyr,
+    dplyr,
+    functional,
+    stringr
 Suggests:
     knitr,
     testthat

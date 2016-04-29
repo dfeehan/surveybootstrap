@@ -1,14 +1,11 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
-//#include <Rcpp.h>
-//#include <RcppArmadillo.h>
 #include <RcppArmadilloExtensions/sample.h>
 
 using namespace Rcpp;
 
 NumericMatrix resample_stratum(CharacterVector clusters, int B);
 
-//std::map<std::string, int> resample_with_zeros(CharacterVector cluster_names, int m_h);
 void resample_with_zeros(std::map<std::string, int> &counts,
                          CharacterVector cluster_names,
                          int m_h);

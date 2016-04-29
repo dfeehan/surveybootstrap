@@ -147,14 +147,14 @@ rds.chain.boot.draws <- function(chains,
 ##' variables from the original dataset other than the
 ##' traits and degree, then you must specify this when
 ##' you construct \code{dd} using the 
-##' '\code{\link{estimate.degree.distns}} function.
+##' '\code{estimate.degree.distns} function.
 ##'
 ##'
 ##' TODO be sure to comment the broken-out trait variables
 ##'      (ie these could all be different from the originals)
 ##'
 ##' @param chains a list with the chains constructed from the survey
-##' using \code{\link{make.chain}}
+##' using \code{make.chain}
 ##' @param mm the mixing model
 ##' @param dd the degree distributions
 ##' @param num.reps the number of bootstrap resamples we want

@@ -65,7 +65,6 @@ rescaled.bootstrap.sample <- function(survey.data,
 
   ## create a single variable with an id number for each PSU
   ## (we need this to use the C++ code, below)
-  ## TODO - check this more; I believe it works
   survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
 
   ## if no strata are specified, enclose the entire survey all in
