@@ -10,15 +10,11 @@ using namespace Rcpp;
 NumericMatrix resample_stratum(CharacterVector clusters, int B);
 RcppExport SEXP surveybootstrap_resample_stratum(SEXP clustersSEXP, SEXP BSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< CharacterVector >::type clusters(clustersSEXP );
-        Rcpp::traits::input_parameter< int >::type B(BSEXP );
-        NumericMatrix __result = resample_stratum(clusters, B);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< CharacterVector >::type clusters(clustersSEXP);
+    Rcpp::traits::input_parameter< int >::type B(BSEXP);
+    __result = Rcpp::wrap(resample_stratum(clusters, B));
+    return __result;
 END_RCPP
 }

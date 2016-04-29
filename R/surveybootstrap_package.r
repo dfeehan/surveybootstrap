@@ -7,7 +7,7 @@
 ##' @docType package
 ##' @name surveybootstrap
 ##' @aliases surveybootstrap package-surveybootstrap
-##' @import Rcpp RcppArmadillo
+##' @import RcppArmadillo
 NULL
 
 ##' @useDynLib surveybootstrap

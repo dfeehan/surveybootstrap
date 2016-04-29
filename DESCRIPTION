@@ -11,7 +11,10 @@ Description: Tools for using different kinds of bootstrap
     simple bootstrap are included.
 License: MIT + file LICENSE
 LinkingTo: Rcpp, RcppArmadillo
-Imports: Rcpp
-Suggests: knitr,
+Imports:
+    Rcpp
+Suggests:
+    knitr,
     testthat
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1
