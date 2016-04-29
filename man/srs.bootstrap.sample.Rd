@@ -33,9 +33,4 @@ units, and which combination of vars determines strata), take
 a bunch of bootstrap samples under a simple random sampling
 (with repetition) scheme
 }
-\details{
-\code{survey.design} is not needed; it's included as an argument
-to make it easier to drop \code{srs.bootstrap.sample} into the place of
-other bootstrap functions, which do require information about the survey design
-}
 
