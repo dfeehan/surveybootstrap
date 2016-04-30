@@ -2,7 +2,6 @@
 
 ^\.travis\.yml$
 data/scratch
-vignettes/draft
 ^.*-dev\\.R$
 ^.*-dev\\.r$
 mu284-surveys-dev.r
@@ -10,3 +9,7 @@ surveybootstrap.Rproj
 var-parallel-dev.r
 var-prof-dev.r
 cran-comments.md
+
+
+vignettes/draft
+vignettes/
