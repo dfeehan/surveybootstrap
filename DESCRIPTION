@@ -1,9 +1,11 @@
 Package: surveybootstrap
 Title: Tools for the Bootstrap with Survey Data
 Version: 0.0.1
-Authors@R: c(person("Dennis", middle="M.", "Feehan", email="feehan@berkeley.edu", 
+Authors@R: c(person(given="Dennis", middle="M.", family="Feehan", 
+                    email="feehan@berkeley.edu", 
                     role=c("aut", "cre")),
-             person("Matthew", middle="J.", "Salganik", email="mjs3@princeton.edu",
+             person(given="Matthew", middle="J.", family="Salganik", 
+                    email="mjs3@princeton.edu",
                     role="ths"))
 Description: Tools for using different kinds of bootstrap
     for estimating sampling variation using complex survey
