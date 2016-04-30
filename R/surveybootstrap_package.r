@@ -7,7 +7,7 @@
 ##' @docType package
 ##' @name surveybootstrap
 ##' @aliases surveybootstrap package-surveybootstrap
-##' @import dplyr functional
+##' @import dplyr functional stats
 NULL
 
 ##' @useDynLib surveybootstrap
