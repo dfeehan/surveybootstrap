@@ -7,7 +7,7 @@
 ##' @docType package
 ##' @name surveybootstrap
 ##' @aliases surveybootstrap package-surveybootstrap
-##' @import dplyr functional stats
+##' @import dplyr functional
 NULL
 
 ##' @useDynLib surveybootstrap
@@ -21,6 +21,14 @@ NULL
 ##' @importFrom stringr str_match
 ##' @importFrom stringr str_locate
 ##' @importFrom stringr str_split
+NULL
+
+##' @importFrom stats rmultinom
+##' @importFrom stats setNames
+##' @importFrom stats terms
+##' @importFrom stats update
+##' @importFrom stats update.formula
+##' @importFrom stats xtabs
 NULL
 
 ##' MU284 population
