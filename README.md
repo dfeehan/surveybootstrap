@@ -11,6 +11,7 @@ sample designs.
 For more information on the bootstrap for surveys, see
 - Rao, JNK and Wu, CFJ (1988). Resampling inference with complex survey data. Journal of the American Statistical Association, 83(401):231–241.
 - Rao, J., Wu, C., and Yue, K. (1992). Some recent work on resampling methods for complex surveys. Survey Methodology, 18(2):209–217.
+- Rust, K. and Rao, J. (1996). [Variance estimation for complex surveys using replication techniques.](http://dx.doi.org/10.1177/096228029600500305) Statistical Methods in Medical Research, 5(3):283-310.
 - Efron, B. and Tibshirani, R. J. (1993). An introduction to the bootstrap. Chapman and Hall/CRC.
 - Rust, K. and Rao, J. (1996). Variance estimation for complex surveys using replication techniques. Statistical Methods in Medical Research, 5(3):283 –310.
 
