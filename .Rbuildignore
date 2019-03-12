@@ -13,3 +13,5 @@ cran-comments.md
 
 vignettes/draft
 vignettes/
+^.*\.Rproj$
+^\.Rproj\.user$
