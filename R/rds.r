@@ -71,7 +71,7 @@ unparse.trait <- function(trait.string, names, sep="\\.") {
         sep <- "\\."
     }
 
-    vals <- str_split(trait.string, sep)
+    vals <- stringr::str_split(trait.string, sep)
 
     vals <- plyr::ldply(vals, as.numeric)
 
@@ -132,7 +132,7 @@ estimate.degree.distns <- function(survey.data,
   if (! is.null(keep.vars)) {
       ## TODO -- should eventually make grabbing these others vars more robust
       other.vars <- survey.data[st$used.idx, keep.vars]
-      deg.dat <- data.frame(trait=st$traits, 
+      deg.dat <- data.frame(trait=st$traits,
                             degree=degs[st$used.idx],
                             other.vars)
   } else {
