@@ -61,10 +61,10 @@ OR\cr
         summary.fn, more?}
 }
 }
+
 \examples{
 \donttest{
 # code goes here
 
 }
 }
-

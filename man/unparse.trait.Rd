@@ -28,4 +28,3 @@ combined traits and explodes it back into
 several variables
 }
 \keyword{internal}
-

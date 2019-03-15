@@ -33,4 +33,3 @@ units, and which combination of vars determines strata), take
 a bunch of bootstrap samples under a simple random sampling
 (with repetition) scheme
 }
-

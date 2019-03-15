@@ -17,4 +17,3 @@ the chain
 count the total number of respondents in the chain
 and return it
 }
-

@@ -21,4 +21,3 @@ in the vector is not guaranteed)
 get all of the values of the given variable
 found among members of a chain
 }
-

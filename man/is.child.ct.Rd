@@ -22,4 +22,3 @@ of the code that relies on the ID format used by the
 Curitiba study (TODO CITE); by modifying this function,
 it shold be possible to adapt this code to another study
 }
-

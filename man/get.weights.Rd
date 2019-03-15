@@ -21,4 +21,3 @@ this is the same as get.var with the default value set to 1
 instead of NA
 }
 \keyword{internal}
-

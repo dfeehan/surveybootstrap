@@ -15,4 +15,3 @@ the maximum depth of the chain
 \description{
 get the height (maximum depth) of a chain
 }
-

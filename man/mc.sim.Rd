@@ -24,4 +24,3 @@ at a specified state
 \details{
 this uses the markov model produced by estimate.mixing
 }
-

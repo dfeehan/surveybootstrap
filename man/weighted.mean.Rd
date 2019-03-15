@@ -22,4 +22,3 @@ given a vector of values and a vector of weights, compute the
 weighted mean
 }
 \keyword{internal}
-

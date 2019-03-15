@@ -9,4 +9,3 @@ Data used in unit tests for variance estimation.
 See TODO-Sarndal TODO-sampling package
 TODO-doc describing unit tests
 }
-

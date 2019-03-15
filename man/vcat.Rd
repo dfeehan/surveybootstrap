@@ -15,4 +15,3 @@ vcat(verbose = TRUE, ...)
 only prints things out in verbose mode
 }
 \keyword{internal}
-

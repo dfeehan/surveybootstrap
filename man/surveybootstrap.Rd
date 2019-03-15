@@ -2,8 +2,8 @@
 % Please edit documentation in R/surveybootstrap_package.r
 \docType{package}
 \name{surveybootstrap}
-\alias{package-surveybootstrap}
 \alias{surveybootstrap}
+\alias{package-surveybootstrap}
 \alias{surveybootstrap-package}
 \title{Survey bootstrap variance estimators}
 \description{
@@ -11,4 +11,3 @@
 using network reporting techniques. It includes estimators appropriate for
 the simple boostrap and the rescaled bootstrap.
 }
-

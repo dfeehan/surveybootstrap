@@ -32,4 +32,3 @@ supporting online material for Weir et al 2012
 (TODO PROPER CITE) to take bootstrap resamples
 of one chain from an RDS dataset
 }
-

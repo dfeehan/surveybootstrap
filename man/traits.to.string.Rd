@@ -28,4 +28,3 @@ this is a helper function that is useful when we wish
 to make several traits into one variable
 }
 \keyword{internal}
-

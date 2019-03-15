@@ -43,4 +43,3 @@ return a degree drawn uniformly at random from among
 the observed degrees of respondents with trait "0.0"
 and then two degrees from respondents with trait "0.1"
 }
-

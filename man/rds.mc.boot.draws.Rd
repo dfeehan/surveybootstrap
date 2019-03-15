@@ -38,4 +38,3 @@ you construct \code{dd} using the
 TODO be sure to comment the broken-out trait variables
      (ie these could all be different from the originals)
 }
-

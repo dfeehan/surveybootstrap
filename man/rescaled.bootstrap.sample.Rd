@@ -58,4 +58,3 @@ in Rao and Wu (1988) and Rust and Rao (1996).
 where weight is the variable with the survey weights and psu
 is the variable denoting the primary sampling unit
 }
-

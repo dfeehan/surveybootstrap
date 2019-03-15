@@ -38,4 +38,3 @@ on the parents (in many cases the same individuals),
 and a set of relevant traits,
 estimate mixing parameters and return a markov model
 }
-

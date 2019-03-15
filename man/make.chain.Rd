@@ -23,4 +23,3 @@ info
 text
 TODO assumes that the chain is a tree (no loops)
 }
-
