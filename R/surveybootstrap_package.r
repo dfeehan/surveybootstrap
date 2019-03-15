@@ -7,28 +7,12 @@
 ##' @docType package
 ##' @name surveybootstrap
 ##' @aliases surveybootstrap package-surveybootstrap
-##' @import dplyr functional
+##' @import dplyr
+##' @importFrom stats rmultinom setNames terms update update.formula xtabs
 NULL
 
 ##' @useDynLib surveybootstrap
 ##' @importFrom Rcpp sourceCpp
-NULL
-
-##' @importFrom plyr llply
-##' @importFrom plyr .
-NULL
-
-##' @importFrom stringr str_match
-##' @importFrom stringr str_locate
-##' @importFrom stringr str_split
-NULL
-
-##' @importFrom stats rmultinom
-##' @importFrom stats setNames
-##' @importFrom stats terms
-##' @importFrom stats update
-##' @importFrom stats update.formula
-##' @importFrom stats xtabs
 NULL
 
 ##' MU284 population

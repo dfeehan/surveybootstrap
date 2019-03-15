@@ -257,7 +257,7 @@ estimate.mixing <- function(survey.data, parent.data, traits) {
 
                       return(list(trans.probs=probs,
                                   trans.fn=function() {
-                                    draw <- rmultinom(1, 1, probs)
+                                    draw <- stats::rmultinom(1, 1, probs)
                                     return(names(probs)[as.logical(draw)])
                                   }))
                     })
@@ -331,7 +331,7 @@ mc.sim <- function(mm, start, n) {
 ##' and FALSE otherwise
 is.child.ct <- function(id, seed.id) {
 
-    res <- str_locate(paste(id), paste(seed.id))
+    res <- stringr::str_locate(paste(id), paste(seed.id))
 
     if (! any(is.na(res)) &&
         res[1] == 1 &&
