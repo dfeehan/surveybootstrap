@@ -15,16 +15,18 @@ Description: Tools for using different kinds of bootstrap
 License: MIT + file LICENSE
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
-    Rcpp
-Depends:
-    plyr,
+    Rcpp,
+    stringr,
     dplyr,
     functional,
-    stringr,
+    plyr,
     purrr,
     tidyverse,
-    magrittr
+    magrittr,
+    functional
+Depends:
 Suggests:
     knitr,
     testthat
 RoxygenNote: 6.1.1
+Encoding: UTF-8
