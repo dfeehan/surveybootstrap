@@ -59,7 +59,8 @@ rescaled.bootstrap.weights <- function(survey.data,
   # NB: I think this could be faster if we bind_cols instead of using left_join.
   #     But that approach relies on the row order being stable; I think it is now, but it seems like
   #     the code will be more fragile if we make that assumption here
-  dfres <- res %>% purrr::reduce(left_join, by='caseid')
+  #dfres <- res %>% purrr::reduce(left_join, by='caseid')
+  dfres <- res %>% purrr::reduce(left_join, by=idvar)
 
   return(dfres)
 }
