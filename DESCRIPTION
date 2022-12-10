@@ -1,6 +1,6 @@
 Package: surveybootstrap
 Title: Tools for the Bootstrap with Survey Data
-Version: 0.0.2.9000
+Version: 0.0.3.9000
 Authors@R: c(person(given=c("Dennis", "M."), 
                     family="Feehan", 
                     email="feehan@berkeley.edu", 

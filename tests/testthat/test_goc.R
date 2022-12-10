@@ -32,14 +32,14 @@ mm <- estimate.mixing(survey.data, parent.data, c("use.crack"))
 ## state, we should end up in neighboring states in proportion
 ## to the transition probabilities
 this.state <- mm$states[["0"]]
-tmp <- laply(1:10000, function(x) { this.state$trans.fn() })
+tmp <- plyr::laply(1:10000, function(x) { this.state$trans.fn() })
 tmptab <- as.numeric(table(tmp)/sum(table(tmp)))
 expect_that(tmptab, equals(as.vector(this.state$trans.probs),
                            tolerance=.01, scale=1),
              label="trans.fn from state '0'")
 
 this.state <- mm$states[["1"]]
-tmp <- laply(1:10000, function(x) { this.state$trans.fn() })
+tmp <- plyr::laply(1:10000, function(x) { this.state$trans.fn() })
 tmptab <- as.numeric(table(tmp)/sum(table(tmp)))
 expect_that(tmptab, equals(as.vector(this.state$trans.probs),
                            tolerance=.01, scale=1),
@@ -85,8 +85,8 @@ dd <- estimate.degree.distns(survey.data,
 tt <- traits.to.string(survey.data, these.traits)
 survey.data$tt[tt$used.idx] <- tt$traits
 
-dmeans <- ddply(survey.data,
-                .(tt),
+dmeans <- plyr::ddply(survey.data,
+                plyr::.(tt),
                 summarise,
                 mean.degree=mean(netsize.5.bss))
 

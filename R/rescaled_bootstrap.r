@@ -65,7 +65,11 @@ rescaled.bootstrap.sample <- function(survey.data,
 
   ## create a single variable with an id number for each PSU
   ## (we need this to use the C++ code, below)
-  survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
+  #survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
+  survey.data <- survey.data %>%
+    group_by(!!!psu.vars) %>%
+    mutate(.cluster_id = cur_group_id()) %>%
+    ungroup()
 
   ## if no strata are specified, enclose the entire survey all in
   ## one stratum
@@ -92,7 +96,7 @@ rescaled.bootstrap.sample <- function(survey.data,
                 colnames(res) <- paste0("rep.", 1:ncol(res))
                 res <- cbind("index"=stratum.data$.internal_id,
                              res)
-                
+
                 return(res)
               })
 
@@ -122,7 +126,7 @@ rescaled.bootstrap.sample <- function(survey.data,
 ##'
 ##' (this is the pure R version; it has been supplanted by
 ##'  \code{rescaled.bootstrap.sample}, which is partially written in C++)
-##' 
+##'
 ##' given a survey dataset and a description of the survey
 ##' design (ie, which combination of vars determines primary sampling
 ##' units, and which combination of vars determines strata), take
@@ -214,8 +218,8 @@ rescaled.bootstrap.sample.pureR <- function(survey.data,
 
                 ## this llply call returns a list, with one entry for each bootstrap rep.
                 ## each list entry has a data frame with the same number of rows as
-                ## stratum.data, 
-                ## and with colums for 
+                ## stratum.data,
+                ## and with colums for
                 ## the survey design variables, the .internal_id,
                 ## r.hi, and weight.scale
                 resamples <- plyr::llply(1:num.reps,

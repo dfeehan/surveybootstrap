@@ -43,10 +43,10 @@ rbsfn <- functional::Curry(bootstrap.estimates,
                            weights="sample_weight",
                            bootstrap.fn="rescaled.bootstrap.sample")
 
-test.boot <- llply(MU284.surveys,
+test.boot <- plyr::llply(MU284.surveys,
                    function(svy) { do.call("rbind", rbsfn(survey.data=svy)) })
 
-test.boot.summ <- ldply(test.boot,
+test.boot.summ <- plyr::ldply(test.boot,
                         summarize,
                         mean.TS82.hat=mean(TS82.hat),
                         mean.R.RMT85.P85.hat=mean(R.RMT85.P85.hat),
@@ -58,9 +58,9 @@ test.boot.summ <- ldply(test.boot,
 ## we'd expect different tolerances for different qois, i think.
 qoi <- colnames(test.boot.summ)
 
-l_ply(qoi,
+plyr::l_ply(qoi,
       function(this.qoi) {
-          l_ply(1:nrow(test.boot.summ),
+          plyr::l_ply(1:nrow(test.boot.summ),
                 function(idx) {
                     expect_that(test.boot.summ[idx,this.qoi],
                                 equals(MU284.boot.res.summ[idx,this.qoi],

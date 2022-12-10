@@ -147,7 +147,7 @@ estimate.degree.distns <- function(survey.data,
   trait <- NULL
 
   deg.distns <- plyr::dlply(deg.dat,
-                      .(trait),
+                      plyr::.(trait),
                       identity)
 
   deg.fns <- unlist(plyr::llply(deg.distns,
@@ -245,7 +245,7 @@ estimate.mixing <- function(survey.data, parent.data, traits) {
   ## return a fn which will give us the next step in the chain from each state
   ## based on these transition probabilities
   res$states <- plyr::dlply(res$mixing.df,
-                    .(parent.trait),
+                    plyr::.(parent.trait),
                     function(this.trait) {
 
                       if (all(this.trait$Freq == 0)) {
