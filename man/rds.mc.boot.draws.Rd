@@ -35,6 +35,7 @@ traits and degree, then you must specify this when
 you construct \code{dd} using the 
 '\code{estimate.degree.distns} function.
 
+
 TODO be sure to comment the broken-out trait variables
      (ie these could all be different from the originals)
 }

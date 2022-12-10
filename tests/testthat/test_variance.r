@@ -34,6 +34,19 @@ load("mu284.RData")
 ##M <- 1000
 M <- 2000
 
+MU284.estimator.fn <- function(survey.data, weights) {
+  survey.data$weight <- weights
+
+  res <- plyr::summarise(survey.data,
+                         TS82.hat=sum(S82*weight),
+                         R.RMT85.P85.hat=sum(RMT85*weight)/sum(P85*weight))
+  return(res)
+}
+
+MU284.estimator.summary.fn <- function(res) {
+  plyr::ldply(res, identity)
+}
+
 context(paste0("variance estimators - rescaled bootstrap - correctness (M=", M, ")"))
 
 rbsfn <- functional::Curry(bootstrap.estimates,
@@ -47,7 +60,7 @@ test.boot <- plyr::llply(MU284.surveys,
                    function(svy) { do.call("rbind", rbsfn(survey.data=svy)) })
 
 test.boot.summ <- plyr::ldply(test.boot,
-                        summarize,
+                        plyr::summarize,
                         mean.TS82.hat=mean(TS82.hat),
                         mean.R.RMT85.P85.hat=mean(R.RMT85.P85.hat),
                         sd.TS82.hat=sd(TS82.hat),

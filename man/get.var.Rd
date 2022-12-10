@@ -15,13 +15,6 @@ get.var(survey.data, var, default = NA)
 
 \item{default}{the default value to fill in if the variable
 is not found}
-
-\item{survey.data}{the survey dataset}
-
-\item{var}{either NULL, a column name, or a vector of values}
-
-\item{default}{the default value to fill in if the variable
-is not found}
 }
 \value{
 a vector of values whose length is the same as the

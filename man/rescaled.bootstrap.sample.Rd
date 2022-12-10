@@ -4,8 +4,13 @@
 \alias{rescaled.bootstrap.sample}
 \title{rescaled.bootstrap.sample}
 \usage{
-rescaled.bootstrap.sample(survey.data, survey.design, parallel = FALSE,
-  paropts = NULL, num.reps = 1)
+rescaled.bootstrap.sample(
+  survey.data,
+  survey.design,
+  parallel = FALSE,
+  paropts = NULL,
+  num.reps = 1
+)
 }
 \arguments{
 \item{survey.data}{the dataset to use}

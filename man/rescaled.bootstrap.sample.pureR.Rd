@@ -4,8 +4,13 @@
 \alias{rescaled.bootstrap.sample.pureR}
 \title{rescaled.bootstrap.sample.pureR}
 \usage{
-rescaled.bootstrap.sample.pureR(survey.data, survey.design,
-  parallel = FALSE, paropts = NULL, num.reps = 1)
+rescaled.bootstrap.sample.pureR(
+  survey.data,
+  survey.design,
+  parallel = FALSE,
+  paropts = NULL,
+  num.reps = 1
+)
 }
 \arguments{
 \item{survey.data}{the dataset to use}

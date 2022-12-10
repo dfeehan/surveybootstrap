@@ -4,8 +4,13 @@
 \alias{srs.bootstrap.sample}
 \title{srs.bootstrap.sample}
 \usage{
-srs.bootstrap.sample(survey.data, num.reps = 1, parallel = FALSE,
-  paropts = NULL, ...)
+srs.bootstrap.sample(
+  survey.data,
+  num.reps = 1,
+  parallel = FALSE,
+  paropts = NULL,
+  ...
+)
 }
 \arguments{
 \item{survey.data}{the dataset to use}

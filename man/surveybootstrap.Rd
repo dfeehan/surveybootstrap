@@ -4,7 +4,6 @@
 \name{surveybootstrap}
 \alias{surveybootstrap}
 \alias{package-surveybootstrap}
-\alias{surveybootstrap-package}
 \title{Survey bootstrap variance estimators}
 \description{
 \code{surveybootstrap} has methods for analyzing data that were collected

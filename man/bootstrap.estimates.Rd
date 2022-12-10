@@ -4,9 +4,19 @@
 \alias{bootstrap.estimates}
 \title{bootstrap.estimates}
 \usage{
-bootstrap.estimates(survey.data, survey.design, bootstrap.fn, estimator.fn,
-  num.reps, weights = NULL, ..., summary.fn = NULL, verbose = TRUE,
-  parallel = FALSE, paropts = NULL)
+bootstrap.estimates(
+  survey.data,
+  survey.design,
+  bootstrap.fn,
+  estimator.fn,
+  num.reps,
+  weights = NULL,
+  ...,
+  summary.fn = NULL,
+  verbose = TRUE,
+  parallel = FALSE,
+  paropts = NULL
+)
 }
 \arguments{
 \item{survey.data}{the dataset to use}

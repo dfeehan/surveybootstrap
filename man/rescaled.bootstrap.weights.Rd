@@ -4,9 +4,16 @@
 \alias{rescaled.bootstrap.weights}
 \title{rescaled.bootstrap.weights}
 \usage{
-rescaled.bootstrap.weights(survey.data, survey.design, num.reps,
-  weights = NULL, idvar, verbose = TRUE, parallel = FALSE,
-  paropts = NULL)
+rescaled.bootstrap.weights(
+  survey.data,
+  survey.design,
+  num.reps,
+  weights = NULL,
+  idvar,
+  verbose = TRUE,
+  parallel = FALSE,
+  paropts = NULL
+)
 }
 \arguments{
 \item{survey.data}{the dataset to use}
