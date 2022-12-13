@@ -14,7 +14,7 @@
 ##' nothing (in which case, the weights should default to 1 for each
 ##' row in the dataset). for the special case of getting weights, look
 ##' at the curried fn get.weights (right below)
-##' 
+##'
 ##' @param survey.data the survey dataset
 ##' @param var either NULL, a column name, or a vector of values
 ##' @param default the default value to fill in if the variable
@@ -28,11 +28,11 @@ get.var <- function(survey.data, var, default=NA) {
   ## weights will default to 1 for everyone, unless the user specified
   ## a weights variable
   if (is.null(var)) {
-    
+
     return(rep(default, nrow(survey.data)))
-    
+
   } else if (length(var) == 1) {
-  
+
     ## ... otherwise, see if the weights variable is referring
     ## to a column of the dataframe; try to
     ## grab sampling weights from survey dataframe
@@ -58,17 +58,17 @@ get.var <- function(survey.data, var, default=NA) {
     }
 
     return(var)
-    
+
   } else if (is.numeric(var) & length(var) == nrow(survey.data)) {
 
     ## if var a vector with one entry per row, then these
     ## are our values
     return(var)
-  } else {    
+  } else {
     stop("can't determine what the values should be for ", var, ".")
   }
-    
-  
+
+
 }
 
 ##########################################################################
@@ -84,23 +84,23 @@ get.weights <- functional::Curry(get.var, default=1)
 ##' grab a function based on its name
 ##'
 ##' helper to grab a fn that is passed in as an argument
-##' 
+##'
 ##' this is based on Hadley Wickham's response to an SO
-##' post: \url{http://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions}
+##' post: \url{https://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions}
 ##' with some minor modifications
 ##'
 ##' @param fn the function to search for
 ##' @param env the environment to start searching in
 ##' @return fn, if fn is already a function; otherwise, the first function found
 ##'         in env or one of its parents whose name is fn
-##' @keywords internal 
+##' @keywords internal
 get.fn <- function(fn, env = parent.frame()) {
 
     ## base case: fn is already a function
     if (is.function(fn)) {
       return(fn)
     }
-  
+
     ## base case: nothing left to search through
     if (identical(env, emptyenv())) {
         stop("Could not find function ", fn, "!")
