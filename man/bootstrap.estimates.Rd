@@ -59,10 +59,8 @@ this function contains the core of the rescaled bootstrap
 method for estimating uncertainty in our estimates
 it should be designed so that it can be passed in to
 estimation functions as an argument\cr
-OR\cr
-\cr
 }
-\section{TODO}{
+\section{Wishlist / TODO}{
 
 \itemize{
   \item{estimator.fn/bootstrap.fn and summary.fn are treated differently
