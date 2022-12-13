@@ -227,7 +227,7 @@ vcat <- function(verbose=TRUE, ...) {
 ##' @keywords internal
 parse_design <- function(formula) {
 
-  ## see http://stackoverflow.com/questions/10224805/how-to-select-a-part-of-formula-in-formula-in-r
+  ## see https://stackoverflow.com/questions/10224805/how-to-select-a-part-of-formula-in-formula-in-r
   ## for some helpful info
 
   psu.formula <- formula
