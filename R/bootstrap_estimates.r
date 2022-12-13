@@ -6,9 +6,8 @@
 ##' method for estimating uncertainty in our estimates
 ##' it should be designed so that it can be passed in to
 ##' estimation functions as an argument\cr
-##' OR\cr
-##' \cr
-##' @section TODO:
+##'
+##' @section Wishlist / TODO:
 ##' \itemize{
 ##'   \item{estimator.fn/bootstrap.fn and summary.fn are treated differently
 ##'         (one expects characters, one expects an actual fn. fix!)}
@@ -42,7 +41,7 @@
 ##' @examples
 ##' \donttest{
 ##' # code goes here
-##' 
+##'
 ##' }
 bootstrap.estimates <- function(survey.data,
                                 survey.design,
@@ -72,7 +71,7 @@ bootstrap.estimates <- function(survey.data,
                         names(boot.call),
                         0L)
   boot.call <- boot.call[c(1,boot.arg.idx)]
-  
+
   boot.call[[1]] <- get.fn(bootstrap.fn)
 
   ## also build up a call to obtain an estimate from the data
