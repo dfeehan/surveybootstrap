@@ -13,19 +13,19 @@ rescaled.bootstrap.sample(
 )
 }
 \arguments{
-\item{survey.data}{the dataset to use}
+\item{survey.data}{The dataset to use}
 
-\item{survey.design}{a formula describing the design of the survey (see below - TODO)}
+\item{survey.design}{A formula describing the design of the survey (see Details)}
 
-\item{parallel}{if TRUE, use parallelization (via \code{plyr})}
+\item{parallel}{If \code{TRUE}, use parallelization (via \code{plyr})}
 
-\item{paropts}{an optional list of arguments passed on to \code{plyr} to control
+\item{paropts}{An optional list of arguments passed on to \code{plyr} to control
 details of parallelization}
 
-\item{num.reps}{the number of bootstrap replication samples to draw}
+\item{num.reps}{The number of bootstrap replication samples to draw}
 }
 \value{
-a list with \code{num.reps} entries. each entry is a dataset which
+A list with \code{num.reps} entries. Each entry is a dataset which
 has at least the variables \code{index} (the row index of the original
 dataset that was resampled) and \code{weight.scale}
 (the factor by which to multiply the sampling weights
@@ -36,9 +36,22 @@ Given a survey dataset and a description of the survey
 design (ie, which combination of variables determines primary sampling
 units, and which combination of variables determines strata), take
 a bunch of bootstrap samples for the rescaled bootstrap estimator
-(see, eg, Rust and Rao 1996).
+(see Details).
 }
 \details{
+\code{survey.design} is a formula of the form
+
+\code{weight ~ psu_vars + strata(strata_vars)}
+
+where:
+\itemize{
+\item \code{weight} is the variable with the survey weights
+\item \code{psu_vars} has the form \code{psu_v1 + psu_v2 + ...}, where primary
+sampling units (PSUs) are determined by \code{psu_v1}, etc
+\item \code{strata_vars} has the form \code{strata_v1 + strata_v2 + ...}, which
+determine strata
+}
+
 Note that we assume that the formula uniquely specifies PSUs.
 This will always be true if the PSUs were selected without replacement.
 If they were selected with replacement, then it will be necessary
@@ -59,10 +72,15 @@ We always take m_i = n_i - 1, according to the advice presented
 in Rao and Wu (1988) and Rust and Rao (1996).
 
 (This is a C++ version; a previous version, written in pure R,
-is called \code{escaled.bootstrap.sample.pureR})
+is called \code{\link[=rescaled.bootstrap.sample.pureR]{rescaled.bootstrap.sample.pureR()}} )
 
-\code{survey.design} is a formula of the form\cr
-weight ~ psu_vars + strata(strata_vars),
-where weight is the variable with the survey weights and psu
-is the variable denoting the primary sampling unit
+References:
+\itemize{
+\item Rust, Keith F., and J. N. K. Rao. "Variance estimation for complex surveys
+using replication techniques." \emph{Statistical methods in medical research}
+5.3 (1996): 283-310.
+\item Rao, Jon NK, and C. F. J. Wu. "Resampling inference with complex survey
+data." \emph{Journal of the American Statistical Association}
+83.401 (1988): 231-241.
+}
 }
