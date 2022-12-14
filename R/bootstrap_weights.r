@@ -22,8 +22,8 @@
 ##' @details
 ##' The formula describing the survey design should have the form
 ##' `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`,
-##' where psu_v1, ... are the variables identifying primary sampling units (PSUs)
-##' and strata_v1, ... identifies the strata
+##' where `psu_v1, ...` are the variables identifying primary sampling units (PSUs)
+##' and `strata_v1, ...` identify the strata
 ##'
 ##' @export
 ##' @examples
