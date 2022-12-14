@@ -9,28 +9,19 @@
 
 
 ##########################################################################
-##' get the weights column from a dataframe
+##' Grab a function based on its name
 ##'
-##' this is the same as get.var with the default value set to 1
-##' instead of NA
-##' @param ... (this is a function curried from `get.var`)
-##' @keywords internal
-get.weights <- functional::Curry(get.var, default=1)
-
-##########################################################################
-##' grab a function based on its name
+##' Helper to grab a function that is passed in as an argument
 ##'
-##' helper to grab a fn that is passed in as an argument
-##'
-##' this is based on Hadley Wickham's response to an SO
+##' This is based on Hadley Wickham's response to an SO
 ##' post:
-##' https://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions
+##' <https://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions>
 ##' with some minor modifications
 ##'
-##' @param fn the function to search for
-##' @param env the environment to start searching in
-##' @return fn, if fn is already a function; otherwise, the first function found
-##'         in env or one of its parents whose name is fn
+##' @param fn The function to search for
+##' @param env The environment to start searching in
+##' @return `fn`, if `fn` is already a function; otherwise, the first function found
+##'         in env or one of its parents whose name is `fn`
 ##' @keywords internal
 get.fn <- function(fn, env = parent.frame()) {
 
@@ -58,21 +49,21 @@ get.fn <- function(fn, env = parent.frame()) {
 }
 
 ##########################################################################
-##' get a variable from a dataframe or vector
+##' Get a variable from a dataframe or vector
 ##'
-##' this function was written because a few of the estimator functions
+##' This function was written because a few of the estimator functions
 ##' need to use weights, and there are several cases to handle:
 ##' the user could pass in a column name, a vector of weights, or
 ##' nothing (in which case, the weights should default to 1 for each
-##' row in the dataset). for the special case of getting weights, look
-##' at the curried fn get.weights (right below)
+##' row in the dataset). For the special case of getting weights, look
+##' at the curried function [get.weights()]
 ##'
-##' @param survey.data the survey dataset
-##' @param var either NULL, a column name, or a vector of values
-##' @param default the default value to fill in if the variable
+##' @param survey.data The survey dataset
+##' @param var Either `NULL`, a column name, or a vector of values
+##' @param default The default value to fill in if the variable
 ##'        is not found
-##' @return a vector of values whose length is the same as the
-##'         number of rows in survey.data; if var is NULL, this has
+##' @return A vector of values whose length is the same as the
+##'         number of rows in `survey.data`; if `var` is `NULL`, this has
 ##'         the default values
 ##' @keywords internal
 get.var <- function(survey.data, var, default=NA) {
@@ -122,19 +113,19 @@ get.var <- function(survey.data, var, default=NA) {
 }
 
 ##########################################################################
-##' get the weights column from a dataframe
+##' Get the weights column from a dataframe
 ##'
-##' this is the same as get.var with the default value set to 1
-##' instead of NA
-##' @param ... (this is a function curried from `get.var`)
+##' This is the same as [get.var()] with the default value set to 1
+##' instead of `NA`
+##' @param ... (this is a function curried from [get.var()])
 ##' @keywords internal
 get.weights <- functional::Curry(get.var, default=1)
 
 ##########################################################################
-##' only prints things out in verbose mode
+##' Only prints things out in verbose mode
 ##'
-##' @param verbose if TRUE, print things out; otherwise, do nothing
-##' @param ... arguments to pass to cat if verbose is TRUE
+##' @param verbose If `TRUE`, print things out; otherwise, do nothing
+##' @param ... Arguments to pass to cat if verbose is `TRUE`
 ##' @keywords internal
 vcat <- function(verbose=TRUE, ...) {
 
@@ -146,13 +137,13 @@ vcat <- function(verbose=TRUE, ...) {
 }
 
 ##########################################################################
-##' parse a formula that describes the design of a survey
+##' Parse a formula that describes the design of a survey
 ##'
-##' Parse a formula of the form\cr
-##' `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`\cr
+##' Parse a formula of the form
+##' `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`
 ##' into a PSU formula and a strata formula.
 ##'
-##' @param formula a formula describing the sample design (see above)
+##' @param formula a formula describing the sample design (see Description of [bootstrap.estimates()])
 ##' @return a list with entries `psu.formula` and `strata.formula`
 ##' @keywords internal
 parse_design <- function(formula) {
@@ -197,16 +188,16 @@ parse_design <- function(formula) {
 
 
 ##########################################################################
-##' compute the weighted mean
+##' Compute the weighted mean
 ##'
-##' given a vector of values and a vector of weights, compute the
+##' Given a vector of values and a vector of weights, compute the
 ##' weighted mean
 ##'
-##' @param x the vector of values
-##' @param w the vector of weights
-##' @param na.rm if TRUE, only consider elmeents of x that are not missing
-##'              (and their corresponding entries in w). Defaults to FALSE.
-##' @return the weighted mean
+##' @param x The vector of values
+##' @param w The vector of weights
+##' @param na.rm if `TRUE`, only consider elements of `x` that are not missing
+##'              (and their corresponding entries in `w`). Defaults to `FALSE`.
+##' @return The weighted mean
 ##' @keywords internal
 weighted.mean <- function(x, w, na.rm=FALSE) {
 
