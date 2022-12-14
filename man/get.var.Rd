@@ -5,8 +5,6 @@
 \title{get a variable from a dataframe or vector}
 \usage{
 get.var(survey.data, var, default = NA)
-
-get.var(survey.data, var, default = NA)
 }
 \arguments{
 \item{survey.data}{the survey dataset}
@@ -20,19 +18,8 @@ is not found}
 a vector of values whose length is the same as the
         number of rows in survey.data; if var is NULL, this has
         the default values
-
-a vector of values whose length is the same as the
-        number of rows in survey.data; if var is NULL, this has
-        the default values
 }
 \description{
-this function was written because a few of the estimator functions
-need to use weights, and there are several cases to handle:
-the user could pass in a column name, a vector of weights, or
-nothing (in which case, the weights should default to 1 for each
-row in the dataset). for the special case of getting weights, look
-at the curried fn get.weights (right below)
-
 this function was written because a few of the estimator functions
 need to use weights, and there are several cases to handle:
 the user could pass in a column name, a vector of weights, or
