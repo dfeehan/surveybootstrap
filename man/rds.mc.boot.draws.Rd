@@ -2,39 +2,43 @@
 % Please edit documentation in R/rds_bootstrap.r
 \name{rds.mc.boot.draws}
 \alias{rds.mc.boot.draws}
-\title{draw RDS bootstrap resamples using the
-algorithm in Salganik 2006 (TODO PROPER CITE)}
+\title{Draw RDS bootstrap resamples using the
+algorithm in Salganik 2006 (see Details below)}
 \usage{
 rds.mc.boot.draws(chains, mm, dd, num.reps)
 }
 \arguments{
-\item{chains}{a list with the chains constructed from the survey
+\item{chains}{A list with the chains constructed from the survey
 using \code{make.chain}}
 
-\item{mm}{the mixing model}
+\item{mm}{The mixing model}
 
-\item{dd}{the degree distributions}
+\item{dd}{The degree distributions}
 
-\item{num.reps}{the number of bootstrap resamples we want}
+\item{num.reps}{The number of bootstrap resamples we want}
 }
 \value{
-a list of length \code{num.reps}; each entry in
+A list of length \code{num.reps}; each entry in
 the list has one bootstrap-resampled dataset
 }
 \description{
-this algorithm picks a respondent from the survey
+This algorithm picks a respondent from the survey
 to be a seed uniformly at random. it then generates
 a bootstrap draw by simulating the markov process
 forward for n steps, where n is the size of the draw
 required.
-}
-\details{
-if you wish the bootstrap dataset to end up with
+
+If you wish the bootstrap dataset to end up with
 variables from the original dataset other than the
 traits and degree, then you must specify this when
 you construct \code{dd} using the
 '\code{estimate.degree.distns} function.
-
-TODO be sure to comment the broken-out trait variables
-(ie these could all be different from the originals)
+}
+\details{
+See:
+\itemize{
+\item Salganik, Matthew J. "Variance estimation, design effects, and sample
+size calculations for respondent-driven sampling."
+\emph{Journal of Urban Health} 83.1 (2006): 98-112.
+}
 }

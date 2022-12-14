@@ -2,33 +2,40 @@
 % Please edit documentation in R/rds_bootstrap.r
 \name{rds.boot.draw.chain}
 \alias{rds.boot.draw.chain}
-\title{draw RDS bootstrap resamples for one chain}
+\title{Draw RDS bootstrap resamples for one chain}
 \usage{
 rds.boot.draw.chain(chain, mm, dd, parent.trait, idvar = "uid")
 }
 \arguments{
-\item{chain}{the chain to draw resamples for}
+\item{chain}{The chain to draw resamples for}
 
-\item{mm}{the mixing model to use}
+\item{mm}{The mixing model to use}
 
-\item{dd}{the degree distns to use}
+\item{dd}{The degree distns to use}
 
-\item{parent.trait}{a vector whose length is the number
+\item{parent.trait}{A vector whose length is the number
 of bootstrap reps we want}
 
-\item{idvar}{the name of the variable used to label the
+\item{idvar}{The name of the variable used to label the
 columns of the output (presumably some id identifying the
-row in the original dataset they come from -- see below)}
+row in the original dataset they come from)}
 }
 \value{
-a list of dataframes with one entry for each respondent in the chain.
+A list of dataframes with one entry for each respondent in the chain.
 each dataframe has one row for each bootstrap replicate. so if we take 10
 bootstrap resamples of a chain of length 50, there will be 50 entries in
 the list that is returned. each entry will be a dataframe with 10 rows.
 }
 \description{
-this function uses the algorithm described in the
+This function uses the algorithm described in the
 supporting online material for Weir et al 2012
-(TODO PROPER CITE) to take bootstrap resamples
-of one chain from an RDS dataset
+(see Details) to take bootstrap resamples
+of one chain from an RDS dataset.
+}
+\details{
+See
+\itemize{
+\item Weir, Sharon S., et al. "A comparison of respondent-driven and venue-based sampling of female sex workers in Liuzhou, China."
+\emph{Sexually transmitted infections} 88.Suppl 2 (2012): i95-i101.
+}
 }

@@ -2,36 +2,30 @@
 % Please edit documentation in R/rds_bootstrap.r
 \name{rds.chain.boot.draws}
 \alias{rds.chain.boot.draws}
-\title{draw RDS bootstrap resamples}
+\title{Draw RDS bootstrap resamples}
 \usage{
 rds.chain.boot.draws(chains, mm, dd, num.reps, keep.vars = NULL)
 }
 \arguments{
-\item{chains}{a list whose entries are the chains
+\item{chains}{A list whose entries are the chains
 we want to resample}
 
-\item{mm}{the mixing model}
+\item{mm}{The mixing model}
 
-\item{dd}{the degree distributions}
+\item{dd}{The degree distributions}
 
-\item{num.reps}{the number of bootstrap resamples we want}
+\item{num.reps}{The number of bootstrap resamples we want}
 
-\item{keep.vars}{if not NULL, then the names of variables
+\item{keep.vars}{If not \code{NULL}, then the names of variables
 from the original dataset we want appended to each bootstrap
-resampled dataset (default is NULL)}
+resampled dataset (default is \code{NULL})}
 }
 \value{
-a list of length \code{num.reps}; each entry in
+A list of length \code{num.reps}; each entry in
 the list has one bootstrap-resampled dataset
 }
 \description{
-draw boostrap resamples for an RDS dataset, using
+Draw boostrap resamples for an RDS dataset, using
 the algorithm described in the supporting online
-material of Weir et al 2012 (TODO PROPER CITE)
-}
-\details{
-TODO -- consider constructing chains, mm from other args
-
-TODO be sure to comment the broken-out trait variables
-(ie these could all be different from the originals)
+material of Weir et al 2012 (see \code{\link[=rds.boot.draw.chain]{rds.boot.draw.chain()}} ).
 }
