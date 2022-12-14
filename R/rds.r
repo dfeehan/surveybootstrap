@@ -9,18 +9,16 @@
 ##' This is a helper function that is useful when we wish
 ##' to make several traits into one variable
 ##'
-##' @param data the respondent info
-##' @param traits the names of the traits to build the model on
-##' @param na.action for now, defaults to 'drop' (meaning all rows of data
-##' with any missingness on the traits are dropped). anything else
-##means
-##' NAs are treated like any other value
-##' @param sep the separator character used to combine values
-##' @return a list whose entries are `used.idx`, which indicates
-##' which rows from the original dataset were used (may not be all of
-##them
-##' if there is missingness); and `traits`, which has the string
-##' version of the traits
+##' @param data The respondent info
+##' @param traits The names of the traits to build the model on
+##' @param na.action Defaults to 'drop' (meaning all rows of data
+##'   with any missingness on the traits are dropped). Anything else
+##'   means `NA`s are treated like any other value.
+##' @param sep The separator character used to combine values
+##' @return A list whose entries are
+##'   * `used.idx`, which indicates which rows from the original dataset were used
+##'     (may not be all of them if there is missingness); and
+##'   * `traits`, which has the string version of the traits
 ##' @keywords internal
 traits.to.string <- function(data, traits, na.action="drop", sep=".") {
 
@@ -48,21 +46,21 @@ traits.to.string <- function(data, traits, na.action="drop", sep=".") {
 }
 
 #####################################################
-##' unparse a collapsed trait string
+##' Unparse a collapsed trait string
 ##'
-##' for a few of the RDS-related functions, it is useful
+##' For a few of the RDS-related functions, it is useful
 ##' to combine several traits into one variable as a string;
 ##' for example, "male" and "young" might become
 ##' "male.young". this function takes a string with
 ##' combined traits and explodes it back into
-##' several variables
+##' several variables.
 ##'
-##' @param trait.string a vector whose values are collapsed
+##' @param trait.string A vector whose values are collapsed
 ##' traits
-##' @param names a vector with the names of each trait (in order)
-##' @param sep the character used to separate the traits in their
+##' @param names A vector with the names of each trait (in order)
+##' @param sep The character used to separate the traits in their
 ##' collpased string representation
-##' @return a dataframe whose rows correspond to the entries in
+##' @return A dataframe whose rows correspond to the entries in
 ##' `trait.string`, with one column per trait
 ##' @keywords internal
 unparse.trait <- function(trait.string, names, sep="\\.") {
@@ -82,39 +80,38 @@ unparse.trait <- function(trait.string, names, sep="\\.") {
 }
 
 #####################################################
-##' estimate degree distributions by trait
+##' Estimate degree distributions by trait
 ##'
-##' break down RDS degree distributions by trait,
+##' Break down RDS degree distributions by trait,
 ##' and return an object which has the degrees
 ##' for each trait as well as functions to draw
 ##' degrees from each trait.
 ##'
-##' @details one of the items returned as a result is a function,
+##' @details One of the items returned as a result is a function,
 ##' `draw.degrees.fn`, which takes one argument,
-##' `traits`. this is a vector of traits and,
+##' `traits`. This is a vector of traits and,
 ##' for each entry in this vector, `draw.degress.fn`
 ##' returns a draw from the empirical distribution of
-##' degrees among respondents with that trait. so,
+##' degrees among respondents with that trait. So,
 ##' `draw.degrees.fn(c("0.0", "0.1", "0.1")` would
 ##' return a degree drawn uniformly at random from among
 ##' the observed degrees of respondents with trait "0.0"
 ##' and then two degrees from respondents with trait "0.1"
 ##'
-##' @param survey.data the respondent info
-##' @param d.hat.vals the variable that contains
-##' the degrees for each respondent
-##' @param traits a vector of the names of the columns
-##' of `survey.data` which refer to the traits
-##' @param keep.vars additional vars to return along with degrees
-##' @return an object with
-##' \itemize{
-##'   \item `distns` a list with one entry per trait value; each
+##' @param survey.data The respondent info
+##' @param d.hat.vals The variable that contains
+##'    the degrees for each respondent
+##' @param traits A vector of the names of the columns
+##'    of `survey.data` which refer to the traits
+##' @param keep.vars Additional vars to return along with degrees
+##' @return An object with
+##'   * `distns` a list with one entry per trait value; each
 ##entry has a dataframe with all of the degrees from respondents with
 ##the given trait
-##'   \item `draw.degrees.fn` a function which gets called with one
+##'   * `draw.degrees.fn` a function which gets called with one
 ##argument, \code{traits}. See description above.
-##'   \item `keep.vars` the name of the other vars that are kept (if any)
-##' }
+##'   * `keep.vars` the name of the other vars that are kept (if any)
+##'
 estimate.degree.distns <- function(survey.data,
                                    d.hat.vals,
                                    traits,
@@ -178,35 +175,29 @@ estimate.degree.distns <- function(survey.data,
 }
 
 #####################################################
-##' construct a mixing model from GoC/RDS data
+##' Construct a mixing model from GoC/RDS data
 ##'
-##' given a dataset with the respondents and a dataset
+##' Given a dataset with the respondents and a dataset
 ##' on the parents (in many cases the same individuals),
 ##' and a set of relevant traits,
-##' estimate mixing parameters and return a markov model
+##' estimate mixing parameters and return a markov model.
 ##'
-##' @param survey.data the respondent info
-##' @param parent.data the parent info
-##' @param traits the names of the traits to build the model on
-##' @return a list with two entries:
-##' \itemize{
-##' \item `mixing.df` the data used to estimate the mixing
-##function
-##' \item `choose.next.state.fn` a function which can be passed
-##' a vector of states and will return a draw of a subsequent state
-##for
-##' each entry in the vector
-##' \item `mixing.df` a dataframe (long-form) representation of
-##' the transition counts used to estimate the transition probabilities
-##' \item `states` a list with an entry for each state. within
-##' each state's entry are
-##' \itemize{
-##' \item `trans.probs` a vector of estimated
-##' transition probabilities
-##' \item `trans.fn` a function which,
-##' when called, randomly chooses a next state with probabilities given
-##' by the transition probs.
-##' }}
+##' @param survey.data The respondent info
+##' @param parent.data The parent info
+##' @param traits The names of the traits to build the model on
+##' @return A list with entries:
+##'   * `mixing.df` the data used to estimate the mixing function
+##'   * `choose.next.state.fn` a function which can be passed
+##'      a vector of states and will return a draw of a subsequent state
+##'      for each entry in the vector
+##'   * `mixing.df` a dataframe (long-form) representation of
+##'      the transition counts used to estimate the transition probabilities
+##'    * `states` a list with an entry for each state. within
+##'       each state's entry are
+##'        - `trans.probs` a vector of estimated transition probabilities
+##'        - `trans.fn` a function which, when called, randomly chooses a
+##'           next state with probabilities given by the transition probs.
+##'
 estimate.mixing <- function(survey.data, parent.data, traits) {
 
   ## reduce to dataframe with [ child trait, parent trait ]
@@ -281,17 +272,17 @@ estimate.mixing <- function(survey.data, parent.data, traits) {
 
 
 #####################################################
-##' run a markov model
+##' Run a markov model
 ##'
-##' run a given markov model for n time steps, starting
-##' at a specified state
+##' Run a given markov model for n time steps, starting
+##' at a specified state.
 ##'
-##' this uses the markov model produced by estimate.mixing
+##' This uses the markov model produced by [estimate.mixing()]
 ##'
-##' @param mm the markov model object returned by `estimate.mixing`
-##' @param start the name of the state to start in
-##' @param n the number of time-steps to run through
-##' @return a vector with the state visited at each time step. the first entry
+##' @param mm The markov model object returned by [estimate.mixing()]
+##' @param start The name of the state to start in
+##' @param n The number of time-steps to run through
+##' @return A vector with the state visited at each time step. the first entry
 ##'         has the starting state
 ##' @export
 mc.sim <- function(mm, start, n) {
@@ -317,13 +308,20 @@ mc.sim <- function(mm, start, n) {
 }
 
 ###########################################################
-##' determine whether or not one id is a parent of another
+##' Determine whether or not one id is a parent of another
 ##'
-##' this function allows us to determine which ids are
-##' directly descended from which other ones. it is the only part
+##' This function allows us to determine which ids are
+##' directly descended from which other ones. It is the only part
 ##' of the code that relies on the ID format used by the
-##' Curitiba study (TODO CITE); by modifying this function,
-##' it shold be possible to adapt this code to another study
+##' Curitiba study (see Details); by modifying this function,
+##' it should be possible to adapt this code to another study.
+##'
+##' @details See:
+##'   * Salganik, M. J., Fazito, D., Bertoni, N., Abdo, A. H., Mello, M. B., &
+##'     Bastos, F. I. (2011). Assessing network scale-up estimates for groups
+##'     most at risk of HIV/AIDS: evidence from a multiple-method study of heavy
+##'     drug users in Curitiba, Brazil. *American journal of epidemiology*,
+##'     174(10), 1190-1196.
 ##'
 ##' @param id the id of the potential child
 ##' @param seed.id the id of the potential parent
@@ -343,17 +341,16 @@ is.child.ct <- function(id, seed.id) {
 }
 
 #####################################################
-##' build an RDS seed's chain from the dataset
+##' Build an RDS seed's chain from the dataset
 ##'
-##' text
-##' TODO assumes that the chain is a tree (no loops)
+##' Note that this assumes that the chain is a tree (no loops)
 ##'
-##' @param seed.id the id of the seed whose chain we
+##' @param seed.id The id of the seed whose chain we
 ##' wish to build from the dataset
-##' @param survey.data the dataset
-##' @param is.child.fn a function which takes two ids as arguments;
-##' it is expected to return TRUE if the second argument is the parent of the
-##' first, and FALSE otherwise. it defaults to [is.child.ct()]
+##' @param survey.data The dataset
+##' @param is.child.fn A function which takes two ids as arguments;
+##' it is expected to return `TRUE` if the second argument is the parent of the
+##' first, and `FALSE` otherwise. it defaults to [is.child.ct()]
 ##' @return info
 make.chain <- function(seed.id, survey.data, is.child.fn=is.child.ct) {
 
@@ -380,12 +377,12 @@ make.chain <- function(seed.id, survey.data, is.child.fn=is.child.ct) {
 }
 
 #####################################################
-##' get the height (maximum depth) of a chain
+##' Get the height (maximum depth) of a chain
 ##'
-##' get the height (maximum depth) of a chain
+##' Get the height (maximum depth) of a chain
 ##'
-##' @param chain the chain object
-##' @return the maximum depth of the chain
+##' @param chain The chain object
+##' @return The maximum depth of the chain
 max.depth <- function(chain) {
     if (is.null(chain$children)) {
         return(1)
@@ -396,13 +393,13 @@ max.depth <- function(chain) {
 }
 
 #####################################################
-##' get the size of a chain
+##' Get the size of a chain
 ##'
-##' count the total number of respondents in the chain
+##' Count the total number of respondents in the chain
 ##' and return it
 ##'
-##' @param chain the chain object
-##' @return the number of respondents involved in
+##' @param chain The chain object
+##' @return The number of respondents involved in
 ##' the chain
 chain.size <- function(chain) {
 
@@ -415,17 +412,15 @@ chain.size <- function(chain) {
 }
 
 #####################################################
-##' chain.vals
-##'
-##' get all of the values of the given variable
+##' Get all of the values of the given variable
 ##' found among members of a chain
 ##'
-##' @param chain the chain to get values from
-##' @param qoi.var the name of the variable to
+##' @param chain The chain to get values from
+##' @param qoi.var The name of the variable to
 ##' get from each member of the chain
-##' @return a vector with all of the values of `qoi.var`
-##' found in this chain. (currently, the order of the values
-##' in the vector is not guaranteed)
+##' @return A vector with all of the values of `qoi.var`
+##' found in this chain. (Currently, the order of the values
+##' in the vector is not guaranteed.)
 chain.vals <- function(chain, qoi.var="uid") {
 
     if (is.null(chain$children)) {
@@ -439,15 +434,15 @@ chain.vals <- function(chain, qoi.var="uid") {
 }
 
 #####################################################
-##' get a dataset from a chain
+##' Get a dataset from a chain
 ##'
-##' take the data for each member of the given chain
-##' and assemble it together in a dataset
+##' Take the data for each member of the given chain
+##' and assemble it together in a dataset.
 ##'
-##' @param chain the chain to build a dataset from
-##' @return a dataset comprised of all of the chain's
-##' members' data put together. the order of the rows
-##' in the datset is not specified.
+##' @param chain The chain to build a dataset from
+##' @return A dataset comprised of all of the chain's
+##' members' data put together. The order of the rows
+##' in the dataset is not specified.
 chain.data <- function(chain) {
     if (is.null(chain$children)) {
         return(chain$data)
