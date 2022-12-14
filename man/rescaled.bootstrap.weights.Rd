@@ -41,8 +41,8 @@ if no summary.fn is specified, then return the list of estimates
         its output
 }
 \description{
-this helper function creates a dataset with rescaled bootstrap weights;
-it can be a helpful alternative to \code{bootstrap.estimates} in some situations\cr
+This function creates a dataset with rescaled bootstrap weights;
+it can be a helpful alternative to \code{bootstrap.estimates} in some situations
 }
 \examples{
 \donttest{

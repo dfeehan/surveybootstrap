@@ -50,26 +50,21 @@ produce bootstrap resamples and estimates in parallel}
 parallelization routine}
 }
 \value{
-if no summary.fn is specified, then return the list of estimates
+If no summary.fn is specified, then return the list of estimates
         produced by estimator.fn; if summary.fn is specified, then return
         its output
 }
 \description{
-this function contains the core of the rescaled bootstrap
-method for estimating uncertainty in our estimates
-it should be designed so that it can be passed in to
-estimation functions as an argument\cr
+Use the rescaled bootstrap
+method to estimating sampling uncertainty from a given
+estimator.
 }
-\section{Wishlist / TODO}{
-
-\itemize{
-  \item{estimator.fn/bootstrap.fn and summary.fn are treated differently
-        (one expects characters, one expects an actual fn. fix!)}
-  \item{write description block, including estimator.fn, bootstrap.fn,
-        summary.fn, more?}
+\details{
+The formula describing the survey design should have the form
+\code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)},
+where psu_v1, ... are the variables identifying primary sampling units (PSUs)
+and strata_v1, ... identifies the strata
 }
-}
-
 \examples{
 \donttest{
 # code goes here
