@@ -2,31 +2,30 @@
 #####################################################
 ##' bootstrap.estimates
 ##'
-##' Use the rescaled bootstrap
-##' method to estimating sampling uncertainty from a given
+##' Use a given bootstrap method to estimate sampling uncertainty from a given
 ##' estimator.
 ##'
-##' @param survey.data the dataset to use
-##' @param survey.design a formula describing the design of the survey
+##' @param survey.data The dataset to use
+##' @param survey.design A formula describing the design of the survey
 ##'                      (see Details below)
-##' @param estimator.fn name of a function which, given a dataset like
-##'                     survey data and arguments in \code{...},
+##' @param estimator.fn The name of a function which, given a dataset like
+##'                     `survey.data` and arguments in `...`,
 ##'                     will produce an estimate of interest
-##' @param bootstrap.fn name of the method to be used to take
-##'                     bootstrap resamples; see below
-##' @param num.reps the number of bootstrap replication samples to draw
-##' @param weights weights to use in estimation (or NULL, if none)
-##' @param summary.fn (optional) name of a function which, given the set of estimates
-##'                   produced by estimator.fn, summarizes them. if not specified, all of
-##'                   the estimates are returned in a list
-##' @param parallel if TRUE, use the plyr library's .parallel argument to
+##' @param bootstrap.fn Name of the method to be used to take
+##'                     bootstrap resamples
+##' @param num.reps The number of bootstrap replication samples to draw
+##' @param weights Weights to use in estimation (or `NULL`, if none)
+##' @param summary.fn (Optional) Name of a function which, given the set of estimates
+##'                   produced by `estimator.fn`, summarizes them. If not specified, all of
+##'                   the estimates are returned in a list.
+##' @param parallel If `TRUE`, use the `plyr` library's `.parallel` argument to
 ##'                 produce bootstrap resamples and estimates in parallel
-##' @param paropts if not NULL, additional arguments to pass along to the
+##' @param paropts If not `NULL`, additional arguments to pass along to the
 ##'                parallelization routine
-##' @param verbose if TRUE, produce lots of feedback about what is going on
-##' @param ... additional arguments which will be passed on to the estimator fn
-##' @return If no summary.fn is specified, then return the list of estimates
-##'         produced by estimator.fn; if summary.fn is specified, then return
+##' @param verbose If `TRUE`, produce lots of feedback about what is going on
+##' @param ... additional arguments which will be passed on to `estimator.fn`
+##' @return If `summary.fn` is not specified, then return the list of estimates
+##'         produced by `estimator.fn`; if `summary.fn` is specified, then return
 ##'         its output
 ##'
 ##' @details
