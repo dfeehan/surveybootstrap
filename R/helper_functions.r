@@ -23,7 +23,8 @@ get.weights <- functional::Curry(get.var, default=1)
 ##' helper to grab a fn that is passed in as an argument
 ##'
 ##' this is based on Hadley Wickham's response to an SO
-##' post: https://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions
+##' post:
+##' https://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions
 ##' with some minor modifications
 ##'
 ##' @param fn the function to search for
