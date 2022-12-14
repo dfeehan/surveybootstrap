@@ -2,10 +2,9 @@
 #####################################################
 ##' bootstrap.estimates
 ##'
-##' this function contains the core of the rescaled bootstrap
-##' method for estimating uncertainty in our estimates
-##' it should be designed so that it can be passed in to
-##' estimation functions as an argument
+##' Use the rescaled bootstrap
+##' method to estimating sampling uncertainty from a given
+##' estimator.
 ##'
 ##' @param survey.data the dataset to use
 ##' @param survey.design a formula describing the design of the survey
@@ -26,9 +25,16 @@
 ##'                parallelization routine
 ##' @param verbose if TRUE, produce lots of feedback about what is going on
 ##' @param ... additional arguments which will be passed on to the estimator fn
-##' @return if no summary.fn is specified, then return the list of estimates
+##' @return If no summary.fn is specified, then return the list of estimates
 ##'         produced by estimator.fn; if summary.fn is specified, then return
 ##'         its output
+##'
+##' @details
+##' The formula describing the survey design should have the form
+##' \code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)},
+##' where psu_v1, ... are the variables identifying primary sampling units (PSUs)
+##' and strata_v1, ... identifies the strata
+##'
 ##' @export
 ##' @examples
 ##' \donttest{
