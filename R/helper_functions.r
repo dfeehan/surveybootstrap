@@ -151,7 +151,7 @@ vcat <- function(verbose=TRUE, ...) {
 ##'  \item{"psu.formula"}{a formula describing the primary sampling unit vars}
 ##'  \item{"strata.formula"}{a formula describing the strata (if any)}
 ##' }\cr
-##' TODO
+##' Wishlist / TODO:
 ##' \itemize{
 ##'  \item{}{check to be sure no response is included (or warn)}
 ##'  \item{}{check formulas for strata more carefully...}
@@ -175,8 +175,6 @@ parse_design <- function(formula) {
   if (length(strata.idx) == 1) {
 
     # grab the expression in the strata(...) part of the formula
-    #strata.text <- str_match
-
     strata.text <- stringr::str_match(these.labels[strata.idx],
                                       "strata\\((.+)\\)")[2]
 
