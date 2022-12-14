@@ -5,7 +5,7 @@
 ##' this function contains the core of the rescaled bootstrap
 ##' method for estimating uncertainty in our estimates
 ##' it should be designed so that it can be passed in to
-##' estimation functions as an argument\cr
+##' estimation functions as an argument
 ##'
 ##' @param survey.data the dataset to use
 ##' @param survey.design a formula describing the design of the survey
