@@ -7,14 +7,6 @@
 ##' it should be designed so that it can be passed in to
 ##' estimation functions as an argument\cr
 ##'
-##' @section Wishlist / TODO:
-##' \itemize{
-##'   \item{estimator.fn/bootstrap.fn and summary.fn are treated differently
-##'         (one expects characters, one expects an actual fn. fix!)}
-##'   \item{write description block, including estimator.fn, bootstrap.fn,
-##'         summary.fn, more?}
-##'}
-##'
 ##' @param survey.data the dataset to use
 ##' @param survey.design a formula describing the design of the survey
 ##'                      (see below - TODO)
@@ -55,6 +47,12 @@ bootstrap.estimates <- function(survey.data,
                                 parallel=FALSE,
                                 paropts=NULL)
 {
+
+  ## Wishlist / TODO
+  ## * estimator.fn/bootstrap.fn and summary.fn are treated differently
+  ##         (one expects characters, one expects an actual fn. fix!)
+  ## * write description block, including estimator.fn, bootstrap.fn,
+  ##         summary.fn, more?
 
   ## get the weights
   weights <- get.weights(survey.data, weights)
