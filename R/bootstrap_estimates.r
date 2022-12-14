@@ -8,7 +8,7 @@
 ##'
 ##' @param survey.data the dataset to use
 ##' @param survey.design a formula describing the design of the survey
-##'                      (see below - TODO)
+##'                      (see Details below)
 ##' @param estimator.fn name of a function which, given a dataset like
 ##'                     survey data and arguments in \code{...},
 ##'                     will produce an estimate of interest
