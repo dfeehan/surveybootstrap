@@ -2,9 +2,9 @@
 #####################################################
 ##' rescaled.bootstrap.sample
 ##'
-##' C++ version: given a survey dataset and a description of the survey
-##' design (ie, which combination of vars determines primary sampling
-##' units, and which combination of vars determines strata), take
+##' Given a survey dataset and a description of the survey
+##' design (ie, which combination of variables determines primary sampling
+##' units, and which combination of variables determines strata), take
 ##' a bunch of bootstrap samples for the rescaled bootstrap estimator
 ##' (see, eg, Rust and Rao 1996).
 ##'
@@ -12,7 +12,7 @@
 ##' This will always be true if the PSUs were selected without replacement.
 ##' If they were selected with replacement, then it will be necessary
 ##' to make each realization of a given PSU in the sample a unique id.
-##' Bottom line: the code below assumes that all observations within
+##' The code below assumes that all observations within
 ##' each PSU (as identified by the design formula) are from the same draw
 ##' of the PSU.
 ##'
@@ -26,6 +26,10 @@
 ##'
 ##' We always take m_i = n_i - 1, according to the advice presented
 ##' in Rao and Wu (1988) and Rust and Rao (1996).
+##'
+##' (This is a C++ version; a previous version, written in pure R,
+##' is called \code{escaled.bootstrap.sample.pureR})
+##'
 ##'
 ##' @param survey.data the dataset to use
 ##' @param survey.design a formula describing the design of the survey (see below - TODO)
