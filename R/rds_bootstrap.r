@@ -61,7 +61,7 @@ rds.boot.draw.chain <- function(chain, mm, dd, parent.trait, idvar="uid") {
 #####################################################
 ##' Draw RDS bootstrap resamples
 ##'
-##' Draw boostrap resamples for an RDS dataset, using
+##' Draw bootstrap resamples for an RDS dataset, using
 ##' the algorithm described in the supporting online
 ##' material of Weir et al 2012 (see [rds.boot.draw.chain()] ).
 ##'
