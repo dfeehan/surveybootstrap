@@ -4,9 +4,9 @@
 ## limited implementation of RDS estimator
 
 #####################################################
-##' take a set of traits and turn into a string
+##' Take a set of traits and turn into a string
 ##'
-##' this is a helper function that is useful when we wish
+##' This is a helper function that is useful when we wish
 ##' to make several traits into one variable
 ##'
 ##' @param data the respondent info
@@ -16,10 +16,10 @@
 ##means
 ##' NAs are treated like any other value
 ##' @param sep the separator character used to combine values
-##' @return a list whose entries are \code{used.idx}, which indicates
+##' @return a list whose entries are `used.idx`, which indicates
 ##' which rows from the original dataset were used (may not be all of
 ##them
-##' if there is missingness); and \code{traits}, which has the string
+##' if there is missingness); and `traits`, which has the string
 ##' version of the traits
 ##' @keywords internal
 traits.to.string <- function(data, traits, na.action="drop", sep=".") {
@@ -63,7 +63,7 @@ traits.to.string <- function(data, traits, na.action="drop", sep=".") {
 ##' @param sep the character used to separate the traits in their
 ##' collpased string representation
 ##' @return a dataframe whose rows correspond to the entries in
-##' \code{trait.string}, with one column per trait
+##' `trait.string`, with one column per trait
 ##' @keywords internal
 unparse.trait <- function(trait.string, names, sep="\\.") {
 
@@ -90,12 +90,12 @@ unparse.trait <- function(trait.string, names, sep="\\.") {
 ##' degrees from each trait.
 ##'
 ##' @details one of the items returned as a result is a function,
-##' \code{draw.degrees.fn}, which takes one argument,
-##' \code{traits}. this is a vector of traits and,
-##' for each entry in this vector, \code{draw.degress.fn}
+##' `draw.degrees.fn`, which takes one argument,
+##' `traits`. this is a vector of traits and,
+##' for each entry in this vector, `draw.degress.fn`
 ##' returns a draw from the empirical distribution of
 ##' degrees among respondents with that trait. so,
-##' \code{draw.degrees.fn(c("0.0", "0.1", "0.1")} would
+##' `draw.degrees.fn(c("0.0", "0.1", "0.1")` would
 ##' return a degree drawn uniformly at random from among
 ##' the observed degrees of respondents with trait "0.0"
 ##' and then two degrees from respondents with trait "0.1"
@@ -104,16 +104,16 @@ unparse.trait <- function(trait.string, names, sep="\\.") {
 ##' @param d.hat.vals the variable that contains
 ##' the degrees for each respondent
 ##' @param traits a vector of the names of the columns
-##' of \code{survey.data} which refer to the traits
+##' of `survey.data` which refer to the traits
 ##' @param keep.vars additional vars to return along with degrees
 ##' @return an object with
 ##' \itemize{
-##'   \item \code{distns} a list with one entry per trait value; each
+##'   \item `distns` a list with one entry per trait value; each
 ##entry has a dataframe with all of the degrees from respondents with
 ##the given trait
-##'   \item \code{draw.degrees.fn} a function which gets called with one
+##'   \item `draw.degrees.fn` a function which gets called with one
 ##argument, \code{traits}. See description above.
-##'   \item \code{keep.vars} the name of the other vars that are kept (if any)
+##'   \item `keep.vars` the name of the other vars that are kept (if any)
 ##' }
 estimate.degree.distns <- function(survey.data,
                                    d.hat.vals,
@@ -190,20 +190,20 @@ estimate.degree.distns <- function(survey.data,
 ##' @param traits the names of the traits to build the model on
 ##' @return a list with two entries:
 ##' \itemize{
-##' \item \code{mixing.df} the data used to estimate the mixing
+##' \item `mixing.df` the data used to estimate the mixing
 ##function
-##' \item \code{choose.next.state.fn} a function which can be passed
+##' \item `choose.next.state.fn` a function which can be passed
 ##' a vector of states and will return a draw of a subsequent state
 ##for
 ##' each entry in the vector
-##' \item \code{mixing.df} a dataframe (long-form) representation of
+##' \item `mixing.df` a dataframe (long-form) representation of
 ##' the transition counts used to estimate the transition probabilities
-##' \item \code{states} a list with an entry for each state. within
+##' \item `states` a list with an entry for each state. within
 ##' each state's entry are
 ##' \itemize{
-##' \item \code{trans.probs} a vector of estimated
+##' \item `trans.probs` a vector of estimated
 ##' transition probabilities
-##' \item \code{trans.fn} a function which,
+##' \item `trans.fn` a function which,
 ##' when called, randomly chooses a next state with probabilities given
 ##' by the transition probs.
 ##' }}
@@ -288,7 +288,7 @@ estimate.mixing <- function(survey.data, parent.data, traits) {
 ##'
 ##' this uses the markov model produced by estimate.mixing
 ##'
-##' @param mm the markov model object returned by \code{estimate.mixing}
+##' @param mm the markov model object returned by `estimate.mixing`
 ##' @param start the name of the state to start in
 ##' @param n the number of time-steps to run through
 ##' @return a vector with the state visited at each time step. the first entry
@@ -327,7 +327,7 @@ mc.sim <- function(mm, start, n) {
 ##'
 ##' @param id the id of the potential child
 ##' @param seed.id the id of the potential parent
-##' @return TRUE if \code{id} is the direct descendant of \code{seed.id}
+##' @return TRUE if `id` is the direct descendant of `seed.id`
 ##' and FALSE otherwise
 is.child.ct <- function(id, seed.id) {
 
@@ -353,7 +353,7 @@ is.child.ct <- function(id, seed.id) {
 ##' @param survey.data the dataset
 ##' @param is.child.fn a function which takes two ids as arguments;
 ##' it is expected to return TRUE if the second argument is the parent of the
-##' first, and FALSE otherwise. it defaults to \code{\link{is.child.ct}}
+##' first, and FALSE otherwise. it defaults to [is.child.ct()]
 ##' @return info
 make.chain <- function(seed.id, survey.data, is.child.fn=is.child.ct) {
 
@@ -423,7 +423,7 @@ chain.size <- function(chain) {
 ##' @param chain the chain to get values from
 ##' @param qoi.var the name of the variable to
 ##' get from each member of the chain
-##' @return a vector with all of the values of \code{qoi.var}
+##' @return a vector with all of the values of `qoi.var`
 ##' found in this chain. (currently, the order of the values
 ##' in the vector is not guaranteed)
 chain.vals <- function(chain, qoi.var="uid") {

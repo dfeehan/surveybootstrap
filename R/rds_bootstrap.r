@@ -72,7 +72,7 @@ rds.boot.draw.chain <- function(chain, mm, dd, parent.trait, idvar="uid") {
 ##' @param keep.vars if not NULL, then the names of variables
 ##' from the original dataset we want appended to each bootstrap
 ##' resampled dataset (default is NULL)
-##' @return a list of length \code{num.reps}; each entry in
+##' @return a list of length `num.reps`; each entry in
 ##' the list has one bootstrap-resampled dataset
 rds.chain.boot.draws <- function(chains,
                                  mm,
@@ -146,19 +146,19 @@ rds.chain.boot.draws <- function(chains,
 ##' if you wish the bootstrap dataset to end up with
 ##' variables from the original dataset other than the
 ##' traits and degree, then you must specify this when
-##' you construct \code{dd} using the 
-##' '\code{estimate.degree.distns} function.
+##' you construct `dd` using the 
+##' '`estimate.degree.distns` function.
 ##'
 ##'
 ##' TODO be sure to comment the broken-out trait variables
 ##'      (ie these could all be different from the originals)
 ##'
 ##' @param chains a list with the chains constructed from the survey
-##' using \code{make.chain}
+##' using `make.chain`
 ##' @param mm the mixing model
 ##' @param dd the degree distributions
 ##' @param num.reps the number of bootstrap resamples we want
-##' @return a list of length \code{num.reps}; each entry in
+##' @return a list of length `num.reps`; each entry in
 ##' the list has one bootstrap-resampled dataset
 rds.mc.boot.draws <- function(chains,
                               mm,

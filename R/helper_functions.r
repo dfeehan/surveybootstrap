@@ -13,7 +13,7 @@
 ##'
 ##' this is the same as get.var with the default value set to 1
 ##' instead of NA
-##' @param ... (this is a function curried from \code{get.var})
+##' @param ... (this is a function curried from `get.var`)
 ##' @keywords internal
 get.weights <- functional::Curry(get.var, default=1)
 
@@ -126,7 +126,7 @@ get.var <- function(survey.data, var, default=NA) {
 ##'
 ##' this is the same as get.var with the default value set to 1
 ##' instead of NA
-##' @param ... (this is a function curried from \code{get.var})
+##' @param ... (this is a function curried from `get.var`)
 ##' @keywords internal
 get.weights <- functional::Curry(get.var, default=1)
 
@@ -149,11 +149,11 @@ vcat <- function(verbose=TRUE, ...) {
 ##' parse a formula that describes the design of a survey
 ##'
 ##' Parse a formula of the form\cr
-##' \code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)}\cr
+##' `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`\cr
 ##' into a PSU formula and a strata formula.
 ##'
 ##' @param formula a formula describing the sample design (see above)
-##' @return a list with entries \code{psu.formula} and \code{strata.formula}
+##' @return a list with entries `psu.formula` and `strata.formula`
 ##' @keywords internal
 parse_design <- function(formula) {
 

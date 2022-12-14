@@ -1,6 +1,6 @@
 ##' Survey bootstrap variance estimators
 ##'
-##' \code{surveybootstrap} has methods for analyzing data that were collected
+##' `surveybootstrap` has methods for analyzing data that were collected
 ##' using network reporting techniques. It includes estimators appropriate for
 ##' the simple boostrap and the rescaled bootstrap.
 ##'

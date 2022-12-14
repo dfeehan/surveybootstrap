@@ -28,21 +28,21 @@
 ##' in Rao and Wu (1988) and Rust and Rao (1996).
 ##'
 ##' (This is a C++ version; a previous version, written in pure R,
-##' is called \code{escaled.bootstrap.sample.pureR})
+##' is called `escaled.bootstrap.sample.pureR`)
 ##'
 ##'
 ##' @param survey.data the dataset to use
 ##' @param survey.design a formula describing the design of the survey (see below - TODO)
 ##' @param num.reps the number of bootstrap replication samples to draw
-##' @param parallel if TRUE, use parallelization (via \code{plyr})
-##' @param paropts an optional list of arguments passed on to \code{plyr} to control
+##' @param parallel if TRUE, use parallelization (via `plyr`)
+##' @param paropts an optional list of arguments passed on to `plyr` to control
 ##'        details of parallelization
-##' @return a list with \code{num.reps} entries. each entry is a dataset which
-##' has at least the variables \code{index} (the row index of the original
-##' dataset that was resampled) and \code{weight.scale}
+##' @return a list with `num.reps` entries. each entry is a dataset which
+##' has at least the variables `index` (the row index of the original
+##' dataset that was resampled) and `weight.scale`
 ##' (the factor by which to multiply the sampling weights
 ##' in the original dataset).
-##' @details \code{survey.design} is a formula of the form\cr
+##' @details `survey.design` is a formula of the form\cr
 ##'    weight ~ psu_vars + strata(strata_vars),
 ##' where weight is the variable with the survey weights and psu
 ##' is the variable denoting the primary sampling unit
@@ -129,7 +129,7 @@ rescaled.bootstrap.sample <- function(survey.data,
 ##' rescaled.bootstrap.sample.pureR
 ##'
 ##' (this is the pure R version; it has been supplanted by
-##'  \code{rescaled.bootstrap.sample}, which is partially written in C++)
+##'  `rescaled.bootstrap.sample`, which is partially written in C++)
 ##'
 ##' given a survey dataset and a description of the survey
 ##' design (ie, which combination of vars determines primary sampling
@@ -159,15 +159,15 @@ rescaled.bootstrap.sample <- function(survey.data,
 ##' @param survey.data the dataset to use
 ##' @param survey.design a formula describing the design of the survey (see below - TODO)
 ##' @param num.reps the number of bootstrap replication samples to draw
-##' @param parallel if TRUE, use parallelization (via \code{plyr})
-##' @param paropts an optional list of arguments passed on to \code{plyr} to control
+##' @param parallel if TRUE, use parallelization (via `plyr`)
+##' @param paropts an optional list of arguments passed on to `plyr` to control
 ##'        details of parallelization
-##' @return a list with \code{num.reps} entries. each entry is a dataset which
-##' has at least the variables \code{index} (the row index of the original
-##' dataset that was resampled) and \code{weight.scale}
+##' @return a list with `num.reps` entries. each entry is a dataset which
+##' has at least the variables `index` (the row index of the original
+##' dataset that was resampled) and `weight.scale`
 ##' (the factor by which to multiply the sampling weights
 ##' in the original dataset).
-##' @details \code{survey.design} is a formula of the form\cr
+##' @details `survey.design` is a formula of the form\cr
 ##'    weight ~ psu_vars + strata(strata_vars),
 ##' where weight is the variable with the survey weights and psu
 ##' is the variable denoting the primary sampling unit

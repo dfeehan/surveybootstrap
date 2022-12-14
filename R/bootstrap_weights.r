@@ -2,14 +2,14 @@
 ##' rescaled.bootstrap.weights
 ##'
 ##' This function creates a dataset with rescaled bootstrap weights;
-##' it can be a helpful alternative to \code{bootstrap.estimates} in some situations
+##' it can be a helpful alternative to `bootstrap.estimates` in some situations
 ##'
-##' @param survey.data the dataset to use
-##' @param survey.design a formula describing the design of the survey
-##'                      (see Details below)
+##' @param survey.data The dataset to use
+##' @param survey.design A formula describing the design of the survey
+##'                      (see Details in [bootstrap.estimates()] help page)
 ##' @param num.reps the number of bootstrap replication samples to draw
 ##' @param weights weights to use in estimation (or NULL, if none)
-##' @param idvar the name of the column in \code{survey.data} that has the respondent id
+##' @param idvar the name of the column in `survey.data` that has the respondent id
 ##' @param parallel if TRUE, use the plyr library's .parallel argument to
 ##'                 produce bootstrap resamples and estimates in parallel
 ##' @param paropts if not NULL, additional arguments to pass along to the
@@ -21,7 +21,7 @@
 ##'
 ##' @details
 ##' The formula describing the survey design should have the form
-##' \code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)},
+##' `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`,
 ##' where psu_v1, ... are the variables identifying primary sampling units (PSUs)
 ##' and strata_v1, ... identifies the strata
 ##'
