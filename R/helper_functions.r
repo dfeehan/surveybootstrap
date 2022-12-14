@@ -4,6 +4,8 @@
 ## various helper functions for use in the networkreporting
 ## package
 ##
+## these are all internal
+##
 
 
 ##########################################################################
@@ -145,17 +147,9 @@ vcat <- function(verbose=TRUE, ...) {
 ##########################################################################
 ##' parse a formula that describes the design of a survey
 ##'
-##' Given a formula of the form\cr
+##' Parse a formula of the form\cr
 ##' \code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)}\cr
-##' \itemize{
-##'  \item{"psu.formula"}{a formula describing the primary sampling unit vars}
-##'  \item{"strata.formula"}{a formula describing the strata (if any)}
-##' }\cr
-##' Wishlist / TODO:
-##' \itemize{
-##'  \item{}{check to be sure no response is included (or warn)}
-##'  \item{}{check formulas for strata more carefully...}
-##' }
+##' into a PSU formula and a strata formula.
 ##'
 ##' @param formula a formula describing the sample design (see above)
 ##' @return a list with entries \code{psu.formula} and \code{strata.formula}
@@ -164,6 +158,10 @@ parse_design <- function(formula) {
 
   ## see https://stackoverflow.com/questions/10224805/how-to-select-a-part-of-formula-in-formula-in-r
   ## for some helpful info
+
+  ## TODO / wishlist:
+  ##  - check to be sure no response is included (or warn)
+  ##  - check formulas for strata more carefully
 
   psu.formula <- formula
   strata.formula <- NULL
