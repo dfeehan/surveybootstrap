@@ -62,7 +62,7 @@ in Rao and Wu (1988) and Rust and Rao (1996).
 is called \code{escaled.bootstrap.sample.pureR})
 
 \code{survey.design} is a formula of the form\cr
-   weight ~ psu_vars + strata(strata_vars),
+weight ~ psu_vars + strata(strata_vars),
 where weight is the variable with the survey weights and psu
 is the variable denoting the primary sampling unit
 }

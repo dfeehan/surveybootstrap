@@ -13,7 +13,7 @@ get.fn(fn, env = parent.frame())
 }
 \value{
 fn, if fn is already a function; otherwise, the first function found
-        in env or one of its parents whose name is fn
+in env or one of its parents whose name is fn
 }
 \description{
 helper to grab a fn that is passed in as an argument

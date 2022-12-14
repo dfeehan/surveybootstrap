@@ -16,10 +16,10 @@ rescaled.bootstrap.weights(
 )
 }
 \arguments{
-\item{survey.data}{the dataset to use}
+\item{survey.data}{The dataset to use}
 
-\item{survey.design}{a formula describing the design of the survey
-(see below - TODO)}
+\item{survey.design}{A formula describing the design of the survey
+(see Details in \code{\link[=bootstrap.estimates]{bootstrap.estimates()}} help page)}
 
 \item{num.reps}{the number of bootstrap replication samples to draw}
 
@@ -37,12 +37,18 @@ parallelization routine}
 }
 \value{
 if no summary.fn is specified, then return the list of estimates
-        produced by estimator.fn; if summary.fn is specified, then return
-        its output
+produced by estimator.fn; if summary.fn is specified, then return
+its output
 }
 \description{
 This function creates a dataset with rescaled bootstrap weights;
 it can be a helpful alternative to \code{bootstrap.estimates} in some situations
+}
+\details{
+The formula describing the survey design should have the form
+\code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)},
+where \verb{psu_v1, ...} are the variables identifying primary sampling units (PSUs)
+and \verb{strata_v1, ...} identifies the strata
 }
 \examples{
 \donttest{

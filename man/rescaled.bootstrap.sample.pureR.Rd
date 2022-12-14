@@ -33,7 +33,7 @@ in the original dataset).
 }
 \description{
 (this is the pure R version; it has been supplanted by
- \code{rescaled.bootstrap.sample}, which is partially written in C++)
+\code{rescaled.bootstrap.sample}, which is partially written in C++)
 }
 \details{
 given a survey dataset and a description of the survey
@@ -62,7 +62,7 @@ We always take m_i = n_i - 1, according to the advice presented
 in Rao and Wu (1988) and Rust and Rao (1996).
 
 \code{survey.design} is a formula of the form\cr
-   weight ~ psu_vars + strata(strata_vars),
+weight ~ psu_vars + strata(strata_vars),
 where weight is the variable with the survey weights and psu
 is the variable denoting the primary sampling unit
 }

@@ -32,10 +32,9 @@ required.
 if you wish the bootstrap dataset to end up with
 variables from the original dataset other than the
 traits and degree, then you must specify this when
-you construct \code{dd} using the 
+you construct \code{dd} using the
 '\code{estimate.degree.distns} function.
 
-
 TODO be sure to comment the broken-out trait variables
-     (ie these could all be different from the originals)
+(ie these could all be different from the originals)
 }

@@ -20,9 +20,9 @@ of \code{survey.data} which refer to the traits}
 \value{
 an object with
 \itemize{
-  \item \code{distns} a list with one entry per trait value; each
-  \item \code{draw.degrees.fn} a function which gets called with one
-  \item \code{keep.vars} the name of the other vars that are kept (if any)
+\item \code{distns} a list with one entry per trait value; each
+\item \code{draw.degrees.fn} a function which gets called with one
+\item \code{keep.vars} the name of the other vars that are kept (if any)
 }
 }
 \description{
@@ -38,7 +38,7 @@ one of the items returned as a result is a function,
 for each entry in this vector, \code{draw.degress.fn}
 returns a draw from the empirical distribution of
 degrees among respondents with that trait. so,
-\code{draw.degrees.fn(c("0.0", "0.1", "0.1")} would
+\verb{draw.degrees.fn(c("0.0", "0.1", "0.1")} would
 return a degree drawn uniformly at random from among
 the observed degrees of respondents with trait "0.0"
 and then two degrees from respondents with trait "0.1"

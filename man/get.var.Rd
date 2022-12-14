@@ -16,8 +16,8 @@ is not found}
 }
 \value{
 a vector of values whose length is the same as the
-        number of rows in survey.data; if var is NULL, this has
-        the default values
+number of rows in survey.data; if var is NULL, this has
+the default values
 }
 \description{
 this function was written because a few of the estimator functions

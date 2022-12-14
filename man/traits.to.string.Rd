@@ -2,7 +2,7 @@
 % Please edit documentation in R/rds.r
 \name{traits.to.string}
 \alias{traits.to.string}
-\title{take a set of traits and turn into a string}
+\title{Take a set of traits and turn into a string}
 \usage{
 traits.to.string(data, traits, na.action = "drop", sep = ".")
 }
@@ -24,7 +24,7 @@ if there is missingness); and \code{traits}, which has the string
 version of the traits
 }
 \description{
-this is a helper function that is useful when we wish
+This is a helper function that is useful when we wish
 to make several traits into one variable
 }
 \keyword{internal}

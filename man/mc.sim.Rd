@@ -15,7 +15,7 @@ mc.sim(mm, start, n)
 }
 \value{
 a vector with the state visited at each time step. the first entry
-        has the starting state
+has the starting state
 }
 \description{
 run a given markov model for n time steps, starting

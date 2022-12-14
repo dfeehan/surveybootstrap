@@ -19,51 +19,50 @@ bootstrap.estimates(
 )
 }
 \arguments{
-\item{survey.data}{the dataset to use}
+\item{survey.data}{The dataset to use}
 
-\item{survey.design}{a formula describing the design of the survey
-(see below - TODO)}
+\item{survey.design}{A formula describing the design of the survey
+(see Details below)}
 
-\item{bootstrap.fn}{name of the method to be used to take
-bootstrap resamples; see below}
+\item{bootstrap.fn}{Name of the method to be used to take
+bootstrap resamples}
 
-\item{estimator.fn}{name of a function which, given a dataset like
-survey data and arguments in \code{...},
+\item{estimator.fn}{The name of a function which, given a dataset like
+\code{survey.data} and arguments in \code{...},
 will produce an estimate of interest}
 
-\item{num.reps}{the number of bootstrap replication samples to draw}
+\item{num.reps}{The number of bootstrap replication samples to draw}
 
-\item{weights}{weights to use in estimation (or NULL, if none)}
+\item{weights}{Weights to use in estimation (or \code{NULL}, if none)}
 
-\item{...}{additional arguments which will be passed on to the estimator fn}
+\item{...}{additional arguments which will be passed on to \code{estimator.fn}}
 
-\item{summary.fn}{(optional) name of a function which, given the set of estimates
-produced by estimator.fn, summarizes them. if not specified, all of
-the estimates are returned in a list}
+\item{summary.fn}{(Optional) Name of a function which, given the set of estimates
+produced by \code{estimator.fn}, summarizes them. If not specified, all of
+the estimates are returned in a list.}
 
-\item{verbose}{if TRUE, produce lots of feedback about what is going on}
+\item{verbose}{If \code{TRUE}, produce lots of feedback about what is going on}
 
-\item{parallel}{if TRUE, use the plyr library's .parallel argument to
+\item{parallel}{If \code{TRUE}, use the \code{plyr} library's \code{.parallel} argument to
 produce bootstrap resamples and estimates in parallel}
 
-\item{paropts}{if not NULL, additional arguments to pass along to the
+\item{paropts}{If not \code{NULL}, additional arguments to pass along to the
 parallelization routine}
 }
 \value{
-If no summary.fn is specified, then return the list of estimates
-        produced by estimator.fn; if summary.fn is specified, then return
-        its output
+If \code{summary.fn} is not specified, then return the list of estimates
+produced by \code{estimator.fn}; if \code{summary.fn} is specified, then return
+its output
 }
 \description{
-Use the rescaled bootstrap
-method to estimating sampling uncertainty from a given
+Use a given bootstrap method to estimate sampling uncertainty from a given
 estimator.
 }
 \details{
 The formula describing the survey design should have the form
 \code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)},
-where psu_v1, ... are the variables identifying primary sampling units (PSUs)
-and strata_v1, ... identifies the strata
+where \verb{psu_v1, ...} are the variables identifying primary sampling units (PSUs)
+and \verb{strata_v1, ...} identifies the strata
 }
 \examples{
 \donttest{

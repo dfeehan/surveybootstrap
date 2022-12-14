@@ -14,7 +14,7 @@ wish to build from the dataset}
 
 \item{is.child.fn}{a function which takes two ids as arguments;
 it is expected to return TRUE if the second argument is the parent of the
-first, and FALSE otherwise. it defaults to \code{\link{is.child.ct}}}
+first, and FALSE otherwise. it defaults to \code{\link[=is.child.ct]{is.child.ct()}}}
 }
 \value{
 info

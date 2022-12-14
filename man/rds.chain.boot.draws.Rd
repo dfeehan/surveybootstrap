@@ -33,5 +33,5 @@ material of Weir et al 2012 (TODO PROPER CITE)
 TODO -- consider constructing chains, mm from other args
 
 TODO be sure to comment the broken-out trait variables
-     (ie these could all be different from the originals)
+(ie these could all be different from the originals)
 }
