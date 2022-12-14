@@ -17,4 +17,10 @@ There was 1 NOTE:
 None.
 
 
+## Checked on
+
+* rhub - Windows Server 2022, R-devel, 64 bit (windows-x86_64-devel)
+* rhub - Ubuntu Linux 20.04.1 LTS, R-release, GCC (ubuntu-gcc-release)
+
+
 
