@@ -6,7 +6,20 @@
 ##' design (ie, which combination of variables determines primary sampling
 ##' units, and which combination of variables determines strata), take
 ##' a bunch of bootstrap samples for the rescaled bootstrap estimator
-##' (see, eg, Rust and Rao 1996).
+##' (see Details).
+##'
+##' @details
+##'
+##' `survey.design` is a formula of the form
+##'
+##'    `weight ~ psu_vars + strata(strata_vars)`
+##'
+##' where:
+##'   * `weight` is the variable with the survey weights
+##'   * `psu_vars` has the form `psu_v1 + psu_v2 + ...`, where primary
+##'     sampling units (PSUs) are determined by `psu_v1`, etc
+##'   * `strata_vars` has the form `strata_v1 + strata_v2 + ...`, which
+##'     determine strata
 ##'
 ##' Note that we assume that the formula uniquely specifies PSUs.
 ##' This will always be true if the PSUs were selected without replacement.
@@ -28,24 +41,28 @@
 ##' in Rao and Wu (1988) and Rust and Rao (1996).
 ##'
 ##' (This is a C++ version; a previous version, written in pure R,
-##' is called `escaled.bootstrap.sample.pureR`)
+##' is called [rescaled.bootstrap.sample.pureR()] )
+##'
+##' References:
+##' * Rust, Keith F., and J. N. K. Rao. "Variance estimation for complex surveys
+##'   using replication techniques." *Statistical methods in medical research*
+##'   5.3 (1996): 283-310.
+##'  * Rao, Jon NK, and C. F. J. Wu. "Resampling inference with complex survey
+##'    data." *Journal of the American Statistical Association*
+##'    83.401 (1988): 231-241.
 ##'
 ##'
-##' @param survey.data the dataset to use
-##' @param survey.design a formula describing the design of the survey (see below - TODO)
-##' @param num.reps the number of bootstrap replication samples to draw
-##' @param parallel if TRUE, use parallelization (via `plyr`)
-##' @param paropts an optional list of arguments passed on to `plyr` to control
+##' @param survey.data The dataset to use
+##' @param survey.design A formula describing the design of the survey (see Details)
+##' @param num.reps The number of bootstrap replication samples to draw
+##' @param parallel If `TRUE`, use parallelization (via `plyr`)
+##' @param paropts An optional list of arguments passed on to `plyr` to control
 ##'        details of parallelization
-##' @return a list with `num.reps` entries. each entry is a dataset which
+##' @return A list with `num.reps` entries. Each entry is a dataset which
 ##' has at least the variables `index` (the row index of the original
 ##' dataset that was resampled) and `weight.scale`
 ##' (the factor by which to multiply the sampling weights
 ##' in the original dataset).
-##' @details `survey.design` is a formula of the form\cr
-##'    weight ~ psu_vars + strata(strata_vars),
-##' where weight is the variable with the survey weights and psu
-##' is the variable denoting the primary sampling unit
 ##' @export
 rescaled.bootstrap.sample <- function(survey.data,
                                       survey.design,
