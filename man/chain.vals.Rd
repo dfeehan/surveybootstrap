@@ -2,22 +2,23 @@
 % Please edit documentation in R/rds.r
 \name{chain.vals}
 \alias{chain.vals}
-\title{chain.vals}
+\title{Get all of the values of the given variable
+found among members of a chain}
 \usage{
 chain.vals(chain, qoi.var = "uid")
 }
 \arguments{
-\item{chain}{the chain to get values from}
+\item{chain}{The chain to get values from}
 
-\item{qoi.var}{the name of the variable to
+\item{qoi.var}{The name of the variable to
 get from each member of the chain}
 }
 \value{
-a vector with all of the values of \code{qoi.var}
-found in this chain. (currently, the order of the values
-in the vector is not guaranteed)
+A vector with all of the values of \code{qoi.var}
+found in this chain. (Currently, the order of the values
+in the vector is not guaranteed.)
 }
 \description{
-get all of the values of the given variable
+Get all of the values of the given variable
 found among members of a chain
 }

@@ -2,24 +2,23 @@
 % Please edit documentation in R/rds.r
 \name{make.chain}
 \alias{make.chain}
-\title{build an RDS seed's chain from the dataset}
+\title{Build an RDS seed's chain from the dataset}
 \usage{
 make.chain(seed.id, survey.data, is.child.fn = is.child.ct)
 }
 \arguments{
-\item{seed.id}{the id of the seed whose chain we
+\item{seed.id}{The id of the seed whose chain we
 wish to build from the dataset}
 
-\item{survey.data}{the dataset}
+\item{survey.data}{The dataset}
 
-\item{is.child.fn}{a function which takes two ids as arguments;
-it is expected to return TRUE if the second argument is the parent of the
-first, and FALSE otherwise. it defaults to \code{\link[=is.child.ct]{is.child.ct()}}}
+\item{is.child.fn}{A function which takes two ids as arguments;
+it is expected to return \code{TRUE} if the second argument is the parent of the
+first, and \code{FALSE} otherwise. it defaults to \code{\link[=is.child.ct]{is.child.ct()}}}
 }
 \value{
 info
 }
 \description{
-text
-TODO assumes that the chain is a tree (no loops)
+Note that this assumes that the chain is a tree (no loops)
 }

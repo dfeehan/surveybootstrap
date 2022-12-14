@@ -7,21 +7,23 @@
 traits.to.string(data, traits, na.action = "drop", sep = ".")
 }
 \arguments{
-\item{data}{the respondent info}
+\item{data}{The respondent info}
 
-\item{traits}{the names of the traits to build the model on}
+\item{traits}{The names of the traits to build the model on}
 
-\item{na.action}{for now, defaults to 'drop' (meaning all rows of data
-with any missingness on the traits are dropped). anything else
-NAs are treated like any other value}
+\item{na.action}{Defaults to 'drop' (meaning all rows of data
+with any missingness on the traits are dropped). Anything else
+means \code{NA}s are treated like any other value.}
 
-\item{sep}{the separator character used to combine values}
+\item{sep}{The separator character used to combine values}
 }
 \value{
-a list whose entries are \code{used.idx}, which indicates
-which rows from the original dataset were used (may not be all of
-if there is missingness); and \code{traits}, which has the string
-version of the traits
+A list whose entries are
+\itemize{
+\item \code{used.idx}, which indicates which rows from the original dataset were used
+(may not be all of them if there is missingness); and
+\item \code{traits}, which has the string version of the traits
+}
 }
 \description{
 This is a helper function that is useful when we wish

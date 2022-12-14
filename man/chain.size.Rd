@@ -2,18 +2,18 @@
 % Please edit documentation in R/rds.r
 \name{chain.size}
 \alias{chain.size}
-\title{get the size of a chain}
+\title{Get the size of a chain}
 \usage{
 chain.size(chain)
 }
 \arguments{
-\item{chain}{the chain object}
+\item{chain}{The chain object}
 }
 \value{
-the number of respondents involved in
+The number of respondents involved in
 the chain
 }
 \description{
-count the total number of respondents in the chain
+Count the total number of respondents in the chain
 and return it
 }

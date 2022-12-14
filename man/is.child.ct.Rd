@@ -2,7 +2,7 @@
 % Please edit documentation in R/rds.r
 \name{is.child.ct}
 \alias{is.child.ct}
-\title{determine whether or not one id is a parent of another}
+\title{Determine whether or not one id is a parent of another}
 \usage{
 is.child.ct(id, seed.id)
 }
@@ -16,9 +16,19 @@ TRUE if \code{id} is the direct descendant of \code{seed.id}
 and FALSE otherwise
 }
 \description{
-this function allows us to determine which ids are
-directly descended from which other ones. it is the only part
+This function allows us to determine which ids are
+directly descended from which other ones. It is the only part
 of the code that relies on the ID format used by the
-Curitiba study (TODO CITE); by modifying this function,
-it shold be possible to adapt this code to another study
+Curitiba study (see Details); by modifying this function,
+it should be possible to adapt this code to another study.
+}
+\details{
+See:
+\itemize{
+\item Salganik, M. J., Fazito, D., Bertoni, N., Abdo, A. H., Mello, M. B., &
+Bastos, F. I. (2011). Assessing network scale-up estimates for groups
+most at risk of HIV/AIDS: evidence from a multiple-method study of heavy
+drug users in Curitiba, Brazil. \emph{American journal of epidemiology},
+174(10), 1190-1196.
+}
 }

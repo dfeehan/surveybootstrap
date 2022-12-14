@@ -2,16 +2,16 @@
 % Please edit documentation in R/rds.r
 \name{max.depth}
 \alias{max.depth}
-\title{get the height (maximum depth) of a chain}
+\title{Get the height (maximum depth) of a chain}
 \usage{
 \method{max}{depth}(chain)
 }
 \arguments{
-\item{chain}{the chain object}
+\item{chain}{The chain object}
 }
 \value{
-the maximum depth of the chain
+The maximum depth of the chain
 }
 \description{
-get the height (maximum depth) of a chain
+Get the height (maximum depth) of a chain
 }

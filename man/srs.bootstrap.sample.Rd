@@ -13,26 +13,26 @@ srs.bootstrap.sample(
 )
 }
 \arguments{
-\item{survey.data}{the dataset to use}
+\item{survey.data}{The dataset to use}
 
-\item{num.reps}{the number of bootstrap replication samples to draw}
+\item{num.reps}{The number of bootstrap replication samples to draw}
 
-\item{parallel}{if TRUE, use parallelization (via \code{plyr})}
+\item{parallel}{If \code{TRUE}, use parallelization (via \code{plyr})}
 
-\item{paropts}{an optional list of arguments passed on to \code{plyr} to control
+\item{paropts}{An optional list of arguments passed on to \code{plyr} to control
 details of parallelization}
 
-\item{...}{ignored, but useful because it allows params like
+\item{...}{Ignored, but useful because it allows params like \code{survey.design}
 which are used in other bootstrap designs, to be passed in without error}
 }
 \value{
-a list with \code{num.reps} entries. each entry is a dataset which has
+A list with \code{num.reps} entries. Each entry is a dataset which has
 at least the variables \code{index} (the row index of the original dataset that
 was resampled) and \code{weight.scale} (the factor by which to multiply the
 sampling weights in the original dataset).
 }
 \description{
-given a survey dataset and a description of the survey
+Given a survey dataset and a description of the survey
 design (ie, which combination of vars determines primary sampling
 units, and which combination of vars determines strata), take
 a bunch of bootstrap samples under a simple random sampling

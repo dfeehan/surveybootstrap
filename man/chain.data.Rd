@@ -2,19 +2,19 @@
 % Please edit documentation in R/rds.r
 \name{chain.data}
 \alias{chain.data}
-\title{get a dataset from a chain}
+\title{Get a dataset from a chain}
 \usage{
 chain.data(chain)
 }
 \arguments{
-\item{chain}{the chain to build a dataset from}
+\item{chain}{The chain to build a dataset from}
 }
 \value{
-a dataset comprised of all of the chain's
-members' data put together. the order of the rows
-in the datset is not specified.
+A dataset comprised of all of the chain's
+members' data put together. The order of the rows
+in the dataset is not specified.
 }
 \description{
-take the data for each member of the given chain
-and assemble it together in a dataset
+Take the data for each member of the given chain
+and assemble it together in a dataset.
 }
