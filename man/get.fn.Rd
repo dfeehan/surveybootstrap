@@ -2,26 +2,26 @@
 % Please edit documentation in R/helper_functions.r
 \name{get.fn}
 \alias{get.fn}
-\title{grab a function based on its name}
+\title{Grab a function based on its name}
 \usage{
 get.fn(fn, env = parent.frame())
 }
 \arguments{
-\item{fn}{the function to search for}
+\item{fn}{The function to search for}
 
-\item{env}{the environment to start searching in}
+\item{env}{The environment to start searching in}
 }
 \value{
-fn, if fn is already a function; otherwise, the first function found
-in env or one of its parents whose name is fn
+\code{fn}, if \code{fn} is already a function; otherwise, the first function found
+in env or one of its parents whose name is \code{fn}
 }
 \description{
-helper to grab a fn that is passed in as an argument
+Helper to grab a function that is passed in as an argument
 }
 \details{
-this is based on Hadley Wickham's response to an SO
+This is based on Hadley Wickham's response to an SO
 post:
-https://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions
+\url{https://stackoverflow.com/questions/14183766/match-fun-provide-error-with-functions-defined-inside-functions}
 with some minor modifications
 }
 \keyword{internal}

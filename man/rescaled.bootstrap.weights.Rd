@@ -48,7 +48,7 @@ it can be a helpful alternative to \code{bootstrap.estimates} in some situations
 The formula describing the survey design should have the form
 \code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)},
 where \verb{psu_v1, ...} are the variables identifying primary sampling units (PSUs)
-and \verb{strata_v1, ...} identifies the strata
+and \verb{strata_v1, ...} identify the strata
 }
 \examples{
 \donttest{

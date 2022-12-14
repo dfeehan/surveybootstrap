@@ -2,16 +2,16 @@
 % Please edit documentation in R/helper_functions.r
 \name{vcat}
 \alias{vcat}
-\title{only prints things out in verbose mode}
+\title{Only prints things out in verbose mode}
 \usage{
 vcat(verbose = TRUE, ...)
 }
 \arguments{
-\item{verbose}{if TRUE, print things out; otherwise, do nothing}
+\item{verbose}{If \code{TRUE}, print things out; otherwise, do nothing}
 
-\item{...}{arguments to pass to cat if verbose is TRUE}
+\item{...}{Arguments to pass to cat if verbose is \code{TRUE}}
 }
 \description{
-only prints things out in verbose mode
+Only prints things out in verbose mode
 }
 \keyword{internal}

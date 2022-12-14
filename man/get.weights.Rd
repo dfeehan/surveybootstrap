@@ -2,20 +2,15 @@
 % Please edit documentation in R/helper_functions.r
 \name{get.weights}
 \alias{get.weights}
-\title{get the weights column from a dataframe}
+\title{Get the weights column from a dataframe}
 \usage{
-get.weights(...)
-
 get.weights(...)
 }
 \arguments{
-\item{...}{(this is a function curried from \code{get.var})}
+\item{...}{(this is a function curried from \code{\link[=get.var]{get.var()}})}
 }
 \description{
-this is the same as get.var with the default value set to 1
-instead of NA
-
-this is the same as get.var with the default value set to 1
-instead of NA
+This is the same as \code{\link[=get.var]{get.var()}} with the default value set to 1
+instead of \code{NA}
 }
 \keyword{internal}
