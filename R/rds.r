@@ -59,7 +59,7 @@ traits.to.string <- function(data, traits, na.action="drop", sep=".") {
 ##' traits
 ##' @param names A vector with the names of each trait (in order)
 ##' @param sep The character used to separate the traits in their
-##' collpased string representation
+##' collapsed string representation
 ##' @return A dataframe whose rows correspond to the entries in
 ##' `trait.string`, with one column per trait
 ##' @keywords internal
