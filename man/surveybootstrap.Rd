@@ -8,5 +8,5 @@
 \description{
 \code{surveybootstrap} has methods for analyzing data that were collected
 using network reporting techniques. It includes estimators appropriate for
-the simple boostrap and the rescaled bootstrap.
+the simple bootstrap and the rescaled bootstrap.
 }

@@ -66,7 +66,31 @@ and \verb{strata_v1, ...} identifies the strata
 }
 \examples{
 \donttest{
-# code goes here
+idu.est <- bootstrap.estimates(
+  ## this describes the sampling design of the
+  ## survey; here, the PSUs are given by the
+  ## variable cluster, and the strata are given
+  ## by the variable region
+  survey.design = ~ cluster + strata(region),
+  ## the number of bootstrap resamples to obtain
+  num.reps=1000,
+  ## this is the name of the function
+  ## we want to use to produce an estimate
+  ## from each bootstrapped dataset
+  estimator.fn="our.estimator",
+  ## these are the sampling weights
+  weights="indweight",
+  ## this is the name of the type of bootstrap
+  ## we wish to use
+  bootstrap.fn="rescaled.bootstrap.sample",
+  ## our dataset
+  survey.data=example.survey,
+  ## other parameters we need to pass
+  ## to the estimator function
+  d.hat.vals=d.hat,
+  total.popn.size=tot.pop.size,
+  y.vals="clients",
+  missing="complete.obs")
 
 }
 }

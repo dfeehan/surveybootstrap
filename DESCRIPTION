@@ -1,5 +1,5 @@
 Package: surveybootstrap
-Title: Tools for the Bootstrap with Survey Data
+Title: Bootstrap with Survey Data
 Version: 0.0.3
 Authors@R: c(person(given=c("Dennis", "M."), 
                     family="Feehan", 
@@ -9,9 +9,11 @@ Authors@R: c(person(given=c("Dennis", "M."),
                     family="Salganik", 
                     email="mjs3@princeton.edu",
                     role="ths"))
-Description: Tools for using different kinds of bootstrap
-    for estimating sampling variation using complex survey
-    data.  
+Description: Implements different kinds of bootstraps
+    to estimate sampling variation from survey data with 
+    complex designs. Includes the rescaled bootstrap
+    described in Rust and Rao (1996) <doi:10.1177/09622802960050030> and
+    Rau and Wu (1988) <doi:10.1080/01621459.1988.10478591>. 
 License: MIT + file LICENSE
 LinkingTo: Rcpp, RcppArmadillo
 Imports:

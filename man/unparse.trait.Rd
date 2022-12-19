@@ -13,7 +13,7 @@ traits}
 \item{names}{A vector with the names of each trait (in order)}
 
 \item{sep}{The character used to separate the traits in their
-collpased string representation}
+collapsed string representation}
 }
 \value{
 A dataframe whose rows correspond to the entries in

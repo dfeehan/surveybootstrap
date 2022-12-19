@@ -25,7 +25,7 @@ A list of length \code{num.reps}; each entry in
 the list has one bootstrap-resampled dataset
 }
 \description{
-Draw boostrap resamples for an RDS dataset, using
+Draw bootstrap resamples for an RDS dataset, using
 the algorithm described in the supporting online
 material of Weir et al 2012 (see \code{\link[=rds.boot.draw.chain]{rds.boot.draw.chain()}} ).
 }
