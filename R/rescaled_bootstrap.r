@@ -188,7 +188,6 @@ rescaled.bootstrap.sample <- function(survey.data,
 ##'    weight ~ psu_vars + strata(strata_vars),
 ##' where weight is the variable with the survey weights and psu
 ##' is the variable denoting the primary sampling unit
-##' @export
 rescaled.bootstrap.sample.pureR <- function(survey.data,
                                       survey.design,
                                       parallel=FALSE,
