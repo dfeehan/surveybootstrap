@@ -30,6 +30,19 @@
 ##' \donttest{
 ##' # code goes here
 ##'
+##' bootweights <- rescaled.bootstrap.weights(
+##'                                          # formula describing survey design:
+##'                                          # psu and strata
+##'                                          survey.design = ~ psu +
+##'                                                            stratum(stratum_analysis),
+##'                                          num.reps=10000,
+##'                                          # column with respondent ids
+##'                                          idvar='caseid',
+##'                                          # column with sampling weight
+##'                                          weights='wwgt',
+##'                                          # survey dataset
+##'                                          survey.data=mw.ego
+##'
 ##' }
 rescaled.bootstrap.weights <- function(survey.data,
                                        survey.design,
