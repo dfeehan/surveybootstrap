@@ -51,8 +51,19 @@ where \verb{psu_v1, ...} are the variables identifying primary sampling units (P
 and \verb{strata_v1, ...} identify the strata
 }
 \examples{
-\donttest{
-# code goes here
+\dontrun{
+bootweights <- rescaled.bootstrap.weights(
+                                         # formula describing survey design:
+                                         # psu and strata
+                                         survey.design = ~ psu +
+                                                           stratum(stratum_analysis),
+                                         num.reps=10000,
+                                         # column with respondent ids
+                                         idvar='caseid',
+                                         # column with sampling weight
+                                         weights='wwgt',
+                                         # survey dataset
+                                         survey.data=mw.ego)
 
 }
 }

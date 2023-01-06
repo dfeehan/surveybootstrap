@@ -36,7 +36,7 @@
 ##'
 ##' @export
 ##' @examples
-##' \donttest{
+##' \dontrun{
 ##' idu.est <- bootstrap.estimates(
 ##'   ## this describes the sampling design of the
 ##'   ## survey; here, the PSUs are given by the

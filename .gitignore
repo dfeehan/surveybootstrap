@@ -3,6 +3,8 @@
 
 .RData
 
+mu284.RData
+
 # taken from https://github.com/hadley/devtools/blob/master/.gitignore
 .R*
 *.so

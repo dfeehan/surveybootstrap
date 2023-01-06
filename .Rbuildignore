@@ -18,3 +18,4 @@ vignettes/
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^CRAN-SUBMISSION$
+^data-raw$

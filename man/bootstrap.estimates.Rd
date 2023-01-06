@@ -65,7 +65,7 @@ where \verb{psu_v1, ...} are the variables identifying primary sampling units (P
 and \verb{strata_v1, ...} identifies the strata
 }
 \examples{
-\donttest{
+\dontrun{
 idu.est <- bootstrap.estimates(
   ## this describes the sampling design of the
   ## survey; here, the PSUs are given by the

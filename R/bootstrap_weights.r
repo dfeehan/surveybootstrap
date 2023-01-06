@@ -27,9 +27,7 @@
 ##'
 ##' @export
 ##' @examples
-##' \donttest{
-##' # code goes here
-##'
+##' \dontrun{
 ##' bootweights <- rescaled.bootstrap.weights(
 ##'                                          # formula describing survey design:
 ##'                                          # psu and strata
@@ -41,7 +39,7 @@
 ##'                                          # column with sampling weight
 ##'                                          weights='wwgt',
 ##'                                          # survey dataset
-##'                                          survey.data=mw.ego
+##'                                          survey.data=mw.ego)
 ##'
 ##' }
 rescaled.bootstrap.weights <- function(survey.data,
