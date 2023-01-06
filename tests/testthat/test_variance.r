@@ -1,3 +1,9 @@
+## LEFT OFF HERE:
+## - I think mu284.RData (which we're not loading anymore) has the reference
+##   values for the unit test. figure out how to fix this!
+##   -> these are MU284.boot.res.summ
+
+
 ## TODO -- test that there is some variance across a set of bootstrap
 ##         samples
 
@@ -24,7 +30,7 @@ set.seed(12345)
 ## setup
 ## NB: see this for possible alternatives
 ## http://stackoverflow.com/questions/8898469/is-it-possible-to-use-r-package-data-in-testthat-tests-or-run-examples
-load("mu284.RData")
+#load("mu284.RData")
 
 #########################################
 ## rescaled (Rao / Wu) bootstrap

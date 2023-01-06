@@ -69,8 +69,38 @@ MU284.complex.surveys <- llply(1:K,
                                function(x) { draw.complex.survey() })
 
 
+#### Calculate results from bootstrap for use in unit tests
+num.bootstrap.samples <- 5000
+
+rbsfn <- Curry(bootstrap.estimates,
+               survey.design= ~ CL,
+               num.reps=num.bootstrap.samples,
+               estimator.fn="MU284.estimator.fn",
+               weights="sample_weight",
+               bootstrap.fn="rescaled.bootstrap.sample")
+
+boot.res <- llply(MU284.complex.surveys,
+                  function(x) {
+                    br <- rbsfn(survey.data=x)
+                    return(do.call("rbind", br))
+                  })
+
+## step 3: compute summary values from the bootstrap resamples
+##         for each survey, and save them to be used as unit
+##         tests in the networkreporting package
+boot.res.summ <- llply(boot.res,
+                       function(svy.boot.res) {
+                         this.summ <- summarise(svy.boot.res,
+                                                mean.TS82.hat=mean(TS82.hat),
+                                                mean.R.RMT85.P85.hat=mean(R.RMT85.P85.hat),
+                                                sd.TS82.hat=sd(TS82.hat),
+                                                sd.R.RMT85.P85.hat=sd(R.RMT85.P85.hat))
+                         return(this.summ)
+                       })
+MU284.boot.res.summ <- do.call("rbind", boot.res.summ)
 
 
 usethis::use_data(MU284, overwrite = TRUE)
 usethis::use_data(MU284.surveys, overwrite = TRUE)
 usethis::use_data(MU284.complex.surveys, overwrite = TRUE)
+usethis::use_data(MU284.boot.res.summ, overwrite = TRUE)

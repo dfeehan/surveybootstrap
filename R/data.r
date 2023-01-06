@@ -25,12 +25,55 @@ NULL
 
 #' Simulated sample surveys drawn from the MU284 Population
 #'
-#' A list with 15 sample surveys drawn from the [MU284] dataset.
+#' A list with 10 sample surveys with sample size 15 drawn from the [MU284]
+#' dataset using simple random sampling with replacment.
 #'
 #' @name MU284.surveys
 #'
 #' @format
-#' A data frame with 284 rows and 11 columns:
+#' A list with 10 data frames, each with 15 rows and 11 columns:
+#' \describe{
+#'   \item{LABEL, ..., CL}{Same as MU284 dataset}
+#'   \item{sample_weight}{The sampling weight for the row}
+#' }
+NULL
+
+#' Simulated sample surveys drawn from the MU284 Population using a complex design
+#'
+#' A list with 10 sample surveys with sample size 15 drawn from the [MU284]
+#' dataset using a complex sampling design.
+#'
+#' @details
+#' The sampling design comes from Ex. 4.3.2 (pg 142-3) of
+#' 'Model Assisted Survey Sampling' by Sarndal, Swensson, and Wretman
+#' (2003, ISBN:0387406204).
+#'
+#' The design is a two-stage sample:
+#'  * stage I: the primary sampling units (PSUs) are the standard clusters from
+#'    [MU284]; we take a simple random sample without replacement of `n_I = 5`
+#'    out of `N_I = 50` of these
+#'  * stage II: within each sampled PSU, we take a simple random sample without
+#'    replacement of `n_i = 3` out of `N_i` municipalities
+#'
+#' @name MU284.complex.surveys
+#'
+#' @format
+#' A list with 10 data frames, each with 15 rows and 11 columns:
+#' \describe{
+#'   \item{LABEL, ..., CL}{Same as MU284 dataset}
+#'   \item{sample_weight}{The sampling weight for the row}
+#' }
+NULL
+
+#' Benchmarks for unit tests
+#'
+#' Benchmark results to use in unit tests; these are based on
+#' [MU284.complex.surveys].
+#'
+#' @name MU284.boot.res.summ
+#'
+#' @format
+#' A list with 10 data frames, each with 15 rows and 11 columns:
 #' \describe{
 #'   \item{LABEL, ..., CL}{Same as MU284 dataset}
 #'   \item{sample_weight}{The sampling weight for the row}

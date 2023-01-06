@@ -65,6 +65,15 @@ where \verb{psu_v1, ...} are the variables identifying primary sampling units (P
 and \verb{strata_v1, ...} identifies the strata
 }
 \examples{
+
+ex.mu284 <- bootstrap.estimates(
+   survey.design = ~1,
+   num.reps = 10,
+   estimator.fn = 'MU284.estimator.fn',
+   weights='sample_weight',
+   bootstrap.fn = 'srs.bootstrap.sample',
+   survey.data=MU284.surveys[[1]])
+
 \dontrun{
 idu.est <- bootstrap.estimates(
   ## this describes the sampling design of the
