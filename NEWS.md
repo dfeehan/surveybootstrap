@@ -4,6 +4,7 @@
 * fixed some dependency errors that suddenly arose (explicitly use plyr:: in a few places)
 * dropped now-deprecated group_indices_() in favor of cur_group_index()
 * changed docs to use Markdown roxygen
+* added MU284 dataset for examples and tests
 
 # surveybootstrap 0.0.2
 
