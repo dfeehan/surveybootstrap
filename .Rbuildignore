@@ -10,6 +10,9 @@ var-parallel-dev.r
 var-prof-dev.r
 cran-comments.md
 
+mu284.RData
+surveybootstrap-dev.r
+
 
 vignettes/draft
 vignettes/
