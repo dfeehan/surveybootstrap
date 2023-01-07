@@ -12,8 +12,8 @@ Authors@R: c(person(given=c("Dennis", "M."),
 Description: Implements different kinds of bootstraps
     to estimate sampling variation from survey data with 
     complex designs. Includes the rescaled bootstrap
-    described in Rust and Rao (1996) <doi:10.1177/09622802960050030> and
-    Rau and Wu (1988) <doi:10.1080/01621459.1988.10478591>. 
+    described in Rust and Rao (1996) <doi:10.1177/096228029600500305> and
+    Rao and Wu (1988) <doi:10.1080/01621459.1988.10478591>. 
 License: MIT + file LICENSE
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
