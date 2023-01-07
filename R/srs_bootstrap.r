@@ -24,7 +24,7 @@
 ##' @examples
 ##'
 ##' survey <- MU284.surveys[[1]]
-##' srs.bootstrap.sample(survey, num.reps = 2)
+##' boot_surveys <- srs.bootstrap.sample(survey, num.reps = 2)
 ##'
 srs.bootstrap.sample <- function(survey.data,
                                  num.reps=1,
