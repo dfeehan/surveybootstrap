@@ -66,13 +66,22 @@ and \verb{strata_v1, ...} identifies the strata
 }
 \examples{
 
+# example using a simple random sample
+
+survey <- MU284.surveys[[1]]
+
+estimator <- function(survey.data, weights) {
+  plyr::summarise(survey.data,
+                  T82.hat = sum(S82 * weights))
+}
+
 ex.mu284 <- bootstrap.estimates(
    survey.design = ~1,
    num.reps = 10,
-   estimator.fn = 'MU284.estimator.fn',
+   estimator.fn = estimator,
    weights='sample_weight',
    bootstrap.fn = 'srs.bootstrap.sample',
-   survey.data=MU284.surveys[[1]])
+   survey.data=survey)
 
 \dontrun{
 idu.est <- bootstrap.estimates(

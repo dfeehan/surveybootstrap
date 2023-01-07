@@ -38,3 +38,9 @@ units, and which combination of vars determines strata), take
 a bunch of bootstrap samples under a simple random sampling
 (with repetition) scheme
 }
+\examples{
+
+survey <- MU284.surveys[[1]]
+boot_surveys <- srs.bootstrap.sample(survey, num.reps = 2)
+
+}

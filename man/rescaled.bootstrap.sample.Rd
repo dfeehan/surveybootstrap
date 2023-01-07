@@ -84,3 +84,11 @@ data." \emph{Journal of the American Statistical Association}
 83.401 (1988): 231-241.
 }
 }
+\examples{
+
+survey <- MU284.complex.surveys[[1]]
+boot_surveys <- rescaled.bootstrap.sample(survey.data = survey,
+                                          survey.design = ~ CL,
+                                          num.reps = 2)
+
+}

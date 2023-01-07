@@ -12,6 +12,7 @@ A data frame with 284 rows and 11 columns:
 \item{RMT85}{Municipal tax revenue in 1985}
 \item{CS82}{Number of Conservative seats in municipal council}
 \item{SS82}{Number of Social-Democratic seats in municipal council}
+\item{S82}{Total number of seats in municipal council}
 \item{ME84}{Number of municipal employees}
 \item{REV84}{Real estate values according to 1984 assessment}
 \item{REG}{Geographic location indicator}

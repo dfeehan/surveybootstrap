@@ -6,8 +6,7 @@
 \format{
 A list with 10 data frames, each with 15 rows and 11 columns:
 \describe{
-\item{LABEL, ..., CL}{Same as MU284 dataset}
-\item{sample_weight}{The sampling weight for the row}
+\item{mean.TS82.hat, ..., sd.R.RMT85.P85.hat}{summaries for each estimand}
 }
 }
 \description{

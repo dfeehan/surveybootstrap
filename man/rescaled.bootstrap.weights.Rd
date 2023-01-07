@@ -51,6 +51,15 @@ where \verb{psu_v1, ...} are the variables identifying primary sampling units (P
 and \verb{strata_v1, ...} identify the strata
 }
 \examples{
+
+survey <- MU284.complex.surveys[[1]]
+rescaled.bootstrap.weights(survey.data = survey,
+                          survey.design = ~ CL,
+                          weights='sample_weight',
+                          idvar='LABEL',
+                          num.reps = 2)
+
+
 \dontrun{
 bootweights <- rescaled.bootstrap.weights(
                                          # formula describing survey design:
