@@ -15,6 +15,7 @@
 #'   \item{RMT85}{Municipal tax revenue in 1985}
 #'   \item{CS82}{Number of Conservative seats in municipal council}
 #'   \item{SS82}{Number of Social-Democratic seats in municipal council}
+#'   \item{S82}{Total number of seats in municipal council}
 #'   \item{ME84}{Number of municipal employees}
 #'   \item{REV84}{Real estate values according to 1984 assessment}
 #'   \item{REG}{Geographic location indicator}
@@ -75,8 +76,7 @@ NULL
 #' @format
 #' A list with 10 data frames, each with 15 rows and 11 columns:
 #' \describe{
-#'   \item{LABEL, ..., CL}{Same as MU284 dataset}
-#'   \item{sample_weight}{The sampling weight for the row}
+#'   \item{mean.TS82.hat, ..., sd.R.RMT85.P85.hat}{summaries for each estimand}
 #' }
 NULL
 
@@ -94,8 +94,9 @@ MU284.estimator.fn <- function(survey.data, weights) {
   survey.data$weight <- weights
 
   res <- plyr::summarise(survey.data,
-                         TS82.hat=sum(S82*weight),
-                         R.RMT85.P85.hat=sum(RMT85*weight)/sum(P85*weight))
+                         TS82.hat=sum(survey.data$S82*survey.data$weight),
+                         R.RMT85.P85.hat=sum(survey.data$RMT85*survey.data$weight)/
+                                         sum(survey.data$P85*survey.data$weight))
   return(res)
 }
 
