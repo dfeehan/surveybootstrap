@@ -64,6 +64,13 @@
 ##' (the factor by which to multiply the sampling weights
 ##' in the original dataset).
 ##' @export
+##' @examples
+##'
+##' survey <- MU284.complex.surveys[[1]]
+##' boot_surveys <- rescaled.bootstrap.sample(survey.data = survey,
+##'                                           survey.design = ~ CL,
+##'                                           num.reps = 2)
+##'
 rescaled.bootstrap.sample <- function(survey.data,
                                       survey.design,
                                       parallel=FALSE,
