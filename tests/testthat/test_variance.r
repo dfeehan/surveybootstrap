@@ -51,7 +51,7 @@ rbsfn <- functional::Curry(bootstrap.estimates,
                            weights="sample_weight",
                            bootstrap.fn="rescaled.bootstrap.sample")
 
-test.boot <- plyr::llply(MU284.surveys,
+test.boot <- plyr::llply(MU284.complex.surveys,
                    function(svy) { do.call("rbind", rbsfn(survey.data=svy)) })
 
 test.boot.summ <- plyr::ldply(test.boot,
