@@ -27,6 +27,15 @@
 ##'
 ##' @export
 ##' @examples
+##'
+##' survey <- MU284.complex.surveys[[1]]
+##' rescaled.bootstrap.weights(survey.data = survey,
+##'                           survey.design = ~ CL,
+##'                           weights='sample_weight',
+##'                           idvar='LABEL',
+##'                           num.reps = 2)
+##'
+##'
 ##' \dontrun{
 ##' bootweights <- rescaled.bootstrap.weights(
 ##'                                          # formula describing survey design:
