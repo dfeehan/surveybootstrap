@@ -5,6 +5,7 @@
 * dropped now-deprecated group_indices_() in favor of cur_group_index()
 * changed docs to use Markdown roxygen
 * added MU284 dataset for examples and tests
+* added examples to exported function docs
 
 # surveybootstrap 0.0.2
 
