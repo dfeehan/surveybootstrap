@@ -117,6 +117,10 @@ rescaled.bootstrap.sample <- function(survey.data,
   bs <- plyr::llply(strata,
               function(stratum.data) {
 
+                ## TODO - need to handle the case where a stratum has
+                ## only one PSU - right now this produces NaNs for the weights,
+                ## which it should not...
+
                 ## (this part is written in c++)
                 res <- resample_stratum(stratum.data$.cluster_id,
                                         num.reps)

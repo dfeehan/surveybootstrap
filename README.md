@@ -49,4 +49,6 @@ If you use our package for your research, please cite it so that we can continue
 Wishlist
 --------
 
+* should issue a warning if the user specifies strata that result in situations with only one PSU per stratum (can't calculate variance in this case, unless the PSU is the entire stratum) 
+
 * update to use the `purrr` package, instead of `plyr` (but we'll probably need to wait until `purrr` supports parallelization)
