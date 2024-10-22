@@ -142,6 +142,8 @@ vcat <- function(verbose=TRUE, ...) {
 ##' Parse a formula of the form
 ##' `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`
 ##' into a PSU formula and a strata formula.
+##' Note that we only document `strata(...)` but this will also work with `stratum(...)`
+##' because it is annoying to have to remember which one to use
 ##'
 ##' @param formula a formula describing the sample design (see Description of [bootstrap.estimates()])
 ##' @return a list with entries `psu.formula` and `strata.formula`
@@ -160,21 +162,30 @@ parse_design <- function(formula) {
 
   these.labels <- attr(terms(formula), "term.labels")
 
-  strata.idx <- grep("strata\\(", these.labels)
+  ## have this match strata( ... ) OR stratum( ... )
+  strata.idx <- grep("(strata|stratum)\\(", these.labels)
 
   if (length(strata.idx) == 1) {
 
     # grab the expression in the strata(...) part of the formula
-    strata.text <- stringr::str_match(these.labels[strata.idx],
-                                      "strata\\((.+)\\)")[2]
+    # have this match strata( ... ) OR stratum( ... )
+    regex_res <- stringr::str_match(these.labels[strata.idx],
+                                    "(strata|stratum)\\((.+)\\)")
+
+    # this will have either 'strata' or 'stratum'
+    strata.name <- regex_res[2]
+
+    # this will have the formula for the strata
+    strata.text <- regex_res[3]
 
     ## updating instead of creating a new formula b/c this preserves
     ## the environment that the original formula was created in...
     strata.formula <- update(formula,
                              paste("~ ", strata.text))
 
+    # remove stratum(...) or strata(...)
     psu.formula <- update.formula(formula,
-                                  paste("~ . - strata(",strata.text,")"))
+                                  paste("~ . - ", strata.name, "(",strata.text,")"))
 
   } else if (length(strata.idx > 1)) {
 
