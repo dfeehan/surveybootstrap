@@ -132,6 +132,8 @@ void count_clusters(std::map<std::string, int> &counts,
 
     }
 
+    // TODO - for jackknife after bootstrap, I think we basically
+    //        want to return exactly what print_cluster_counts is printing
     //print_cluster_counts(counts);
 
     return;

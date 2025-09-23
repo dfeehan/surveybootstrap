@@ -16,5 +16,7 @@ a list with entries \code{psu.formula} and \code{strata.formula}
 Parse a formula of the form
 \code{~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)}
 into a PSU formula and a strata formula.
+Note that we only document \code{strata(...)} but this will also work with \code{stratum(...)}
+because it is annoying to have to remember which one to use
 }
 \keyword{internal}

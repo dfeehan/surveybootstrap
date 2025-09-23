@@ -2,6 +2,7 @@
 % Please edit documentation in R/surveybootstrap_package.r
 \docType{package}
 \name{surveybootstrap}
+\alias{surveybootstrap-package}
 \alias{surveybootstrap}
 \alias{package-surveybootstrap}
 \title{Survey bootstrap variance estimators}
@@ -9,4 +10,13 @@
 \code{surveybootstrap} has methods for analyzing data that were collected
 using network reporting techniques. It includes estimators appropriate for
 the simple bootstrap and the rescaled bootstrap.
+}
+\author{
+\strong{Maintainer}: Dennis M. Feehan \email{feehan@berkeley.edu}
+
+Other contributors:
+\itemize{
+  \item Matthew J. Salganik \email{mjs3@princeton.edu} [thesis advisor]
+}
+
 }
