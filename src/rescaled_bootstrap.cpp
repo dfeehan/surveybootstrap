@@ -4,7 +4,9 @@
 
 using namespace Rcpp;
 
-NumericMatrix resample_stratum(CharacterVector clusters, int B);
+//NumericMatrix resample_stratum(CharacterVector clusters, int B);
+
+List resample_stratum(CharacterVector clusters, int B);
 
 void resample_with_zeros(std::map<std::string, int> &counts,
                          CharacterVector cluster_names,
@@ -22,7 +24,7 @@ void print_cluster_counts(std::map<std::string, int> &counts);
 //NumericMatrix resample_stratum(CharacterVector clusters,
 //
 // [[Rcpp::export]]
-NumericMatrix resample_stratum(CharacterVector clusters, int B) {
+List resample_stratum(CharacterVector clusters, int B) {
 
     // get the set of clusters and the count of obs in each one
     IntegerVector cluster_set = table(clusters);
@@ -37,6 +39,11 @@ NumericMatrix resample_stratum(CharacterVector clusters, int B) {
     // for each obs (row) and boot strap rep (column)
     NumericMatrix result_scales = NumericMatrix(num_rows, B);
 
+    // this matrix will hold the number of times each cluster
+    // was chosen in the resample
+    // it will have dimension n_h X B, where n_h is the number of clusters
+    NumericMatrix cluster_counts = NumericMatrix(n_h, B);
+
     // uncomment to print useful debugging messages
     /*
     Rprintf("\n cluster table: \n\n");
@@ -48,6 +55,9 @@ NumericMatrix resample_stratum(CharacterVector clusters, int B) {
     Rf_PrintValue(cluster_names);
     */
 
+    // this is a map that takes cluster names and maps to the number
+    // of times the cluster was resampled
+    // we'll zero it out each time through the loop...
     std::map<std::string, int> resampled_clusters;
 
     double n_h_factor = (double) n_h / (double) m_h;
@@ -57,7 +67,7 @@ NumericMatrix resample_stratum(CharacterVector clusters, int B) {
 
         //Rprintf("starting iteration %d...\n", b+1);
 
-        // resamplea  set of clusters
+        // resample a set of clusters
         resample_with_zeros(resampled_clusters, cluster_names, m_h);
 
         // go through each row and
@@ -72,17 +82,29 @@ NumericMatrix resample_stratum(CharacterVector clusters, int B) {
         }
 
         // uncomment for debugging
-        /*
         Rprintf("\n cluster resamples: \n");
         print_cluster_counts(resampled_clusters);
-        */
+
+        // copy the cluster counts over to the matrix
+        // where we are storing them
+        for (int i = 0; i < n_h; i++) {
+            cluster_counts(i, b) = resampled_clusters[as<std::string>(cluster_names[i])];
+        }
 
         // clear out the resampled clusters
         resampled_clusters.clear();
 
     }
 
-    return(result_scales);
+    rownames(cluster_counts) = cluster_names;
+
+    //return(result_scales);
+
+    // Return a list with both matrices
+    return List::create(
+        Named("weight_factors") = result_scales,
+        Named("cluster_counts") = cluster_counts
+    );
 
 }
 

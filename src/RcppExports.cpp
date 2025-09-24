@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // resample_stratum
-NumericMatrix resample_stratum(CharacterVector clusters, int B);
+List resample_stratum(CharacterVector clusters, int B);
 RcppExport SEXP _surveybootstrap_resample_stratum(SEXP clustersSEXP, SEXP BSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

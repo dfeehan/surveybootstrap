@@ -58,11 +58,16 @@
 ##' @param parallel If `TRUE`, use parallelization (via `plyr`)
 ##' @param paropts An optional list of arguments passed on to `plyr` to control
 ##'        details of parallelization
-##' @return A list with `num.reps` entries. Each entry is a dataset which
-##' has at least the variables `index` (the row index of the original
-##' dataset that was resampled) and `weight.scale`
-##' (the factor by which to multiply the sampling weights
-##' in the original dataset).
+##' @return A list with two entries:  
+##'   
+##'     * `weight_scaling_factor` - A list with `num.reps` entries. 
+##'        Each entry is a dataset which
+##'       has at least the variables `index` (the row index of the original
+##'       dataset that was resampled) and `weight.scale`
+##'       (the factor by which to multiply the sampling weights
+##'       in the original dataset).
+##'     * `cluster_counts` - TODO
+##' 
 ##' @export
 ##' @examples
 ##'
@@ -112,44 +117,67 @@ rescaled.bootstrap.sample <- function(survey.data,
   ## (see, eg, Rust and Rao 1996)
 
   ## this llply call returns a list, with one entry for each stratum
-  ## each stratum's entry contains a list with the bootstrap resamples
-  ## (see the note for the inner llply call below)
-  bs <- plyr::llply(strata,
-              function(stratum.data) {
+  ## each stratum's entry contains a list with two entries:
+  #     - the bootstrap resamples (see the note for the inner llply call below)
+  #     - the cluster counts
+  #bs <- plyr::llply(strata,
+  bs <- purrr:::map(strata,
+            function(stratum.data) {
 
-                ## TODO - need to handle the case where a stratum has
-                ## only one PSU - right now this produces NaNs for the weights,
-                ## which it should not...
+              ## TODO - need to handle the case where a stratum has
+              ## only one PSU - right now this produces NaNs for the weights,
+              ## which it should not...
 
-                ## (this part is written in c++)
-                res <- resample_stratum(stratum.data$.cluster_id,
-                                        num.reps)
+              ## (this part is written in c++)
+              res <- resample_stratum(stratum.data$.cluster_id,
+                                      num.reps)
 
-                colnames(res) <- paste0("rep.", 1:ncol(res))
-                res <- cbind("index"=stratum.data$.internal_id,
-                             res)
+              #browser()
 
-                return(res)
-              })
+              res_weight_factors <- res$weight_factors
+              res_cluster_counts <- res$cluster_counts
+
+              colnames(res_weight_factors) <- paste0("rep.", 1:ncol(res_weight_factors))
+              res_weight_factors <- cbind("index"=stratum.data$.internal_id,
+                           res_weight_factors)
+
+              #return(res)
+              return(lst(res_weight_factors,
+                         res_cluster_counts))
+            })
 
   ## bs: list, one entry for each stratum
-  ## each stratum's entry is a matrix.
-  ## first column of the matrix is called 'index',
-  ## which is the row number for the observation in the
-  ## original dataset; there is one remaining column for each
-  ## bootstrap resample. the entries of each column are the factors
-  ## by which the original weights should be scaled
+  ## each stratum's entry is a list with two entries:
+  ##     * `res_weight_factors` - a  matrix.
+  ##        first column of the matrix is called 'index',
+  ##        which is the row number for the observation in the
+  ##        original dataset; there is one remaining column for each
+  ##        bootstrap resample. the entries of each column are the factors
+  ##        by which the original weights should be scaled
+  ##     * `res_cluster_counts` - a matrix
+  ##        the rownames of the matrix are the cluster names (using stratum_data$.internal_id)
+  ##        there is one column for each bootstrap resample
+  ##        entry (i,j) has the number of times that cluster i was resampled in bootstrap rep j
 
-  bs.all <- do.call("rbind", bs)
 
-  res <- plyr::alply(bs.all[,-1],
+browser()
+
+  ## bind together combine the weight factors for all of the strata
+  #bs.all <- do.call("rbind", bs)
+  res_weight_factors_all <-
+    bind_rows(map(bs, ~ .x$res_weight_factors))
+
+  ## NOT YET CHANGED
+  ## and make a list
+  #res <- plyr::alply(bs.all[,-1],
+  res_wf <- plyr::alply(res_weight_factors_all[,-1],
                2,
                function(this_col) {
                    return(data.frame(index=bs.all[,1],
                                      weight.scale=this_col))
                })
 
-  return(res)
+  return(res_wf)
 
 }
 
