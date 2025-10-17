@@ -58,7 +58,18 @@
 ##' @param parallel If `TRUE`, use parallelization (via `plyr`)
 ##' @param paropts An optional list of arguments passed on to `plyr` to control
 ##'        details of parallelization
-##' @return A list with two entries:
+##' @param include_cc If `TRUE`, include cluster counts in the output. These cluster counts
+##'        are needed for jackknife after bootstrap calculations 
+##' @return 
+##'     The return value will depend on whether or not you ask for the cluster counts (using `include_cc`).
+##'     If `include_cc` is `FALSE` (the default), return
+##'       A list with `num.reps` entries. Each entry is a dataset which
+##'       has at least the variables `index` (the row index of the original
+##'       dataset that was resampled) and `weight.scale`
+##'       (the factor by which to multiply the sampling weights
+##'       in the original dataset).
+##'
+##'      If `include_cc` is `TRUE`, then return a list with two entries:
 ##'
 ##'     * `weight_scaling_factor` - A list with `num.reps` entries.
 ##'        Each entry is a dataset which
@@ -66,7 +77,10 @@
 ##'       dataset that was resampled) and `weight.scale`
 ##'       (the factor by which to multiply the sampling weights
 ##'       in the original dataset).
-##'     * `cluster_counts` - TODO
+##'     * `cluster_counts` - A list with `num.reps` entries.
+##'       Each entry is a dataset which has the variable '.cluster_id',
+##'       the values of columns that specify the PSU (from the `survey.design` formula),
+##'       and `cluster_count` (the number of times the given PSU was resampled)) 
 ##'
 ##' @export
 ##' @examples
@@ -80,9 +94,11 @@ rescaled.bootstrap.sample <- function(survey.data,
                                       survey.design,
                                       parallel=FALSE,
                                       paropts=NULL,
-                                      num.reps=1)
+                                      num.reps=1,
+                                      include_cc = FALSE)
 {
 
+  # .internal_id is the code we use to identify individual observations
   survey.data$.internal_id <- 1:nrow(survey.data)
 
   design <- parse_design(survey.design)
@@ -100,9 +116,15 @@ rescaled.bootstrap.sample <- function(survey.data,
   ## (we need this to use the C++ code, below)
   #survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
   survey.data <- survey.data %>%
-    group_by(!!psu.vars) %>%
+    group_by(!!!psu.vars) %>%
+    # .cluster_id is the internal code we use to identify PSUs
     mutate(.cluster_id = cur_group_id()) %>%
     ungroup()
+
+  ## save the cluster mapping to return
+  cluster_id_mapping <- survey.data %>%
+    distinct(!!!psu.vars, .cluster_id) %>%
+    arrange(.cluster_id)
 
   ## if no strata are specified, enclose the entire survey all in
   ## one stratum
@@ -139,8 +161,12 @@ rescaled.bootstrap.sample <- function(survey.data,
 
               colnames(res_weight_factors) <- paste0("rep.", 1:ncol(res_weight_factors))
               res_weight_factors <- cbind("index"=stratum.data$.internal_id,
-                           res_weight_factors)
-
+                                          res_weight_factors)
+              
+              colnames(res_cluster_counts) <- paste0("rep.", 1:ncol(res_cluster_counts))
+              res_cluster_counts <- cbind("psu_index"=1:nrow(res_cluster_counts),
+                                          res_cluster_counts)
+                                          
               #return(res)
               return(lst(weight_factors=res_weight_factors,
                          cluster_counts=res_cluster_counts))
@@ -164,6 +190,7 @@ rescaled.bootstrap.sample <- function(survey.data,
   #bs.all <- do.call("rbind", bs)
   wf_all_strata <- bs %>% purrr::map_dfr(~ as.data.frame(.x$weight_factors))
 
+
   ## and make a list with one entry for each bootstrap rep;
   ## each entry has two columns: the index of the observation and its weight factor
   # NB: this is now returning a list of tibbles, instead of
@@ -172,17 +199,35 @@ rescaled.bootstrap.sample <- function(survey.data,
                        ~ tibble(index = wf_all_strata[,1],
                                 weight_scale = .x))
 
-  #res <- plyr::alply(bs.all[,-1],
-  #res_wf <- plyr::alply(res_weight_factors_all[,-1],
-  #             2,
-  #             function(this_col) {
-  #                 return(data.frame(index=bs.all[,1],
-  #                                   weight.scale=this_col))
-  #             })
+  # if we are supposed to return cluster counts as well as weight factors...                                
+  if(include_cc) {
 
-  # TODO - need to return the cluster counts also JAB
+    cc_all_strata <- bs %>% purrr::map_dfr(~ as.data.frame(.x$cluster_counts)) 
+    
+    cluster_id_mapping_inorder <- cluster_id_mapping %>% arrange(.cluster_id)
 
-  return(res_wf)
+    ## sanity check - be sure we have the clusters lined up correctly
+    stopifnot(all(cc_all_strata[,1] == cluster_id_mapping_inorder$.cluster_id))
+
+    res_cc <- purrr::map(cc_all_strata[,-1],
+                         ~ tibble(index = cc_all_strata[,1],
+                                  cluster_count = .x) %>%
+                           # add the original cluster info back on
+                           # (the .cluster_id won't be meaningful to the user)
+                           bind_cols(cluster_id_mapping) %>%
+                           select(.cluster_id, !!!psu.vars, cluster_count)
+                          ) 
+
+    return(lst(weight_factors=res_wf,
+               cluster_counts=res_cc))
+
+  # otherwise, just return weight factors
+  } else {
+
+    return(res_wf)
+
+  }
+
 
 }
 
