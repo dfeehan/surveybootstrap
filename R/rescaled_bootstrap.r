@@ -58,16 +58,16 @@
 ##' @param parallel If `TRUE`, use parallelization (via `plyr`)
 ##' @param paropts An optional list of arguments passed on to `plyr` to control
 ##'        details of parallelization
-##' @return A list with two entries:  
-##'   
-##'     * `weight_scaling_factor` - A list with `num.reps` entries. 
+##' @return A list with two entries:
+##'
+##'     * `weight_scaling_factor` - A list with `num.reps` entries.
 ##'        Each entry is a dataset which
 ##'       has at least the variables `index` (the row index of the original
 ##'       dataset that was resampled) and `weight.scale`
 ##'       (the factor by which to multiply the sampling weights
 ##'       in the original dataset).
 ##'     * `cluster_counts` - TODO
-##' 
+##'
 ##' @export
 ##' @examples
 ##'
@@ -100,7 +100,7 @@ rescaled.bootstrap.sample <- function(survey.data,
   ## (we need this to use the C++ code, below)
   #survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
   survey.data <- survey.data %>%
-    group_by(!!!psu.vars) %>%
+    group_by(!!psu.vars) %>%
     mutate(.cluster_id = cur_group_id()) %>%
     ungroup()
 
@@ -142,8 +142,8 @@ rescaled.bootstrap.sample <- function(survey.data,
                            res_weight_factors)
 
               #return(res)
-              return(lst(res_weight_factors,
-                         res_cluster_counts))
+              return(lst(weight_factors=res_weight_factors,
+                         cluster_counts=res_cluster_counts))
             })
 
   ## bs: list, one entry for each stratum
@@ -160,22 +160,27 @@ rescaled.bootstrap.sample <- function(survey.data,
   ##        entry (i,j) has the number of times that cluster i was resampled in bootstrap rep j
 
 
-browser()
-
   ## bind together combine the weight factors for all of the strata
   #bs.all <- do.call("rbind", bs)
-  res_weight_factors_all <-
-    bind_rows(map(bs, ~ .x$res_weight_factors))
+  wf_all_strata <- bs %>% purrr::map_dfr(~ as.data.frame(.x$weight_factors))
 
-  ## NOT YET CHANGED
-  ## and make a list
+  ## and make a list with one entry for each bootstrap rep;
+  ## each entry has two columns: the index of the observation and its weight factor
+  # NB: this is now returning a list of tibbles, instead of
+  #     a list of data frames
+  res_wf <- purrr::map(wf_all_strata[,-1],
+                       ~ tibble(index = wf_all_strata[,1],
+                                weight_scale = .x))
+
   #res <- plyr::alply(bs.all[,-1],
-  res_wf <- plyr::alply(res_weight_factors_all[,-1],
-               2,
-               function(this_col) {
-                   return(data.frame(index=bs.all[,1],
-                                     weight.scale=this_col))
-               })
+  #res_wf <- plyr::alply(res_weight_factors_all[,-1],
+  #             2,
+  #             function(this_col) {
+  #                 return(data.frame(index=bs.all[,1],
+  #                                   weight.scale=this_col))
+  #             })
+
+  # TODO - need to return the cluster counts also JAB
 
   return(res_wf)
 
