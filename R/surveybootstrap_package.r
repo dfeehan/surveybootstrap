@@ -10,7 +10,7 @@
 ##' @import dplyr
 ##' @importFrom functional Curry
 ##' @importFrom stats rmultinom setNames terms update update.formula xtabs
-NULL
+"_PACKAGE"
 
 ##' @useDynLib surveybootstrap
 ##' @importFrom Rcpp sourceCpp
