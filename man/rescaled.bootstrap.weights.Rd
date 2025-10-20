@@ -11,6 +11,7 @@ rescaled.bootstrap.weights(
   weights = NULL,
   idvar,
   verbose = TRUE,
+  include_cc = FALSE,
   parallel = FALSE,
   paropts = NULL
 )
@@ -28,6 +29,8 @@ rescaled.bootstrap.weights(
 \item{idvar}{the name of the column in \code{survey.data} that has the respondent id}
 
 \item{verbose}{if TRUE, produce lots of feedback about what is going on}
+
+\item{include_cc}{if TRUE, include cluster counts (see \code{rescaled_bootstrap})}
 
 \item{parallel}{if TRUE, use the plyr library's .parallel argument to
 produce bootstrap resamples and estimates in parallel}

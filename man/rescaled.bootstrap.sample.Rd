@@ -9,7 +9,8 @@ rescaled.bootstrap.sample(
   survey.design,
   parallel = FALSE,
   paropts = NULL,
-  num.reps = 1
+  num.reps = 1,
+  include_cc = FALSE
 )
 }
 \arguments{
@@ -23,13 +24,32 @@ rescaled.bootstrap.sample(
 details of parallelization}
 
 \item{num.reps}{The number of bootstrap replication samples to draw}
+
+\item{include_cc}{If \code{TRUE}, include cluster counts in the output. These cluster counts
+are needed for jackknife after bootstrap calculations}
 }
 \value{
-A list with \code{num.reps} entries. Each entry is a dataset which
-has at least the variables \code{index} (the row index of the original
-dataset that was resampled) and \code{weight.scale}
-(the factor by which to multiply the sampling weights
-in the original dataset).
+\if{html}{\out{<div class="sourceCode">}}\preformatted{The return value will depend on whether or not you ask for the cluster counts (using `include_cc`).
+If `include_cc` is `FALSE` (the default), return
+  A list with `num.reps` entries. Each entry is a dataset which
+  has at least the variables `index` (the row index of the original
+  dataset that was resampled) and `weight.scale`
+  (the factor by which to multiply the sampling weights
+  in the original dataset).
+
+ If `include_cc` is `TRUE`, then return a list with two entries:
+
+* `weight_scaling_factor` - A list with `num.reps` entries.
+   Each entry is a dataset which
+  has at least the variables `index` (the row index of the original
+  dataset that was resampled) and `weight.scale`
+  (the factor by which to multiply the sampling weights
+  in the original dataset).
+* `cluster_counts` - A list with `num.reps` entries.
+  Each entry is a dataset which has the variable '.cluster_id',
+  the values of columns that specify the PSU (from the `survey.design` formula),
+  and `cluster_count` (the number of times the given PSU was resampled)) 
+}\if{html}{\out{</div>}}
 }
 \description{
 Given a survey dataset and a description of the survey
