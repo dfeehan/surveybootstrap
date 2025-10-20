@@ -210,7 +210,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   boot_weights <- wf_all_strata %>% 
     mutate(across(-1, ~ . * weights)) %>%
     # and put the original id back on
-    left_join(orig_weights %>% select(index=.internal_id, one_of(idvar))) %>%
+    left_join(orig_weights %>% select(index=.internal_id, one_of(idvar)), by='index') %>%
     select(any_of(idvar), everything(), -index)
 
   res <- list(orig_weights = orig_weights,
@@ -221,7 +221,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
 
     wf_all_strata <- wf_all_strata %>%
       # put the original id back on
-      left_join(orig_weights %>% select(index=.internal_id, one_of(idvar))) %>%
+      left_join(orig_weights %>% select(index=.internal_id, one_of(idvar)), by='index') %>%
       select(any_of(idvar), everything(), -index)
 
     res <- c(res, list(weight_scaling_factor = wf_all_strata))
