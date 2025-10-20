@@ -228,6 +228,10 @@ get.rescaled.bootstrap.weights <- function(survey.data,
       left_join(orig_weights %>% select(index=.internal_id, one_of(idvar)), by='index') %>%
       select(any_of(idvar), everything(), -index)
 
+    # rename "rep.1", "rep.2", ... cols -> "boot_rep_1", "boot_rep_2", ...
+    names(wf_all_strata) <- 
+      gsub("^rep\\.", "boot_rep_", names(wf_all_strata))
+
     res <- c(res, list(weight_scaling_factor = wf_all_strata))
 
   } 
@@ -247,6 +251,10 @@ get.rescaled.bootstrap.weights <- function(survey.data,
       # (the .cluster_id won't be meaningful to the user)
       bind_cols(cluster_id_mapping) %>%
       select(!!!psu.vars, starts_with('rep.'), -.cluster_id, -psu_index)
+
+    # rename "rep.1", "rep.2", ... cols -> "boot_rep_1", "boot_rep_2", ...
+    names(cc_all_strata) <- 
+      gsub("^rep\\.", "boot_rep_", names(cc_all_strata))
 
     res <- c(res, list(cluster_counts = cc_all_strata))
 
