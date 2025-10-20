@@ -82,8 +82,8 @@ List resample_stratum(CharacterVector clusters, int B) {
         }
 
         // uncomment for debugging
-        Rprintf("\n cluster resamples: \n");
-        print_cluster_counts(resampled_clusters);
+        //Rprintf("\n cluster resamples: \n");
+        //print_cluster_counts(resampled_clusters);
 
         // copy the cluster counts over to the matrix
         // where we are storing them
