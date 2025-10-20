@@ -211,7 +211,11 @@ get.rescaled.bootstrap.weights <- function(survey.data,
     mutate(across(-1, ~ . * weights)) %>%
     # and put the original id back on
     left_join(orig_weights %>% select(index=.internal_id, one_of(idvar)), by='index') %>%
-    select(any_of(idvar), everything(), -index)
+    select(any_of(idvar), everything(), -index) 
+
+  # rename "rep.1", "rep.2", ... cols -> "boot_weight_1", "boot_weight_2", ...
+  names(boot_weights) <- 
+    gsub("^rep\\.", "boot_weight_", names(boot_weights))
 
   res <- list(orig_weights = orig_weights,
               boot_weights = boot_weights)
