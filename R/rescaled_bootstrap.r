@@ -1,5 +1,246 @@
 
 #####################################################
+#' rescaled.bootstrap.weights
+#'
+#' Get a dataset of rescaled bootstrap weights.
+#'
+#' @details
+#' 
+#' This is a new function being added as part of a refactor
+#' in v.0.2. This function focuses on being able to return
+#' a dataframe with bootstrap weights, and optionally also
+#' a dataframe with cluster/PSU inclusion counts.
+#'
+#' `survey.design` is a formula of the form
+#'
+#'    `weight ~ psu_vars + strata(strata_vars)`
+#'
+#' where:
+#'   * `weight` is the variable with the survey weights
+#'   * `psu_vars` has the form `psu_v1 + psu_v2 + ...`, where primary
+#'     sampling units (PSUs) are determined by `psu_v1`, etc
+#'   * `strata_vars` has the form `strata_v1 + strata_v2 + ...`, which
+#'     determine strata
+#'
+#' Note that we assume that the formula uniquely specifies PSUs.
+#' This will always be true if the PSUs were selected without replacement.
+#' If they were selected with replacement, then it will be necessary
+#' to make each realization of a given PSU in the sample a unique id.
+#' The code below assumes that all observations within
+#' each PSU (as identified by the design formula) are from the same draw
+#' of the PSU.
+#'
+#' The rescaled bootstrap technique works by adjusting the
+#' estimation weights based on the number of times each
+#' row is included in the resamples. If a row is never selected,
+#' it is still included in the returned results, but its weight
+#' will be set to 0. It is therefore important to use estimators
+#' that make use of the estimation weights on the resampled
+#' datasets.
+#'
+#' We always take m_i = n_i - 1, according to the advice presented
+#' in Rao and Wu (1988) and Rust and Rao (1996).
+#'
+#' (This is a C++ version; a previous version, written in pure R,
+#' is called [rescaled.bootstrap.sample.pureR()] )
+#'
+#' References:
+#' * Rust, Keith F., and J. N. K. Rao. "Variance estimation for complex surveys
+#'   using replication techniques." *Statistical methods in medical research*
+#'   5.3 (1996): 283-310.
+#'  * Rao, Jon NK, and C. F. J. Wu. "Resampling inference with complex survey
+#'    data." *Journal of the American Statistical Association*
+#'    83.401 (1988): 231-241.
+#'
+#'
+#' @param survey.data The dataset to use
+#' @param survey.design A formula describing the design of the survey (see Details)
+#' @param num.reps The number of bootstrap replication samples to draw
+#' @param weights Survey weights to be rescaled (or `NULL`, if none)
+#' @param parallel If `TRUE`, use parallelization (via `plyr`)
+#' @param paropts An optional list of arguments passed on to `plyr` to control
+#'        details of parallelization
+#' @param include_scaling_factors If `TRUE`, include `weight_scaling_factor` in the output
+#' @param include_cc If `TRUE`, include cluster counts in the output. These cluster counts
+#'        are needed for jackknife after bootstrap calculations 
+#' @return 
+#'     A list with entries:
+#'
+#'     * `orig_weights` - A dataframe with rows corresponding to the original
+#'        `survey.data` and a column with the original (un rescaled) weight for the obs.
+#'        Can be useful for debugging. 
+#' 
+#'     * `boot_weights` - A dataframe with rows corresponding to the original
+#'        `survey.data` and one column for each bootstrap rep. The entries have
+#'        the rescaled bootstrap weights for each row and bootstrap rep. 
+#'
+#'     * `weight_scaling_factor` - (if `include_scaling_factors` is `TRUE`). A dataframe with rows corresponding to the original
+#'        `survey.data` and one column for each bootstrap rep. The entries have
+#'        the values by which the original weights were scaled to produce `boot_weights`.
+#'        You typically won't need to use this dataframe, but it can be helpful for debugging.
+#' 
+#'     * `cluster_counts` - (if `include_cc` is `TRUE`). A list with `num.reps` entries.
+#'       Each entry is a dataset which has the variable '.cluster_id',
+#'       the values of columns that specify the PSU (from the `survey.design` formula),
+#'       and `cluster_count` (the number of times the given PSU was resampled)) 
+#'
+#' @export
+#' @examples
+#'
+#' survey <- MU284.complex.surveys[[1]]
+#' boot_surveys <- get.rescaled.bootstrap.weights(survey.data = survey,
+#'                                                survey.design = ~ CL,
+#'                                                num.reps = 2)
+#'
+get.rescaled.bootstrap.weights <- function(survey.data,
+                                           survey.design,
+                                           weights=NULL,
+                                           parallel=FALSE,
+                                           paropts=NULL,
+                                           num.reps=1,
+                                           include_scaling_factors = FALSE,
+                                           include_cc = FALSE)
+{
+
+  # .internal_id is the code we use to identify individual observations
+  survey.data$.internal_id <- 1:nrow(survey.data)
+
+  design <- parse_design(survey.design)
+
+  ## drop the "~" at the start of the formula
+  psu.vars <- design$psu.formula[c(-1)][[1]]
+
+  ## in the special case where there are no PSU vars, treat each row as
+  ## its own PSU
+  if (length(psu.vars)==1 & psu.vars=="1") {
+    psu.vars <- as.name(".internal_id")
+  }
+
+  ## get the weights
+  weights <- get.weights(survey.data, weights)
+
+  ## create a single variable with an id number for each PSU
+  ## (we need this to use the C++ code, below)
+  #survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
+  survey.data <- survey.data %>%
+    group_by(!!!psu.vars) %>%
+    # .cluster_id is the internal code we use to identify PSUs
+    mutate(.cluster_id = cur_group_id()) %>%
+    ungroup()
+
+  ## save the cluster mapping to return
+  cluster_id_mapping <- survey.data %>%
+    distinct(!!!psu.vars, .cluster_id) %>%
+    arrange(.cluster_id)
+
+  ## if no strata are specified, enclose the entire survey all in
+  ## one stratum
+  if (is.null(design$strata.formula)) {
+    strata <- list(survey.data)
+  } else {
+    strata <- plyr::dlply(survey.data, design$strata.formula, identity)
+  }
+
+  ## get num.reps bootstrap resamples within each stratum,
+  ## according to the rescaled bootstrap scheme
+  ## (see, eg, Rust and Rao 1996)
+
+  ## this llply call returns a list, with one entry for each stratum
+  ## each stratum's entry contains a list with two entries:
+  #     - the bootstrap resamples (see the note for the inner llply call below)
+  #     - the cluster counts
+  #bs <- plyr::llply(strata,
+  bs <- purrr:::map(strata,
+            function(stratum.data) {
+
+              ## TODO - need to handle the case where a stratum has
+              ## only one PSU - right now this produces NaNs for the weights,
+              ## which it should not...
+
+              ## (this part is written in c++)
+              res <- resample_stratum(stratum.data$.cluster_id,
+                                      num.reps)
+
+              #browser()
+
+              res_weight_factors <- res$weight_factors
+              res_cluster_counts <- res$cluster_counts
+
+              colnames(res_weight_factors) <- paste0("rep.", 1:ncol(res_weight_factors))
+              res_weight_factors <- cbind("index"=stratum.data$.internal_id,
+                                          res_weight_factors)
+              
+              colnames(res_cluster_counts) <- paste0("rep.", 1:ncol(res_cluster_counts))
+              res_cluster_counts <- cbind("psu_index"=1:nrow(res_cluster_counts),
+                                          res_cluster_counts)
+                                          
+              #return(res)
+              return(lst(weight_factors=res_weight_factors,
+                         cluster_counts=res_cluster_counts))
+            })
+
+  ## bs: list, one entry for each stratum
+  ## each stratum's entry is a list with two entries:
+  ##     * `res_weight_factors` - a  matrix.
+  ##        first column of the matrix is called 'index',
+  ##        which is the row number for the observation in the
+  ##        original dataset; there is one remaining column for each
+  ##        bootstrap resample. the entries of each column are the factors
+  ##        by which the original weights should be scaled
+  ##     * `res_cluster_counts` - a matrix
+  ##        the rownames of the matrix are the cluster names (using stratum_data$.internal_id)
+  ##        there is one column for each bootstrap resample
+  ##        entry (i,j) has the number of times that cluster i was resampled in bootstrap rep j
+
+
+  ## bind together combine the weight factors for all of the strata
+  #bs.all <- do.call("rbind", bs)
+  wf_all_strata <- bs %>% purrr::map_dfr(~ as.data.frame(.x$weight_factors))
+
+  # original weights
+  orig_weights <- tibble(index=wf_all_strata[,1],
+                         weight=weights)
+
+  # apply the scaling factors to get the rescaled weights
+  boot_weights <- wf_all_strata %>% 
+    mutate(across(-1, ~ . * weights))
+
+  res <- list(orig_weights = orig_weights,
+              boot_weights = boot_weights)
+
+  # if we are supposed to return cluster counts as well as weight factors...                                
+  if(include_scaling_factors) {
+
+    res <- c(res, list(weight_scaling_factor = wf_all_strata))
+
+  } 
+
+  # if we are supposed to return cluster counts as well as weight factors...                                
+  if(include_cc) {
+
+    cc_all_strata <- bs %>% purrr::map_dfr(~ as.data.frame(.x$cluster_counts)) 
+
+    cluster_id_mapping_inorder <- cluster_id_mapping %>% arrange(.cluster_id)
+
+    ## sanity check - be sure we have the clusters lined up correctly
+    stopifnot(all(cc_all_strata[,1] == cluster_id_mapping_inorder$.cluster_id))
+
+    cc_all_strata <- cc_all_strata %>%
+      # add the original cluster info back on
+      # (the .cluster_id won't be meaningful to the user)
+      bind_cols(cluster_id_mapping) %>%
+      select(.cluster_id, !!!psu.vars, starts_with('rep.'))
+
+    res <- c(res, list(cluster_counts = cc_all_strata))
+
+  } 
+
+  return(res)
+  
+
+}
+
+#####################################################
 ##' rescaled.bootstrap.sample
 ##'
 ##' Given a survey dataset and a description of the survey
