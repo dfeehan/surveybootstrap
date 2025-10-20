@@ -56,6 +56,7 @@
 #' @param survey.data The dataset to use
 #' @param survey.design A formula describing the design of the survey (see Details)
 #' @param num.reps The number of bootstrap replication samples to draw
+#' @param idvar the name of the column in `survey.data` that has the respondent id
 #' @param weights Survey weights to be rescaled (or `NULL`, if none)
 #' @param parallel If `TRUE`, use parallelization (via `plyr`)
 #' @param paropts An optional list of arguments passed on to `plyr` to control
@@ -94,6 +95,7 @@
 #'
 get.rescaled.bootstrap.weights <- function(survey.data,
                                            survey.design,
+                                           idvar,
                                            weights=NULL,
                                            parallel=FALSE,
                                            paropts=NULL,
@@ -104,6 +106,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
 
   # .internal_id is the code we use to identify individual observations
   survey.data$.internal_id <- 1:nrow(survey.data)
+
 
   design <- parse_design(survey.design)
 
@@ -127,6 +130,12 @@ get.rescaled.bootstrap.weights <- function(survey.data,
     # .cluster_id is the internal code we use to identify PSUs
     mutate(.cluster_id = cur_group_id()) %>%
     ungroup()
+
+  # original weights
+  ## can be useful for debugging
+  orig_weights <- survey.data %>% 
+    select(.internal_id, .cluster_id, any_of(psu.vars), one_of(idvar))
+  orig_weights$weight <- weights
 
   ## save the cluster mapping to return
   cluster_id_mapping <- survey.data %>%
@@ -197,19 +206,23 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   #bs.all <- do.call("rbind", bs)
   wf_all_strata <- bs %>% purrr::map_dfr(~ as.data.frame(.x$weight_factors))
 
-  # original weights
-  orig_weights <- tibble(index=wf_all_strata[,1],
-                         weight=weights)
-
   # apply the scaling factors to get the rescaled weights
   boot_weights <- wf_all_strata %>% 
-    mutate(across(-1, ~ . * weights))
+    mutate(across(-1, ~ . * weights)) %>%
+    # and put the original id back on
+    left_join(orig_weights %>% select(index=.internal_id, one_of(idvar))) %>%
+    select(any_of(idvar), everything(), -index)
 
   res <- list(orig_weights = orig_weights,
               boot_weights = boot_weights)
 
   # if we are supposed to return cluster counts as well as weight factors...                                
   if(include_scaling_factors) {
+
+    wf_all_strata <- wf_all_strata %>%
+      # put the original id back on
+      left_join(orig_weights %>% select(index=.internal_id, one_of(idvar))) %>%
+      select(any_of(idvar), everything(), -index)
 
     res <- c(res, list(weight_scaling_factor = wf_all_strata))
 
@@ -229,7 +242,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
       # add the original cluster info back on
       # (the .cluster_id won't be meaningful to the user)
       bind_cols(cluster_id_mapping) %>%
-      select(.cluster_id, !!!psu.vars, starts_with('rep.'))
+      select(!!!psu.vars, starts_with('rep.'), -.cluster_id, -psu_index)
 
     res <- c(res, list(cluster_counts = cc_all_strata))
 
