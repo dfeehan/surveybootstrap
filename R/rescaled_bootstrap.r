@@ -463,7 +463,7 @@ rescaled.bootstrap.sample <- function(survey.data,
   #     a list of data frames
   res_wf <- purrr::map(wf_all_strata[,-1],
                        ~ tibble(index = wf_all_strata[,1],
-                                weight_scale = .x))
+                                weight.scale = .x))
 
   # if we are supposed to return cluster counts as well as weight factors...                                
   if(include_cc) {
