@@ -78,3 +78,194 @@ plyr::l_ply(qoi,
                 })
       })
 
+#########################################
+## rescaled.bootstrap.sample output structure
+
+context("rescaled.bootstrap.sample - output structure")
+
+rbs_svy <- MU284.complex.surveys[[1]]
+rbs_result <- rescaled.bootstrap.sample(survey.data = rbs_svy,
+                                        survey.design = ~ CL,
+                                        num.reps = 5)
+
+test_that("returns a list of length num.reps", {
+  expect_equal(length(rbs_result), 5)
+})
+
+test_that("each rep has columns 'index' and 'weight.scale'", {
+  for (rep in rbs_result) {
+    expect_true("index" %in% names(rep))
+    expect_true("weight.scale" %in% names(rep))
+  }
+})
+
+test_that("index values are valid row indices", {
+  for (rep in rbs_result) {
+    expect_true(all(rep$index >= 1 & rep$index <= nrow(rbs_svy)))
+  }
+})
+
+test_that("weight.scale values are non-negative", {
+  for (rep in rbs_result) {
+    expect_true(all(rep$weight.scale >= 0))
+  }
+})
+
+rbs_cc_result <- rescaled.bootstrap.sample(survey.data = rbs_svy,
+                                           survey.design = ~ CL,
+                                           num.reps = 5,
+                                           include_cc = TRUE)
+
+test_that("include_cc=TRUE returns list with weight_factors and cluster_counts", {
+  expect_true("weight_factors" %in% names(rbs_cc_result))
+  expect_true("cluster_counts" %in% names(rbs_cc_result))
+})
+
+test_that("weight_factors has same structure as default output", {
+  expect_equal(length(rbs_cc_result$weight_factors), 5)
+  for (rep in rbs_cc_result$weight_factors) {
+    expect_true("index" %in% names(rep))
+    expect_true("weight.scale" %in% names(rep))
+  }
+})
+
+test_that("cluster_counts entries have expected columns", {
+  for (cc in rbs_cc_result$cluster_counts) {
+    expect_true(".cluster_id" %in% names(cc))
+    expect_true("CL" %in% names(cc))
+    expect_true("cluster_count" %in% names(cc))
+  }
+})
+
+#########################################
+## srs.bootstrap.sample output structure
+
+context("srs.bootstrap.sample - output structure")
+
+srs_svy <- MU284.surveys[[1]]
+srs_result <- srs.bootstrap.sample(survey.data = srs_svy,
+                                   num.reps = 5)
+
+test_that("returns a list of length num.reps", {
+  expect_equal(length(srs_result), 5)
+})
+
+test_that("each rep has columns 'index' and 'weight.scale'", {
+  for (rep in srs_result) {
+    expect_true("index" %in% names(rep))
+    expect_true("weight.scale" %in% names(rep))
+  }
+})
+
+test_that("each rep has nrow(survey.data) rows", {
+  for (rep in srs_result) {
+    expect_equal(nrow(rep), nrow(srs_svy))
+  }
+})
+
+test_that("weight.scale is always 1 (SRS does not rescale)", {
+  for (rep in srs_result) {
+    expect_true(all(rep$weight.scale == 1))
+  }
+})
+
+test_that("index values are valid row indices", {
+  for (rep in srs_result) {
+    expect_true(all(rep$index >= 1 & rep$index <= nrow(srs_svy)))
+  }
+})
+
+#########################################
+## get.rescaled.bootstrap.weights output structure
+
+context("get.rescaled.bootstrap.weights - output structure")
+
+grbs_svy <- MU284.complex.surveys[[1]]
+grbs_result <- get.rescaled.bootstrap.weights(survey.data = grbs_svy,
+                                              survey.design = ~ CL,
+                                              idvar = 'LABEL',
+                                              weights = 'sample_weight',
+                                              num.reps = 5)
+
+test_that("result has orig_weights and boot_weights", {
+  expect_true("orig_weights" %in% names(grbs_result))
+  expect_true("boot_weights" %in% names(grbs_result))
+})
+
+test_that("boot_weights has idvar column and one column per rep", {
+  expected_cols <- c("LABEL", paste0("boot_weight_", 1:5))
+  expect_true(all(expected_cols %in% names(grbs_result$boot_weights)))
+})
+
+test_that("boot_weights has same number of rows as survey", {
+  expect_equal(nrow(grbs_result$boot_weights), nrow(grbs_svy))
+})
+
+test_that("all boot weights are non-negative", {
+  for (col in paste0("boot_weight_", 1:5)) {
+    expect_true(all(grbs_result$boot_weights[[col]] >= 0))
+  }
+})
+
+grbs_sf_result <- get.rescaled.bootstrap.weights(survey.data = grbs_svy,
+                                                 survey.design = ~ CL,
+                                                 idvar = 'LABEL',
+                                                 weights = 'sample_weight',
+                                                 num.reps = 5,
+                                                 include_scaling_factors = TRUE)
+
+test_that("include_scaling_factors=TRUE adds weight_scaling_factor with boot_rep_* cols", {
+  expect_true("weight_scaling_factor" %in% names(grbs_sf_result))
+  expected_cols <- c("LABEL", paste0("boot_rep_", 1:5))
+  expect_true(all(expected_cols %in% names(grbs_sf_result$weight_scaling_factor)))
+})
+
+grbs_cc_result <- get.rescaled.bootstrap.weights(survey.data = grbs_svy,
+                                                 survey.design = ~ CL,
+                                                 idvar = 'LABEL',
+                                                 weights = 'sample_weight',
+                                                 num.reps = 5,
+                                                 include_cc = TRUE)
+
+test_that("include_cc=TRUE adds cluster_counts with PSU col and boot_rep_* cols", {
+  expect_true("cluster_counts" %in% names(grbs_cc_result))
+  expected_cols <- c("CL", paste0("boot_rep_", 1:5))
+  expect_true(all(expected_cols %in% names(grbs_cc_result$cluster_counts)))
+})
+
+#########################################
+## bootstrap.estimates + rescaled.bootstrap.sample integration (regression)
+
+context("bootstrap.estimates - rescaled bootstrap integration (regression)")
+
+## Regression test: verifies that bootstrap.estimates correctly reads the
+## weight.scale column from rescaled.bootstrap.sample output.
+## The bug (weight_scale vs weight.scale naming mismatch) would cause
+## all estimates to be NA/NaN/Inf due to numeric(0) weights.
+
+reg_svy <- MU284.complex.surveys[[1]]
+reg_result <- bootstrap.estimates(survey.data = reg_svy,
+                                  survey.design = ~ CL,
+                                  num.reps = 10,
+                                  estimator.fn = MU284.estimator.fn,
+                                  weights = 'sample_weight',
+                                  bootstrap.fn = 'rescaled.bootstrap.sample')
+
+test_that("returns a list of length num.reps", {
+  expect_equal(length(reg_result), 10)
+})
+
+test_that("each result has expected estimator columns", {
+  for (est in reg_result) {
+    expect_true("TS82.hat" %in% names(est))
+    expect_true("R.RMT85.P85.hat" %in% names(est))
+  }
+})
+
+test_that("all estimates are finite (regression: weight.scale column name)", {
+  all_ts82  <- sapply(reg_result, function(x) x$TS82.hat)
+  all_ratio <- sapply(reg_result, function(x) x$R.RMT85.P85.hat)
+  expect_true(all(is.finite(all_ts82)))
+  expect_true(all(is.finite(all_ratio)))
+})
+

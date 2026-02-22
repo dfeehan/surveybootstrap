@@ -44,6 +44,32 @@ expect_that(d3$strata.formula, is_identical_to(~ b))
 ## TODO -- write test for topcodev.var
 ## TODO -- write test for topcode.data
 
+context("helpers - weighted.mean")
+
+test_that("equal weights give the same result as mean()", {
+  x <- c(1, 2, 3, 4, 5)
+  w <- rep(1, 5)
+  expect_equal(surveybootstrap:::weighted.mean(x, w), mean(x))
+})
+
+test_that("a zero-weight observation does not affect the result", {
+  x <- c(1, 2, 3, 999)
+  w <- c(1, 1, 1, 0)
+  expect_equal(surveybootstrap:::weighted.mean(x, w), mean(c(1, 2, 3)))
+})
+
+test_that("na.rm=FALSE with NA in x returns NA", {
+  x <- c(1, 2, NA, 4)
+  w <- c(1, 1, 1, 1)
+  expect_true(is.na(surveybootstrap:::weighted.mean(x, w, na.rm = FALSE)))
+})
+
+test_that("na.rm=TRUE with NA in x ignores missing values", {
+  x <- c(1, 2, NA, 4)
+  w <- c(1, 1, 1, 1)
+  expect_equal(surveybootstrap:::weighted.mean(x, w, na.rm = TRUE), mean(c(1, 2, 4)))
+})
+
 ## TODO -- do we need weighted mean fn?
 
 ## TODO -- write test for parse.total.popn.size
