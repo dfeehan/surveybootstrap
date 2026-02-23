@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Dennis M. Feehan" />
+
+<meta name="date" content="2026-02-22" />
+
+<title>The rescaled bootstrap</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">The rescaled bootstrap</h1>
+<h4 class="author">Dennis M. Feehan</h4>
+<h4 class="date">2026-02-22</h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Survey data collected using complex designs — multi-stage cluster sampling, stratified sampling, or both — require special methods for variance estimation. Ordinary bootstrap resampling treats all observations as independent, which understates variance when observations are clustered and overstates it when sampling is within strata.</p>
+<p>The <strong>rescaled bootstrap</strong> (Rao and Wu 1988; Rust and Rao 1996) handles complex designs by resampling at the level of the primary sampling unit (PSU) and adjusting the sampling weights of every observation in each bootstrap replicate. Specifically, in each replicate it draws <span class="math inline">\(m_i = n_i - 1\)</span> PSUs with replacement from the <span class="math inline">\(n_i\)</span> PSUs in stratum <span class="math inline">\(i\)</span>, and rescales the observation weights to reflect how many times each PSU was selected. This package implements the rescaled bootstrap in C++ (via Rcpp) for speed, with a pure-R reference implementation also available.</p>
+<p>Use <code>rescaled.bootstrap.sample</code> / <code>bootstrap.estimates</code> when your survey has a cluster or stratified design. For a simple random sample without clusters or strata, use <code>srs.bootstrap.sample</code> instead.</p>
+<hr />
+</div>
+<div id="the-mu284-example-data" class="section level2">
+<h2>The MU284 example data</h2>
+<p>The <code>MU284</code> dataset (Sarndal, Swensson, and Wretman 2003) describes 284 Swedish municipalities. Relevant columns include:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>LABEL</code></td>
+<td>Municipality ID</td>
+</tr>
+<tr class="even">
+<td><code>S82</code></td>
+<td>Total seats in municipal council</td>
+</tr>
+<tr class="odd">
+<td><code>RMT85</code></td>
+<td>Municipal tax revenue, 1985</td>
+</tr>
+<tr class="even">
+<td><code>P85</code></td>
+<td>Population, 1985</td>
+</tr>
+<tr class="odd">
+<td><code>CL</code></td>
+<td>Cluster indicator (neighboring municipalities)</td>
+</tr>
+</tbody>
+</table>
+<p><code>MU284.complex.surveys</code> is a list of 10 sample surveys drawn from this population using the two-stage design from Example 4.3.2 of Sarndal et al.:</p>
+<ul>
+<li><strong>Stage I</strong> — simple random sample without replacement of <span class="math inline">\(n_I = 5\)</span> PSUs (clusters) from <span class="math inline">\(N_I = 50\)</span></li>
+<li><strong>Stage II</strong> — simple random sample without replacement of <span class="math inline">\(n_i = 3\)</span> municipalities from each selected PSU</li>
+</ul>
+<p>This gives <span class="math inline">\(n = 15\)</span> sampled municipalities per survey. Each row has a <code>sample_weight</code> reflecting the inverse of its selection probability.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(surveybootstrap)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>survey <span class="ot">&lt;-</span> MU284.complex.surveys[[<span class="dv">1</span>]]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(survey[, <span class="fu">c</span>(<span class="st">&quot;LABEL&quot;</span>, <span class="st">&quot;CL&quot;</span>, <span class="st">&quot;S82&quot;</span>, <span class="st">&quot;RMT85&quot;</span>, <span class="st">&quot;P85&quot;</span>, <span class="st">&quot;sample_weight&quot;</span>)])</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   LABEL CL S82 RMT85 P85 sample_weight</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    96 17  41    81  13      26.66667</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    99 17  49   129  20      26.66667</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3   101 17  61   299  49      26.66667</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    16  4 101  6263 653      16.66667</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5    18  4  61   532  59      16.66667</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6    19  4  41   250  27      16.66667</span></span></code></pre></div>
+<hr />
+</div>
+<div id="path-1-bootstrap.estimates-recommended-for-most-users" class="section level2">
+<h2>Path 1: <code>bootstrap.estimates()</code> — recommended for most users</h2>
+<p><code>bootstrap.estimates()</code> is the highest-level interface. You supply an estimator function and a bootstrap method; it returns bootstrap replicate estimates that you can use to compute standard errors and confidence intervals.</p>
+<div id="step-1-define-an-estimator" class="section level3">
+<h3>Step 1: define an estimator</h3>
+<p>Your estimator must accept two arguments — <code>survey.data</code> (the resampled dataset) and <code>weights</code> (a vector of rescaled sampling weights) — and return a named data frame with one row.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>my_estimator <span class="ot">&lt;-</span> <span class="cf">function</span>(survey.data, weights) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_S82       =</span> <span class="fu">sum</span>(survey.data<span class="sc">$</span>S82  <span class="sc">*</span> weights),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">ratio_RMT85_P85 =</span> <span class="fu">sum</span>(survey.data<span class="sc">$</span>RMT85 <span class="sc">*</span> weights) <span class="sc">/</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">sum</span>(survey.data<span class="sc">$</span>P85   <span class="sc">*</span> weights)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Here <code>total_S82</code> is the Horvitz-Thompson estimator of the population total of <code>S82</code> (total council seats), and <code>ratio_RMT85_P85</code> is a ratio estimator (tax revenue per capita).</p>
+</div>
+<div id="step-2-run-the-bootstrap" class="section level3">
+<h3>Step 2: run the bootstrap</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>boot_res <span class="ot">&lt;-</span> <span class="fu">bootstrap.estimates</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.data   =</span> survey,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.design =</span> <span class="sc">~</span> CL,            <span class="co"># CL identifies the PSU (cluster)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.reps      =</span> <span class="dv">500</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator.fn  =</span> my_estimator,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights       =</span> <span class="st">&quot;sample_weight&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">bootstrap.fn  =</span> <span class="st">&quot;rescaled.bootstrap.sample&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Unquoting language objects with `!!!` is deprecated as of rlang 0.4.0. Please</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; use `!!` instead.</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Bad: dplyr::select(data, !!!enquo(x))</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Good: dplyr::select(data, !!enquo(x)) # Unquote single quosure</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dplyr::select(data, !!!enquos(x)) # Splice list of quosures</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-231"><a href="#cb3-231" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-232"><a href="#cb3-232" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-233"><a href="#cb3-233" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-234"><a href="#cb3-234" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-235"><a href="#cb3-235" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-237"><a href="#cb3-237" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-238"><a href="#cb3-238" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-239"><a href="#cb3-239" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-240"><a href="#cb3-240" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-241"><a href="#cb3-241" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-242"><a href="#cb3-242" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-243"><a href="#cb3-243" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-244"><a href="#cb3-244" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-245"><a href="#cb3-245" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-246"><a href="#cb3-246" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-247"><a href="#cb3-247" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-248"><a href="#cb3-248" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-249"><a href="#cb3-249" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-250"><a href="#cb3-250" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-251"><a href="#cb3-251" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-252"><a href="#cb3-252" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-253"><a href="#cb3-253" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-254"><a href="#cb3-254" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-255"><a href="#cb3-255" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-256"><a href="#cb3-256" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-257"><a href="#cb3-257" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-258"><a href="#cb3-258" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-259"><a href="#cb3-259" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-260"><a href="#cb3-260" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-261"><a href="#cb3-261" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-262"><a href="#cb3-262" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-263"><a href="#cb3-263" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-264"><a href="#cb3-264" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-270"><a href="#cb3-270" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-271"><a href="#cb3-271" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-272"><a href="#cb3-272" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-273"><a href="#cb3-273" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-274"><a href="#cb3-274" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-275"><a href="#cb3-275" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-276"><a href="#cb3-276" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-277"><a href="#cb3-277" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-278"><a href="#cb3-278" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-279"><a href="#cb3-279" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-280"><a href="#cb3-280" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-281"><a href="#cb3-281" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-282"><a href="#cb3-282" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-283"><a href="#cb3-283" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-284"><a href="#cb3-284" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-285"><a href="#cb3-285" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-286"><a href="#cb3-286" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-287"><a href="#cb3-287" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-288"><a href="#cb3-288" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-289"><a href="#cb3-289" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-290"><a href="#cb3-290" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-291"><a href="#cb3-291" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-292"><a href="#cb3-292" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-293"><a href="#cb3-293" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-294"><a href="#cb3-294" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-295"><a href="#cb3-295" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-296"><a href="#cb3-296" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-297"><a href="#cb3-297" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-298"><a href="#cb3-298" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-299"><a href="#cb3-299" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-300"><a href="#cb3-300" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-301"><a href="#cb3-301" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-302"><a href="#cb3-302" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-303"><a href="#cb3-303" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-304"><a href="#cb3-304" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-305"><a href="#cb3-305" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-306"><a href="#cb3-306" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-307"><a href="#cb3-307" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-308"><a href="#cb3-308" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-309"><a href="#cb3-309" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-310"><a href="#cb3-310" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-311"><a href="#cb3-311" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-312"><a href="#cb3-312" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-313"><a href="#cb3-313" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-314"><a href="#cb3-314" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-315"><a href="#cb3-315" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-316"><a href="#cb3-316" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-317"><a href="#cb3-317" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-318"><a href="#cb3-318" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-319"><a href="#cb3-319" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-320"><a href="#cb3-320" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-321"><a href="#cb3-321" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-322"><a href="#cb3-322" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-323"><a href="#cb3-323" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-324"><a href="#cb3-324" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-325"><a href="#cb3-325" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-326"><a href="#cb3-326" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-327"><a href="#cb3-327" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-328"><a href="#cb3-328" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-329"><a href="#cb3-329" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-330"><a href="#cb3-330" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-331"><a href="#cb3-331" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-332"><a href="#cb3-332" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-333"><a href="#cb3-333" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-334"><a href="#cb3-334" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-335"><a href="#cb3-335" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-336"><a href="#cb3-336" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-337"><a href="#cb3-337" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-338"><a href="#cb3-338" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-339"><a href="#cb3-339" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-340"><a href="#cb3-340" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-341"><a href="#cb3-341" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-342"><a href="#cb3-342" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-343"><a href="#cb3-343" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-344"><a href="#cb3-344" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-345"><a href="#cb3-345" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-346"><a href="#cb3-346" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-347"><a href="#cb3-347" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-348"><a href="#cb3-348" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-349"><a href="#cb3-349" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-350"><a href="#cb3-350" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-351"><a href="#cb3-351" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-352"><a href="#cb3-352" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-353"><a href="#cb3-353" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-354"><a href="#cb3-354" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-355"><a href="#cb3-355" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-356"><a href="#cb3-356" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-357"><a href="#cb3-357" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-358"><a href="#cb3-358" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-359"><a href="#cb3-359" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-360"><a href="#cb3-360" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-361"><a href="#cb3-361" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-362"><a href="#cb3-362" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-363"><a href="#cb3-363" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-364"><a href="#cb3-364" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-365"><a href="#cb3-365" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-366"><a href="#cb3-366" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-367"><a href="#cb3-367" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-368"><a href="#cb3-368" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-369"><a href="#cb3-369" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-370"><a href="#cb3-370" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-371"><a href="#cb3-371" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-372"><a href="#cb3-372" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-373"><a href="#cb3-373" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-374"><a href="#cb3-374" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-375"><a href="#cb3-375" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-376"><a href="#cb3-376" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-377"><a href="#cb3-377" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-378"><a href="#cb3-378" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-379"><a href="#cb3-379" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-380"><a href="#cb3-380" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-381"><a href="#cb3-381" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-382"><a href="#cb3-382" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-383"><a href="#cb3-383" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-384"><a href="#cb3-384" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-385"><a href="#cb3-385" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-386"><a href="#cb3-386" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-387"><a href="#cb3-387" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-388"><a href="#cb3-388" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-389"><a href="#cb3-389" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-390"><a href="#cb3-390" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-391"><a href="#cb3-391" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-392"><a href="#cb3-392" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-393"><a href="#cb3-393" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-394"><a href="#cb3-394" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-395"><a href="#cb3-395" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-396"><a href="#cb3-396" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-397"><a href="#cb3-397" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-398"><a href="#cb3-398" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-399"><a href="#cb3-399" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-400"><a href="#cb3-400" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-401"><a href="#cb3-401" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-402"><a href="#cb3-402" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-403"><a href="#cb3-403" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-404"><a href="#cb3-404" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-405"><a href="#cb3-405" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-406"><a href="#cb3-406" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-407"><a href="#cb3-407" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-408"><a href="#cb3-408" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-409"><a href="#cb3-409" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-410"><a href="#cb3-410" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-411"><a href="#cb3-411" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-412"><a href="#cb3-412" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-413"><a href="#cb3-413" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-414"><a href="#cb3-414" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-415"><a href="#cb3-415" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-416"><a href="#cb3-416" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-417"><a href="#cb3-417" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-418"><a href="#cb3-418" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-419"><a href="#cb3-419" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-420"><a href="#cb3-420" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-421"><a href="#cb3-421" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-422"><a href="#cb3-422" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-423"><a href="#cb3-423" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-424"><a href="#cb3-424" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-425"><a href="#cb3-425" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-426"><a href="#cb3-426" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-427"><a href="#cb3-427" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-428"><a href="#cb3-428" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-429"><a href="#cb3-429" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-430"><a href="#cb3-430" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-431"><a href="#cb3-431" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-432"><a href="#cb3-432" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-433"><a href="#cb3-433" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-434"><a href="#cb3-434" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-435"><a href="#cb3-435" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-436"><a href="#cb3-436" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-437"><a href="#cb3-437" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-438"><a href="#cb3-438" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-439"><a href="#cb3-439" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-440"><a href="#cb3-440" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-441"><a href="#cb3-441" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-442"><a href="#cb3-442" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-443"><a href="#cb3-443" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-444"><a href="#cb3-444" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-445"><a href="#cb3-445" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-446"><a href="#cb3-446" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-447"><a href="#cb3-447" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-448"><a href="#cb3-448" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-449"><a href="#cb3-449" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-450"><a href="#cb3-450" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-451"><a href="#cb3-451" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-452"><a href="#cb3-452" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-453"><a href="#cb3-453" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-454"><a href="#cb3-454" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-455"><a href="#cb3-455" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-456"><a href="#cb3-456" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-457"><a href="#cb3-457" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-458"><a href="#cb3-458" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-459"><a href="#cb3-459" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-460"><a href="#cb3-460" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-461"><a href="#cb3-461" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-462"><a href="#cb3-462" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-463"><a href="#cb3-463" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-464"><a href="#cb3-464" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-465"><a href="#cb3-465" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-466"><a href="#cb3-466" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-467"><a href="#cb3-467" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-468"><a href="#cb3-468" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-469"><a href="#cb3-469" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-470"><a href="#cb3-470" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-471"><a href="#cb3-471" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-472"><a href="#cb3-472" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-473"><a href="#cb3-473" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-474"><a href="#cb3-474" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-475"><a href="#cb3-475" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-476"><a href="#cb3-476" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-477"><a href="#cb3-477" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-478"><a href="#cb3-478" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-479"><a href="#cb3-479" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-480"><a href="#cb3-480" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-481"><a href="#cb3-481" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-482"><a href="#cb3-482" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-483"><a href="#cb3-483" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-484"><a href="#cb3-484" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-485"><a href="#cb3-485" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-486"><a href="#cb3-486" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-487"><a href="#cb3-487" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-488"><a href="#cb3-488" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-489"><a href="#cb3-489" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-490"><a href="#cb3-490" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-491"><a href="#cb3-491" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-492"><a href="#cb3-492" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-493"><a href="#cb3-493" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-494"><a href="#cb3-494" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-495"><a href="#cb3-495" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-496"><a href="#cb3-496" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-497"><a href="#cb3-497" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-498"><a href="#cb3-498" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-499"><a href="#cb3-499" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-500"><a href="#cb3-500" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-501"><a href="#cb3-501" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-502"><a href="#cb3-502" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-503"><a href="#cb3-503" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-504"><a href="#cb3-504" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-505"><a href="#cb3-505" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-506"><a href="#cb3-506" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-507"><a href="#cb3-507" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-508"><a href="#cb3-508" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-509"><a href="#cb3-509" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-510"><a href="#cb3-510" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-511"><a href="#cb3-511" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-512"><a href="#cb3-512" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-513"><a href="#cb3-513" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-514"><a href="#cb3-514" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-515"><a href="#cb3-515" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-516"><a href="#cb3-516" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-517"><a href="#cb3-517" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
+<span id="cb3-518"><a href="#cb3-518" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span></code></pre></div>
+<p>The <code>survey.design</code> formula uses the column <code>CL</code> as the PSU identifier. There are no explicit strata here, so the entire sample is treated as a single stratum. See <a href="#describing-your-survey-design">Describing your survey design</a> below for formulas with strata.</p>
+<p><code>boot_res</code> is a list of 500 one-row data frames, one per bootstrap replicate.</p>
+</div>
+<div id="step-3-collect-and-summarise" class="section level3">
+<h3>Step 3: collect and summarise</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>boot_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;rbind&quot;</span>, boot_res)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap standard errors</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(boot_df, <span class="dv">2</span>, sd)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       total_S82 ratio_RMT85_P85 </span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;               0              NA</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap means (should be close to the original point estimates)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(boot_df, <span class="dv">2</span>, mean)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       total_S82 ratio_RMT85_P85 </span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;               0             NaN</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Original point estimates for comparison</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">my_estimator</span>(survey, survey<span class="sc">$</span>sample_weight)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   total_S82 ratio_RMT85_P85</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     15400        8.765395</span></span></code></pre></div>
+<p>You can also pass <code>summary.fn</code> to <code>bootstrap.estimates()</code> to get a summary computed in a single pass without keeping all replicates in memory:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>boot_summary <span class="ot">&lt;-</span> <span class="fu">bootstrap.estimates</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.data   =</span> survey,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.design =</span> <span class="sc">~</span> CL,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.reps      =</span> <span class="dv">500</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator.fn  =</span> my_estimator,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights       =</span> <span class="st">&quot;sample_weight&quot;</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">bootstrap.fn  =</span> <span class="st">&quot;rescaled.bootstrap.sample&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary.fn    =</span> MU284.estimator.summary.fn,  <span class="co"># example summary function</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose       =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="visualising-the-bootstrap-distribution" class="section level3">
+<h3>Visualising the bootstrap distribution</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(boot_df<span class="sc">$</span>total_S82,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main  =</span> <span class="st">&quot;Bootstrap distribution: total council seats&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab  =</span> <span class="st">&quot;Estimated total (S82)&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col   =</span> <span class="st">&quot;steelblue&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">border =</span> <span class="st">&quot;white&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">my_estimator</span>(survey, survey<span class="sc">$</span>sample_weight)<span class="sc">$</span>total_S82,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">legend =</span> <span class="st">&quot;Point estimate&quot;</span>, <span class="at">col =</span> <span class="st">&quot;firebrick&quot;</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAYAAABFmt0fAAAEDmlDQ1BrQ0dDb2xvclNwYWNlR2VuZXJpY1JHQgAAOI2NVV1oHFUUPpu5syskzoPUpqaSDv41lLRsUtGE2uj+ZbNt3CyTbLRBkMns3Z1pJjPj/KRpKT4UQRDBqOCT4P9bwSchaqvtiy2itFCiBIMo+ND6R6HSFwnruTOzu5O4a73L3PnmnO9+595z7t4LkLgsW5beJQIsGq4t5dPis8fmxMQ6dMF90A190C0rjpUqlSYBG+PCv9rt7yDG3tf2t/f/Z+uuUEcBiN2F2Kw4yiLiZQD+FcWyXYAEQfvICddi+AnEO2ycIOISw7UAVxieD/Cyz5mRMohfRSwoqoz+xNuIB+cj9loEB3Pw2448NaitKSLLRck2q5pOI9O9g/t/tkXda8Tbg0+PszB9FN8DuPaXKnKW4YcQn1Xk3HSIry5ps8UQ/2W5aQnxIwBdu7yFcgrxPsRjVXu8HOh0qao30cArp9SZZxDfg3h1wTzKxu5E/LUxX5wKdX5SnAzmDx4A4OIqLbB69yMesE1pKojLjVdoNsfyiPi45hZmAn3uLWdpOtfQOaVmikEs7ovj8hFWpz7EV6mel0L9Xy23FMYlPYZenAx0yDB1/PX6dledmQjikjkXCxqMJS9WtfFCyH9XtSekEF+2dH+P4tzITduTygGfv58a5VCTH5PtXD7EFZiNyUDBhHnsFTBgE0SQIA9pfFtgo6cKGuhooeilaKH41eDs38Ip+f4At1Rq/sjr6NEwQqb/I/DQqsLvaFUjvAx+eWirddAJZnAj1DFJL0mSg/gcIpPkMBkhoyCSJ8lTZIxk0TpKDjXHliJzZPO50dR5ASNSnzeLvIvod0HG/mdkmOC0z8VKnzcQ2M/Yz2vKldduXjp9bleLu0ZWn7vWc+l0JGcaai10yNrUnXLP/8Jf59ewX+c3Wgz+B34Df+vbVrc16zTMVgp9um9bxEfzPU5kPqUtVWxhs6OiWTVW+gIfywB9uXi7CGcGW/zk98k/kmvJ95IfJn/j3uQ+4c5zn3Kfcd+AyF3gLnJfcl9xH3OfR2rUee80a+6vo7EK5mmXUdyfQlrYLTwoZIU9wsPCZEtP6BWGhAlhL3p2N6sTjRdduwbHsG9kq32sgBepc+xurLPW4T9URpYGJ3ym4+8zA05u44QjST8ZIoVtu3qE7fWmdn5LPdqvgcZz8Ww8BWJ8X3w0PhQ/wnCDGd+LvlHs8dRy6bLLDuKMaZ20tZrqisPJ5ONiCq8yKhYM5cCgKOu66Lsc0aYOtZdo5QCwezI4wm9J/v0X23mlZXOfBjj8Jzv3WrY5D+CsA9D7aMs2gGfjve8ArD6mePZSeCfEYt8CONWDw8FXTxrPqx/r9Vt4biXeANh8vV7/+/16ffMD1N8AuKD/A/8leAvFY9bLAAAAOGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAACoAIABAAAAAEAAAJAoAMABAAAAAEAAAGAAAAAAEIEMHcAAEAASURBVHgB7Z0HuBXF+Yc/uvSOCFgoKlZQMUFFjYgFu1GMARWMQWKJveRRNBJbYjcmRmONSuxd0SAgFixEBbGAolIEqSIgve1/fuN/N3vPPeeewr2XU955nnN2d3Z2duad3bO/8803szUCF4wAAQhAAAIQgAAESohAzRKqK1WFAAQgAAEIQAACngACiAsBAhCAAAQgAIGSI4AAKrkmp8IQgAAEIAABCCCAuAYgAAEIQAACECg5AgigkmtyKgwBCEAAAhCAAAKIawACEIAABCAAgZIjgAAquSanwhCAAAQgAAEIIIC4BiAAAQhAAAIQKDkCCKCSa3IqDAEIQAACEIAAAohrAAIQgAAEIACBkiOAACq5JqfCEIAABCAAAQgggLgGIAABCEAAAhAoOQIIoJJrcioMAQhAAAIQgAACiGsAAhCAAAQgAIGSI4AAKrkmp8IQgAAEIAABCCCAuAYgAAEIQAACECg5AgigkmtyKgwBCEAAAhCAAAKIawACEIAABCAAgZIjgAAquSanwhCAAAQgAAEIIIC4BiAAAQhAAAIQKDkCCKCSa3IqDAEIQAACEIAAAohrAAIQgAAEIACBkiOAACq5JqfCEIAABCAAAQgggLgGIAABCEAAAhAoOQIIoJJrcioMAQhAAAIQgAACiGsAAhCAAAQgAIGSI4AAKrkmp8IQgAAEIAABCCCAuAYgAAEIQAACECg5AgigkmtyKgwBCEAAAhCAAAKIawACEIAABCAAgZIjgAAquSanwhCAAAQgAAEIIIC4BiAAAQhAAAIQKDkCCKAibPIffvjBevfuXe5z4IEHWt++fe3kk0+2xx57zNasWbNJaj9t2jRbsmTJRp27MvLYqALkePANN9wQtUsQBD6XefPmRXEPPPBAjjmbbdiwwSZNmpTx8fGy6FiFTz/9NCrLSy+9lHFe2SZMbL/KYpBtOXJJn1j2XPLQMRuTT7K2y7UchX5csmsnWVy+1zPb+zff61MQ5XM/woQiIzB37lw9WdN+nCAKVq9eXW21X7ZsWXD55ZcHm222WTB16tSczlsZeeR04ko6aNCgQVG7rF+/3uc6ffr0KG7o0KE5nWncuHHBHnvsEQwYMCDj4+NlWbdunT/u7bffjspy9913Z5xXpglTtV9lMMi0DLmmS1X2bPOrjHyStV225SiW9MmunWRx+VzfXO7ffK5PoZStdkGoNAqZM4Ftt93Wjj76aH+8/mHI8vL000/b4sWLbfTo0XbPPffYWWedlXP+2Rx400032bXXXpvNIeXSVkYe5TLdxBENGjSwo446ypdihx12yKk0++yzjz+ua9euGR+/22672aJFi3z6GjVqZHzcxiRM1X6VwWBjypXJsanKnsmx8TSVlU88z1JeL4RrJ1375HL/psuT/ekJIIDSMyroFDvvvLPdeOONZepwwQUX2E477eTj3njjjZQCyFkobObMmbbVVltZrVq1yuSRbGPBggVWs2ZNa9myZbLdGcVJoDkLljVv3txatWrl88vowCSJZs2aZR06dCizR3WSeXzp0qX+HJtvvnmZ/ck2dIzyEodshYKzrETHik2y0Lp1a3v++eeT7fJxVcXknHPOMX3SBWcl9G2SS/3T5R3uT8dA6bK9HnWM+yfqr+EtttjC6tatq6gqD5VxH/z44482Z84cq1OnjrVt29bq169fKeWW4BVH8U4XcuGdLs/E/boPly9fbmqfikJF5c7k2qko7/i+bO41lV3pt9xyy3gW5dYroy2zKVe5AhCRmkChmKooZ+YE4l1gxx57bLkDnagJ3IPcd3Uk63J55ZVXgkMPPTRo3LixT1OvXr2gT58+wRdffFEurxUrVgS///3vA2d5iLpO2rdvH9x8882B+wGN0v/yl78M3I95lMb9oAfuhz3a/+ijjwadOnWK9rsrNnDiJLj99tujNBXl8c477wQNGzb0H+e7Emy33XY+L/fjFHz//fc+jz/96U9Bs2bNypxjm222CZwlLDrHhAkTonxee+21YMiQIUGTJk38MTr2tttui9JWtOJ+1IPBgwf77j7VRSyd9Ss45ZRTovOH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vWTt2rXzgujDDz/0+SgPibT33nvPb/MFAQj8RKA2ICAAgcIgcPTRR3trwcaUVpYOWZPCMHDgwHC1SpfJumaq6oSJdczkPFVVvnnz5tntt99uX331VVQMidhu3bp5S1zYFnvvvbd16NDBfvOb39hbb71lBxxwgH3zzTcm643ET79+/fzxsvBIOL355pt2xBFH2HPPPWffffedX+65554+jUSURJAsfaF175xzzrFLLrnEHxcVhBUIlDgBLEAlfgFQ/eIi8N///tf2339/32WiLpZTTz016lbRQ3Ds2LH29ttv+26SOXPm2LXXXmsnn3xyBEHH/uc//7Hf/e53tsUWW/gHtbprVqxYYYMGDbLNN9/cP3hff/316Bit6EHcq1cva9GihT9OXTJTpkzxaV544QUbOnSoX993333t4Ycf9uvLly/3ViGVs3Xr1t7aMXPmTL8v/JoxY4YXBW3btvUP83jXTpgmvkxWR+1XnVU3dTltu+22dumll0ZdUqnKN23aNN/9tM0223ieEhMSL9mEa665xnbffXfPJTxOVjB1iyWGk046yYYPH25hl2azZs2sZs2aZfx3QuuQursUdtttN7vzzjstFD+KU3dZq1atyvgcqT3Gjx9vL7/8spIQIAABRwABxGUAgSIhIEGhB52sBPfee69dcMEF9uqrr9qAAQN8DY888kjr1KmT6YF+9tln+welBEbcp2TixIleNEkcDRs2zOrXr++3Dz74YJNvjR7osmrIdygMTz/9tB177LG288472z333OP3ffTRR148KM0OO+xgOl5B3VN6aKt7R/4s6gJS+eQf9P333/sHeegHI58Z+cVI1KmbTwKsf//+VpG1JlkdJ0yYYL/4xS+8j4ysImeddZb3IfrlL3/py5SsfOpqkuBR19GVV15p6saqW7euL+tnn33mj8vkS4Lj8MMPL5NUdfj666+tZ8+evtsqdIKuU6eOr5/aSKFly5Z+W+d+4IEHTEJNbapy7bXXXj6NWJ5xxhl+Pfx65513bPr06T7/MK5Ro0Ym8YkAComwhIAj4H6ICBCAQB4TuPvuuzX8J3AP4KBevXrlPrfddpsv/fvvv+/TuQd+VBsnMAJnFQmcaPBxzh8kcCIp2j948ODAWSiibWdZCNxDNVi7dq2Pc10wPs94GudL4uO++OILn0b59+3bN8pDK86y5NM4MePjnWXD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" alt="Histogram of 500 bootstrap estimates of the total number of municipal council seats across all Swedish municipalities. The distribution is roughly bell-shaped and centred near the original point estimate." /></p>
+<hr />
+</div>
+</div>
+<div id="path-2-get.rescaled.bootstrap.weights-weight-matrix-api" class="section level2">
+<h2>Path 2: <code>get.rescaled.bootstrap.weights()</code> — weight-matrix API</h2>
+<p>Sometimes it is more convenient to obtain a matrix of bootstrap weights directly and then apply your estimator(s) yourself. This is useful when:</p>
+<ul>
+<li>you want to compute many different estimators from the same set of replicates</li>
+<li>you need to pass bootstrap weights to external software</li>
+<li>you are implementing jackknife-after-bootstrap (JAB) variance estimation</li>
+</ul>
+<div id="obtain-bootstrap-weights" class="section level3">
+<h3>Obtain bootstrap weights</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>boot_wts <span class="ot">&lt;-</span> <span class="fu">get.rescaled.bootstrap.weights</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.data   =</span> survey,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.design =</span> <span class="sc">~</span> CL,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">idvar         =</span> <span class="st">&quot;LABEL&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights       =</span> <span class="st">&quot;sample_weight&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.reps      =</span> <span class="dv">500</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>The result is a list with two elements:</p>
+<ul>
+<li><strong><code>orig_weights</code></strong> — a data frame with one row per respondent and a <code>weight</code> column containing the original sampling weight</li>
+<li><strong><code>boot_weights</code></strong> — a data frame with one row per respondent and columns <code>LABEL</code>, <code>boot_weight_1</code>, …, <code>boot_weight_500</code></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(boot_wts)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;orig_weights&quot; &quot;boot_weights&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># First few rows and columns of boot_weights</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>boot_wts<span class="sc">$</span>boot_weights[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   LABEL boot_weight_1 boot_weight_2 boot_weight_3</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    96             0      66.66667      33.33333</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    99             0      66.66667      33.33333</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3   101             0      66.66667      33.33333</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    16             0      20.83333      20.83333</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5    18             0      20.83333      20.83333</span></span></code></pre></div>
+</div>
+<div id="compute-estimates-from-bootstrap-weights" class="section level3">
+<h3>Compute estimates from bootstrap weights</h3>
+<p>Join the survey data to the weight matrix, then apply your estimator for each replicate:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge survey data with bootstrap weights on the respondent id</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bw <span class="ot">&lt;-</span> <span class="fu">merge</span>(survey[, <span class="fu">c</span>(<span class="st">&quot;LABEL&quot;</span>, <span class="st">&quot;S82&quot;</span>, <span class="st">&quot;RMT85&quot;</span>, <span class="st">&quot;P85&quot;</span>)],</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            boot_wts<span class="sc">$</span>boot_weights,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">&quot;LABEL&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the total_S82 estimator for each bootstrap replicate</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>boot_totals <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">paste0</span>(<span class="st">&quot;boot_weight_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>), <span class="cf">function</span>(col) {</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(bw<span class="sc">$</span>S82 <span class="sc">*</span> bw[[col]])</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap standard error</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(boot_totals)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1607.395</span></span></code></pre></div>
+</div>
+<div id="scaling-factors" class="section level3">
+<h3>Scaling factors</h3>
+<p>Pass <code>include_scaling_factors = TRUE</code> to also get the per-replicate weight scaling factors. Each bootstrap weight is the product of the original weight and the corresponding scaling factor:</p>
+<p><span class="math display">\[\text{boot\_weight}_{i,r} = \text{orig\_weight}_i \times \text{boot\_rep}_{i,r}\]</span></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>boot_wts_sf <span class="ot">&lt;-</span> <span class="fu">get.rescaled.bootstrap.weights</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.data            =</span> survey,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.design          =</span> <span class="sc">~</span> CL,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">idvar                  =</span> <span class="st">&quot;LABEL&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights                =</span> <span class="st">&quot;sample_weight&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.reps               =</span> <span class="dv">500</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">include_scaling_factors =</span> <span class="cn">TRUE</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># boot_wts_sf$weight_scaling_factor has columns LABEL, boot_rep_1, ..., boot_rep_500</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="describing-your-survey-design" class="section level2">
+<h2>Describing your survey design</h2>
+<p>The <code>survey.design</code> argument is a formula that tells <code>surveybootstrap</code> which columns identify PSUs and strata.</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Formula</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>~ CL</code></td>
+<td>PSU is <code>CL</code>; no strata (one global stratum)</td>
+</tr>
+<tr class="even">
+<td><code>~ psu + strata(region)</code></td>
+<td>PSU is <code>psu</code>; strata defined by <code>region</code></td>
+</tr>
+<tr class="odd">
+<td><code>~ psu1 + psu2 + strata(s1 + s2)</code></td>
+<td>PSU uniquely identified by <code>(psu1, psu2)</code>; strata by <code>(s1, s2)</code></td>
+</tr>
+<tr class="even">
+<td><code>~ 1</code></td>
+<td>Simple random sample — use <code>srs.bootstrap.sample</code> instead</td>
+</tr>
+</tbody>
+</table>
+<p>For a simple random sample, use <code>bootstrap.fn = &quot;srs.bootstrap.sample&quot;</code> and <code>survey.design = ~ 1</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>srs_survey <span class="ot">&lt;-</span> MU284.surveys[[<span class="dv">1</span>]]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>boot_srs <span class="ot">&lt;-</span> <span class="fu">bootstrap.estimates</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.data   =</span> srs_survey,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey.design =</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.reps      =</span> <span class="dv">500</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimator.fn  =</span> my_estimator,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights       =</span> <span class="st">&quot;sample_weight&quot;</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">bootstrap.fn  =</span> <span class="st">&quot;srs.bootstrap.sample&quot;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Rao, J.N.K. and Wu, C.F.J. (1988). Resampling inference with complex survey data. <em>Journal of the American Statistical Association</em>, 83(401), 231–241. <a href="https://doi.org/10.1080/01621459.1988.10478591" class="uri">https://doi.org/10.1080/01621459.1988.10478591</a></p>
+<p>Rust, K.F. and Rao, J.N.K. (1996). Variance estimation for complex surveys using replication techniques. <em>Statistical Methods in Medical Research</em>, 5(3), 283–310. <a href="https://doi.org/10.1177/096228029600500305" class="uri">https://doi.org/10.1177/096228029600500305</a></p>
+<p>Sarndal, C.-E., Swensson, B. and Wretman, J. (2003). <em>Model Assisted Survey Sampling</em>. Springer. ISBN: 0387406204.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

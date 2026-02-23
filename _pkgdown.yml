@@ -1,0 +1,90 @@
+url: https://dfeehan.github.io/surveybootstrap/
+
+template:
+  bootstrap: 5
+
+home:
+  title: surveybootstrap
+  description: Bootstrap variance estimation for complex survey designs
+
+navbar:
+  structure:
+    left: [intro, reference, news]
+    right: [github]
+  components:
+    github:
+      icon: fab fa-github
+      aria-label: GitHub
+      href: https://github.com/dfeehan/surveybootstrap
+
+reference:
+  - title: "Main bootstrap interface"
+    desc: >
+      High-level function for obtaining bootstrap estimates of sampling
+      uncertainty from any estimator.
+    contents:
+      - bootstrap.estimates
+
+  - title: "Bootstrap sampling methods"
+    desc: >
+      Functions that draw bootstrap resamples from a survey dataset.
+      Pass the name of one of these to the `bootstrap.fn` argument of
+      `bootstrap.estimates()`.
+    contents:
+      - rescaled.bootstrap.sample
+      - srs.bootstrap.sample
+
+  - title: "Bootstrap weight utilities"
+    desc: >
+      Functions that return rescaled bootstrap weights as data frames,
+      useful for downstream calculations such as jackknife-after-bootstrap
+      (JAB) variance estimation.
+    contents:
+      - get.rescaled.bootstrap.weights
+      - rescaled.bootstrap.weights
+
+  - title: "RDS bootstrap methods"
+    desc: >
+      Bootstrap functions for respondent-driven sampling (RDS) data.
+    contents:
+      - rds.boot.draw.chain
+      - rds.chain.boot.draws
+      - rds.mc.boot.draws
+      - estimate.degree.distns
+      - estimate.mixing
+
+  - title: "RDS chain utilities"
+    desc: >
+      Internal helper functions for working with RDS recruitment chains.
+    contents:
+      - chain.data
+      - chain.size
+      - chain.vals
+      - is.child.ct
+      - make.chain
+      - max.depth
+      - mc.sim
+
+  - title: "Example data"
+    desc: >
+      The MU284 dataset (284 Swedish municipalities) and simulated samples
+      drawn from it, used in package examples and tests.
+    contents:
+      - MU284
+      - MU284.surveys
+      - MU284.complex.surveys
+      - MU284.boot.res.summ
+      - MU284.estimator.fn
+      - MU284.estimator.summary.fn
+
+  - title: "Legacy / internal"
+    desc: >
+      Older implementations retained for reference.
+    contents:
+      - rescaled.bootstrap.sample.pureR
+      - surveybootstrap
+
+news:
+  releases:
+  - text: "Version 0.2.0"
+    href: news/index.html
