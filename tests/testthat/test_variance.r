@@ -269,3 +269,92 @@ test_that("all estimates are finite (regression: weight.scale column name)", {
   expect_true(all(is.finite(all_ratio)))
 })
 
+#########################################
+## rescaled.bootstrap.weights output structure
+
+context("rescaled.bootstrap.weights - output structure")
+
+rbw_svy <- MU284.complex.surveys[[1]]
+rbw_result <- rescaled.bootstrap.weights(survey.data = rbw_svy,
+                                         survey.design = ~ CL,
+                                         idvar = 'LABEL',
+                                         weights = 'sample_weight',
+                                         num.reps = 5)
+
+test_that("returns a data frame", {
+  expect_true(is.data.frame(rbw_result))
+})
+
+test_that("has idvar column and one boot weight column per rep", {
+  expected_cols <- c("LABEL", paste0("boot_weight_", 1:5))
+  expect_true(all(expected_cols %in% names(rbw_result)))
+})
+
+test_that("has same number of rows as survey", {
+  expect_equal(nrow(rbw_result), nrow(rbw_svy))
+})
+
+test_that("all boot weights are non-negative", {
+  for (col in paste0("boot_weight_", 1:5)) {
+    expect_true(all(rbw_result[[col]] >= 0))
+  }
+})
+
+#########################################
+## get.rescaled.bootstrap.weights semantic content
+
+context("get.rescaled.bootstrap.weights - semantic content")
+
+sem_svy <- MU284.complex.surveys[[1]]
+
+## cluster_counts semantics
+sem_cc <- get.rescaled.bootstrap.weights(survey.data = sem_svy,
+                                         survey.design = ~ CL,
+                                         idvar = 'LABEL',
+                                         weights = 'sample_weight',
+                                         num.reps = 5,
+                                         include_cc = TRUE)
+
+test_that("cluster_counts has one row per unique PSU", {
+  n_psus <- dplyr::n_distinct(sem_svy$CL)
+  expect_equal(nrow(sem_cc$cluster_counts), n_psus)
+})
+
+test_that("cluster_counts boot_rep_* values are non-negative", {
+  for (col in paste0("boot_rep_", 1:5)) {
+    expect_true(all(sem_cc$cluster_counts[[col]] >= 0))
+  }
+})
+
+test_that("orig_weights has a weight column with positive values", {
+  expect_true("weight" %in% names(sem_cc$orig_weights))
+  expect_true(all(sem_cc$orig_weights$weight > 0))
+})
+
+test_that("orig_weights has same number of rows as survey", {
+  expect_equal(nrow(sem_cc$orig_weights), nrow(sem_svy))
+})
+
+## scaling factor relationship: boot_weight == orig_weight * scaling_factor
+sem_sf <- get.rescaled.bootstrap.weights(survey.data = sem_svy,
+                                         survey.design = ~ CL,
+                                         idvar = 'LABEL',
+                                         weights = 'sample_weight',
+                                         num.reps = 5,
+                                         include_scaling_factors = TRUE)
+
+test_that("boot_weight equals orig_weight times scaling_factor for each rep", {
+  orig_w <- sem_sf$orig_weights[, c("LABEL", "weight")]
+  for (i in 1:5) {
+    bw_col <- paste0("boot_weight_", i)
+    sf_col <- paste0("boot_rep_", i)
+    joined <- merge(orig_w,
+                    sem_sf$boot_weights[, c("LABEL", bw_col)],
+                    by = "LABEL")
+    joined <- merge(joined,
+                    sem_sf$weight_scaling_factor[, c("LABEL", sf_col)],
+                    by = "LABEL")
+    expect_equal(joined[[bw_col]], joined[["weight"]] * joined[[sf_col]])
+  }
+})
+

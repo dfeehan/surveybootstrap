@@ -15,7 +15,6 @@
 ##' @param paropts if not NULL, additional arguments to pass along to the
 ##'                parallelization routine
 ##' @param verbose if TRUE, produce lots of feedback about what is going on
-##' @param include_cc if TRUE, include cluster counts (see `rescaled_bootstrap`)
 ##' @return if no summary.fn is specified, then return the list of estimates
 ##'         produced by estimator.fn; if summary.fn is specified, then return
 ##'         its output
@@ -58,7 +57,6 @@ rescaled.bootstrap.weights <- function(survey.data,
                                        weights=NULL,
                                        idvar,
                                        verbose=TRUE,
-                                       include_cc=FALSE,
                                        parallel=FALSE,
                                        paropts=NULL)
 {
