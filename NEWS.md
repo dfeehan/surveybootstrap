@@ -1,3 +1,23 @@
+# surveybootstrap 0.2.0
+
+* Added `get.rescaled.bootstrap.weights()`: new function that returns rescaled
+  bootstrap weights (and optionally cluster counts and scaling factors) in a
+  wide data frame, making it straightforward to use the rescaled bootstrap for
+  jackknife-after-bootstrap (JAB) variance estimation
+* `rescaled.bootstrap.sample()` gains an `include_cc` argument; when `TRUE` it
+  returns per-rep cluster inclusion counts alongside the weight-scaling factors,
+  which are needed for JAB calculations
+* Fixed a bug where `bootstrap.estimates()` failed silently when used with
+  `rescaled.bootstrap.sample()`: the weight-scaling column was named
+  `weight_scale` (underscore) in the sampler but read as `weight.scale` (dot)
+  by the estimator, causing weights to collapse to `numeric(0)` and all
+  estimates to be `NaN` / `Inf`
+* Expanded test suite: added structural and semantic tests for
+  `rescaled.bootstrap.sample()`, `srs.bootstrap.sample()`,
+  `get.rescaled.bootstrap.weights()`, and `rescaled.bootstrap.weights()`;
+  added a regression test that directly catches the `weight.scale` naming bug;
+  added tests for the `weighted.mean()` helper
+
 # surveybootstrap 0.1.0.9000
 
 
