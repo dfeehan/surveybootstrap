@@ -1,6 +1,6 @@
 # Articles
 
-### All vignettes
+### Getting started
 
 - [The rescaled
   bootstrap](https://dfeehan.github.io/surveybootstrap/articles/draft/rescaled_bootstrap.md):

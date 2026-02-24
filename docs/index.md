@@ -1,4 +1,4 @@
-# Summary
+# Surveybootstap
 
 The goal of the `surveybootstrap` package is to help people use the
 bootstrap to estimate sampling uncertainty from surveys, including
@@ -52,6 +52,8 @@ continue to develop it.
   package.” <http://cran.r-project.org/package=surveybootstrap>
 
 ## Wishlist
+
+- non-vignette article with larger-scale demonstration
 
 - should issue a warning if the user specifies strata that result in
   situations with only one PSU per stratum (can’t calculate variance in

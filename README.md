@@ -1,7 +1,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/dfeehan/surveybootstrap.svg?branch=master)](https://travis-ci.org/dfeehan/surveybootstrap)
 
-Summary
+Surveybootstap
 ================
 
 The goal of the `surveybootstrap` package is to help people use the bootstrap
@@ -49,6 +49,8 @@ If you use our package for your research, please cite it so that we can continue
 
 Wishlist
 --------
+
+* non-vignette article with larger-scale demonstration
 
 * should issue a warning if the user specifies strata that result in situations with only one PSU per stratum (can't calculate variance in this case, unless the PSU is the entire stratum) 
 

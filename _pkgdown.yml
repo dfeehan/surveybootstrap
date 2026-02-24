@@ -9,7 +9,7 @@ home:
 
 navbar:
   structure:
-    left: [intro, reference, news]
+    left: [intro, reference, articles, news]
     right: [github]
   components:
     github:
@@ -83,6 +83,11 @@ reference:
     contents:
       - rescaled.bootstrap.sample.pureR
       - surveybootstrap
+
+articles:
+  - title: "Getting started"
+    contents:
+      - draft/rescaled_bootstrap
 
 news:
   releases:
