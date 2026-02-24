@@ -23,7 +23,14 @@
 - Added vignette “The rescaled bootstrap” illustrating the main workflow
   with the MU284 example data
 - Added pkgdown site
-- Added regression tests covering the above bug fixes
+- [`rescaled.bootstrap.sample()`](https://dfeehan.github.io/surveybootstrap/reference/rescaled.bootstrap.sample.md)
+  and
+  [`get.rescaled.bootstrap.weights()`](https://dfeehan.github.io/surveybootstrap/reference/get.rescaled.bootstrap.weights.md)
+  now issue a warning when any stratum contains fewer than 2 PSUs
+  (variance cannot be estimated in that case; bootstrap weights for the
+  stratum will be 0)
+- Added regression tests covering the above bug fixes and the single-PSU
+  warning
 
 ## surveybootstrap 0.2.0
 

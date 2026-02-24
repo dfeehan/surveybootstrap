@@ -46,7 +46,9 @@
 <li>Fixed <code><a href="../reference/rescaled.bootstrap.weights.html">rescaled.bootstrap.weights()</a></code> producing column names <code>boot_weight_rep.1</code>, <code>boot_weight_rep.2</code>, … instead of the documented <code>boot_weight_1</code>, <code>boot_weight_2</code>, …</li>
 <li>Added vignette “The rescaled bootstrap” illustrating the main workflow with the MU284 example data</li>
 <li>Added pkgdown site</li>
-<li>Added regression tests covering the above bug fixes</li>
+<li>
+<code><a href="../reference/rescaled.bootstrap.sample.html">rescaled.bootstrap.sample()</a></code> and <code><a href="../reference/get.rescaled.bootstrap.weights.html">get.rescaled.bootstrap.weights()</a></code> now issue a warning when any stratum contains fewer than 2 PSUs (variance cannot be estimated in that case; bootstrap weights for the stratum will be 0)</li>
+<li>Added regression tests covering the above bug fixes and the single-PSU warning</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="surveybootstrap-020">surveybootstrap 0.2.0<a class="anchor" aria-label="anchor" href="#surveybootstrap-020"></a></h2>

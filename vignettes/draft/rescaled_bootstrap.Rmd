@@ -2,7 +2,6 @@
 title: "The rescaled bootstrap"
 author: 
   - "Dennis M. Feehan"
-  - 'with assistance from Calude Opus 4.6'
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -280,6 +279,10 @@ boot_srs <- bootstrap.estimates(
 ```
 
 ---
+
+## Acknowledgement
+
+DF used Claude Opus 4.6 to help improve this vignette.
 
 ## References
 

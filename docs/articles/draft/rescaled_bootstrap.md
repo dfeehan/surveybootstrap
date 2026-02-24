@@ -301,6 +301,10 @@ boot_srs <- bootstrap.estimates(
 
 ------------------------------------------------------------------------
 
+## Acknowledgement
+
+DF used Claude Opus 4.6 to help improve this vignette.
+
 ## References
 
 Rao, J.N.K. and Wu, C.F.J. (1988). Resampling inference with complex
