@@ -8,7 +8,7 @@ Get a dataset of rescaled bootstrap weights.
 get.rescaled.bootstrap.weights(
   survey.data,
   survey.design,
-  idvar,
+  idvar = NULL,
   weights = NULL,
   parallel = FALSE,
   paropts = NULL,
@@ -139,7 +139,4 @@ survey <- MU284.complex.surveys[[1]]
 boot_surveys <- get.rescaled.bootstrap.weights(survey.data = survey,
                                                survey.design = ~ CL,
                                                num.reps = 2)
-#> Error in select(., .internal_id, .cluster_id, any_of(psu.var.names), one_of(idvar)): ℹ In argument: `one_of(idvar)`.
-#> Caused by error:
-#> ! argument "idvar" is missing, with no default
 ```

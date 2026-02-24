@@ -13,7 +13,6 @@ rescaled.bootstrap.weights(
   weights = NULL,
   idvar,
   verbose = TRUE,
-  include_cc = FALSE,
   parallel = FALSE,
   paropts = NULL
 )
@@ -46,10 +45,6 @@ rescaled.bootstrap.weights(
 - verbose:
 
   if TRUE, produce lots of feedback about what is going on
-
-- include_cc:
-
-  if TRUE, include cluster counts (see `rescaled_bootstrap`)
 
 - parallel:
 
@@ -84,21 +79,21 @@ rescaled.bootstrap.weights(survey.data = survey,
                           idvar='LABEL',
                           num.reps = 2)
 #>    LABEL boot_weight_1 boot_weight_2
-#> 1     96             0      33.33333
-#> 2     99             0      33.33333
-#> 3    101             0      33.33333
-#> 4     16             0      20.83333
-#> 5     18             0      20.83333
-#> 6     19             0      20.83333
-#> 7    221             0       0.00000
-#> 8    223             0       0.00000
-#> 9    224             0       0.00000
-#> 10   188            50       0.00000
-#> 11   190            50       0.00000
-#> 12   191            50       0.00000
-#> 13   199            50      50.00000
-#> 14   200            50      50.00000
-#> 15   203            50      50.00000
+#> 1     96       0.00000      33.33333
+#> 2     99       0.00000      33.33333
+#> 3    101       0.00000      33.33333
+#> 4     16      41.66667      20.83333
+#> 5     18      41.66667      20.83333
+#> 6     19      41.66667      20.83333
+#> 7    221      41.66667       0.00000
+#> 8    223      41.66667       0.00000
+#> 9    224      41.66667       0.00000
+#> 10   188       0.00000      25.00000
+#> 11   190       0.00000      25.00000
+#> 12   191       0.00000      25.00000
+#> 13   199       0.00000      25.00000
+#> 14   200       0.00000      25.00000
+#> 15   203       0.00000      25.00000
 
 
 if (FALSE) { # \dontrun{

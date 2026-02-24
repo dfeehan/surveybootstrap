@@ -1,6 +1,6 @@
 # Articles
 
-### All vignettes
+### Getting started
 
 - [The rescaled
-  bootstrap](http://dennisfeehan.org/surveybootstrap/articles/draft/rescaled_bootstrap.md):
+  bootstrap](http://dennisfeehan.org/surveybootstrap/articles/rescaled_bootstrap.md):
