@@ -53,10 +53,13 @@ continue to develop it.
 
 ## Wishlist
 
-- non-vignette article with larger-scale demonstration
-
 - vignette to cover jackknife-after-bootstrap for estimating variance of
   variance estimators
+
+- non-vignette article with larger-scale demonstration (ie, a demo that
+  takes longer to run than would be good for a vignette)
+
+- either remove the RDS bootstrap or include a vignette to document it
 
 - update to use the `purrr` package, instead of `plyr` (but we’ll
   probably need to wait until `purrr` supports parallelization)
