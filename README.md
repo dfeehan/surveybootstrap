@@ -1,9 +1,6 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/dfeehan/surveybootstrap.svg?branch=master)](https://travis-ci.org/dfeehan/surveybootstrap)
 
-Surveybootstap
-================
-
 The goal of the `surveybootstrap` package is to help people use the bootstrap
 to estimate sampling uncertainty from surveys, including surveys with complex
 sample designs.

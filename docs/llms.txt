@@ -1,5 +1,3 @@
-# Surveybootstap
-
 The goal of the `surveybootstrap` package is to help people use the
 bootstrap to estimate sampling uncertainty from surveys, including
 surveys with complex sample designs.
