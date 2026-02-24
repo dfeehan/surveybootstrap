@@ -163,9 +163,15 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   bs <- purrr:::map(strata,
             function(stratum.data) {
 
-              ## TODO - need to handle the case where a stratum has
-              ## only one PSU - right now this produces NaNs for the weights,
-              ## which it should not...
+              n_psu <- length(unique(stratum.data$.cluster_id))
+              if (n_psu < 2) {
+                warning(
+                  "A stratum has only ", n_psu, " PSU. ",
+                  "The rescaled bootstrap requires at least 2 PSUs per stratum to estimate variance. ",
+                  "Bootstrap weights for this stratum will be 0.",
+                  call. = FALSE
+                )
+              }
 
               ## (this part is written in c++)
               res <- resample_stratum(stratum.data$.cluster_id,
@@ -414,9 +420,15 @@ rescaled.bootstrap.sample <- function(survey.data,
   bs <- purrr:::map(strata,
             function(stratum.data) {
 
-              ## TODO - need to handle the case where a stratum has
-              ## only one PSU - right now this produces NaNs for the weights,
-              ## which it should not...
+              n_psu <- length(unique(stratum.data$.cluster_id))
+              if (n_psu < 2) {
+                warning(
+                  "A stratum has only ", n_psu, " PSU. ",
+                  "The rescaled bootstrap requires at least 2 PSUs per stratum to estimate variance. ",
+                  "Bootstrap weights for this stratum will be 0.",
+                  call. = FALSE
+                )
+              }
 
               ## (this part is written in c++)
               res <- resample_stratum(stratum.data$.cluster_id,

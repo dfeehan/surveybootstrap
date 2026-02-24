@@ -52,6 +52,6 @@ Wishlist
 
 * non-vignette article with larger-scale demonstration
 
-* should issue a warning if the user specifies strata that result in situations with only one PSU per stratum (can't calculate variance in this case, unless the PSU is the entire stratum) 
+* vignette to cover jackknife-after-bootstrap for estimating variance of variance estimators
 
 * update to use the `purrr` package, instead of `plyr` (but we'll probably need to wait until `purrr` supports parallelization)

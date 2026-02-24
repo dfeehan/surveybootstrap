@@ -102,3 +102,40 @@ test_that("returns finite estimates (regression against NaN/Inf from naming bug)
   expect_true(all(is.finite(estimates)),
               info = "All bootstrap estimates should be finite (not NaN/Inf)")
 })
+
+# ── Single-PSU stratum warning ────────────────────────────────────────────────
+
+# A minimal dataset: stratum A has 2 PSUs, stratum B has only 1 PSU
+single_psu_data <- data.frame(
+  id      = 1:5,
+  stratum = c("A", "A", "A", "B", "B"),
+  psu     = c(1L,  1L,  2L,  3L,  3L),
+  y       = c(10,  20,  30,  40,  50)
+)
+
+context("rescaled.bootstrap.sample - single-PSU stratum warning")
+
+test_that("warns when a stratum has only 1 PSU", {
+  expect_warning(
+    rescaled.bootstrap.sample(
+      survey.data   = single_psu_data,
+      survey.design = ~ psu + strata(stratum),
+      num.reps      = 3
+    ),
+    regexp = "only 1 PSU"
+  )
+})
+
+context("get.rescaled.bootstrap.weights - single-PSU stratum warning")
+
+test_that("warns when a stratum has only 1 PSU", {
+  expect_warning(
+    get.rescaled.bootstrap.weights(
+      survey.data   = single_psu_data,
+      survey.design = ~ psu + strata(stratum),
+      idvar         = "id",
+      num.reps      = 3
+    ),
+    regexp = "only 1 PSU"
+  )
+})
