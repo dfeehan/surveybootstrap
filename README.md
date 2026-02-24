@@ -55,3 +55,5 @@ Wishlist
 * vignette to cover jackknife-after-bootstrap for estimating variance of variance estimators
 
 * update to use the `purrr` package, instead of `plyr` (but we'll probably need to wait until `purrr` supports parallelization)
+
+* either remove the RDS bootstrap or include a vignette to document it
