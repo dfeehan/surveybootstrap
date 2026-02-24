@@ -1,3 +1,19 @@
+# surveybootstrap 0.2.1
+
+* Fixed a warning ("Unknown or uninitialised column: `weight.scale`") that
+  appeared when using `bootstrap.estimates()` with `rescaled.bootstrap.sample()`:
+  the index column was being extracted as a one-column tibble instead of a plain
+  vector, causing tibble's `$` accessor to misreport the column as missing
+* Fixed a deprecation warning from rlang ("Unquoting language objects with `!!!`
+  is deprecated"): replaced `!!!psu.vars` with `across(all_of(...))` / `all_of(...)`
+  throughout `rescaled.bootstrap.sample()` and `get.rescaled.bootstrap.weights()`
+* Fixed `rescaled.bootstrap.weights()` producing column names `boot_weight_rep.1`,
+  `boot_weight_rep.2`, … instead of the documented `boot_weight_1`, `boot_weight_2`, …
+* Added vignette "The rescaled bootstrap" illustrating the main workflow with the
+  MU284 example data
+* Added pkgdown site
+* Added regression tests covering the above bug fixes
+
 # surveybootstrap 0.2.0
 
 * Added `get.rescaled.bootstrap.weights()`: new function that returns rescaled
