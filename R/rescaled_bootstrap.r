@@ -118,6 +118,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   if (length(psu.vars)==1 & psu.vars=="1") {
     psu.vars <- as.name(".internal_id")
   }
+  psu.var.names <- all.vars(psu.vars)
 
   ## get the weights
   weights <- get.weights(survey.data, weights)
@@ -126,20 +127,20 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   ## (we need this to use the C++ code, below)
   #survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
   survey.data <- survey.data %>%
-    group_by(!!!psu.vars) %>%
+    group_by(across(all_of(psu.var.names))) %>%
     # .cluster_id is the internal code we use to identify PSUs
     mutate(.cluster_id = cur_group_id()) %>%
     ungroup()
 
   # original weights
   ## can be useful for debugging
-  orig_weights <- survey.data %>% 
-    select(.internal_id, .cluster_id, any_of(psu.vars), one_of(idvar))
+  orig_weights <- survey.data %>%
+    select(.internal_id, .cluster_id, any_of(psu.var.names), one_of(idvar))
   orig_weights$weight <- weights
 
   ## save the cluster mapping to return
   cluster_id_mapping <- survey.data %>%
-    distinct(!!!psu.vars, .cluster_id) %>%
+    distinct(across(all_of(psu.var.names)), .cluster_id) %>%
     arrange(.cluster_id)
 
   ## if no strata are specified, enclose the entire survey all in
@@ -250,7 +251,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
       # add the original cluster info back on
       # (the .cluster_id won't be meaningful to the user)
       bind_cols(cluster_id_mapping) %>%
-      select(!!!psu.vars, starts_with('rep.'), -.cluster_id, -psu_index)
+      select(all_of(psu.var.names), starts_with('rep.'), -.cluster_id, -psu_index)
 
     # rename "rep.1", "rep.2", ... cols -> "boot_rep_1", "boot_rep_2", ...
     names(cc_all_strata) <- 
@@ -377,19 +378,20 @@ rescaled.bootstrap.sample <- function(survey.data,
   if (length(psu.vars)==1 & psu.vars=="1") {
     psu.vars <- as.name(".internal_id")
   }
+  psu.var.names <- all.vars(psu.vars)
 
   ## create a single variable with an id number for each PSU
   ## (we need this to use the C++ code, below)
   #survey.data$.cluster_id <- group_indices_(survey.data, .dots=all.vars(psu.vars))
   survey.data <- survey.data %>%
-    group_by(!!!psu.vars) %>%
+    group_by(across(all_of(psu.var.names))) %>%
     # .cluster_id is the internal code we use to identify PSUs
     mutate(.cluster_id = cur_group_id()) %>%
     ungroup()
 
   ## save the cluster mapping to return
   cluster_id_mapping <- survey.data %>%
-    distinct(!!!psu.vars, .cluster_id) %>%
+    distinct(across(all_of(psu.var.names)), .cluster_id) %>%
     arrange(.cluster_id)
 
   ## if no strata are specified, enclose the entire survey all in
@@ -481,7 +483,7 @@ rescaled.bootstrap.sample <- function(survey.data,
                            # add the original cluster info back on
                            # (the .cluster_id won't be meaningful to the user)
                            bind_cols(cluster_id_mapping) %>%
-                           select(.cluster_id, !!!psu.vars, cluster_count)
+                           select(.cluster_id, all_of(psu.var.names), cluster_count)
                           ) 
 
     return(lst(weight_factors=res_wf,
