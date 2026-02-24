@@ -79,7 +79,7 @@ rescaled.bootstrap.weights <- function(survey.data,
 
   # for the tibble generated from the ith boostrap replicate, rename the weight column
   # 'boot_weight_i' (so that the columns each have distinct names)
-  res <- purrr::imap(raw.res,
+  res <- purrr::imap(unname(raw.res),
                      ~.x$boot.data %>% rename(!!paste0('boot_weight_', .y) := .bootstrapweights))
 
   # take the list of tibbles and turn it into one big tibble
