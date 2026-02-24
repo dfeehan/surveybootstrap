@@ -178,15 +178,7 @@ survey <- MU284.complex.surveys[[1]]
 boot_surveys <- get.rescaled.bootstrap.weights(survey.data = survey,
                                                survey.design = ~ CL,
                                                num.reps = 2)
-#> Warning: Unquoting language objects with `!!!` is deprecated as of rlang 0.4.0. Please
-#> use `!!` instead.
-#> 
-#> # Bad: dplyr::select(data, !!!enquo(x))
-#> 
-#> # Good: dplyr::select(data, !!enquo(x)) # Unquote single quosure
-#> dplyr::select(data, !!!enquos(x)) # Splice list of quosures
-#> This warning is displayed once every 8 hours.
-#> Error in select(., .internal_id, .cluster_id, any_of(psu.vars), one_of(idvar)): ℹ In argument: `one_of(idvar)`.
+#> Error in select(., .internal_id, .cluster_id, any_of(psu.var.names), one_of(idvar)): ℹ In argument: `one_of(idvar)`.
 #> Caused by error:
 #> ! argument "idvar" is missing, with no default
 ```

@@ -57,8 +57,9 @@
 
       <h1>The rescaled bootstrap</h1>
                         <h4 data-toc-skip class="author">Dennis M. Feehan</h4>
+                        <h4 data-toc-skip class="author">with assistance from Calude Opus 4.6</h4>
             
-            <h4 data-toc-skip class="date">2026-02-22</h4>
+            <h4 data-toc-skip class="date">2026-02-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dfeehan/surveybootstrap/blob/HEAD/vignettes/draft/rescaled_bootstrap.Rmd" class="external-link"><code>vignettes/draft/rescaled_bootstrap.Rmd</code></a></small>
       <div class="d-none name"><code>rescaled_bootstrap.Rmd</code></div>
@@ -69,15 +70,16 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Survey data collected using complex designs — multi-stage cluster sampling, stratified sampling, or both — require special methods for variance estimation. Ordinary bootstrap resampling treats all observations as independent, which understates variance when observations are clustered and overstates it when sampling is within strata.</p>
-<p>The <strong>rescaled bootstrap</strong> (Rao and Wu 1988; Rust and Rao 1996) handles complex designs by resampling at the level of the primary sampling unit (PSU) and adjusting the sampling weights of every observation in each bootstrap replicate. Specifically, in each replicate it draws <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>i</mi></msub><mo>=</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m_i = n_i - 1</annotation></semantics></math> PSUs with replacement from the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>i</mi></msub><annotation encoding="application/x-tex">n_i</annotation></semantics></math> PSUs in stratum <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>, and rescales the observation weights to reflect how many times each PSU was selected. This package implements the rescaled bootstrap in C++ (via Rcpp) for speed, with a pure-R reference implementation also available.</p>
+<p>This vignette demonstrates the basic functionality of the <code>surveybootstrap</code> package. The goal is to illustrate how to use the <strong>rescaled bootstrap</strong> (Rao and Wu 1988; Rust and Rao 1996) to take bootstrap resamples from a survey dataset when the survey sample has a complex design.</p>
+<p>The <strong>rescaled bootstrap</strong> handles complex designs by resampling at the level of the primary sampling unit (PSU) and adjusting the sampling weights of every observation in each bootstrap replicate. Specifically, for each bootstrap resample, we draw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>i</mi></msub><mo>=</mo><msub><mi>n</mi><mi>i</mi></msub><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m_i = n_i - 1</annotation></semantics></math> PSUs with replacement from the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>i</mi></msub><annotation encoding="application/x-tex">n_i</annotation></semantics></math> PSUs in stratum <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>, and rescales the observation weights to reflect how many times each PSU was selected.<br>
+This package implements the rescaled bootstrap in C++ (via Rcpp) for speed.</p>
 <p>Use <code>rescaled.bootstrap.sample</code> / <code>bootstrap.estimates</code> when your survey has a cluster or stratified design. For a simple random sample without clusters or strata, use <code>srs.bootstrap.sample</code> instead.</p>
 <hr>
 </div>
 <div class="section level2">
 <h2 id="the-mu284-example-data">The MU284 example data<a class="anchor" aria-label="anchor" href="#the-mu284-example-data"></a>
 </h2>
-<p>The <code>MU284</code> dataset (Sarndal, Swensson, and Wretman 2003) describes 284 Swedish municipalities. Relevant columns include:</p>
+<p>The <code>MU284</code> dataset (Sarndal, Swensson, and Wretman 2003, pg. 652) describes 284 Swedish municipalities. Relevant columns include:</p>
 <table class="table">
 <thead><tr class="header">
 <th>Column</th>
@@ -94,29 +96,28 @@
 </tr>
 <tr class="odd">
 <td><code>RMT85</code></td>
-<td>Municipal tax revenue, 1985</td>
+<td>Municipal tax revenue, 1985 (in millions of Kronor)</td>
 </tr>
 <tr class="even">
 <td><code>P85</code></td>
-<td>Population, 1985</td>
+<td>Population, 1985 (in thousands)</td>
 </tr>
 <tr class="odd">
 <td><code>CL</code></td>
-<td>Cluster indicator (neighboring municipalities)</td>
+<td>Cluster indicator (a set of neighboring municipalities)</td>
 </tr>
 </tbody>
 </table>
 <p><code>MU284.complex.surveys</code> is a list of 10 sample surveys drawn from this population using the two-stage design from Example 4.3.2 of Sarndal et al.:</p>
 <ul>
 <li>
-<strong>Stage I</strong> — simple random sample without replacement of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>I</mi></msub><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">n_I = 5</annotation></semantics></math> PSUs (clusters) from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>I</mi></msub><mo>=</mo><mn>50</mn></mrow><annotation encoding="application/x-tex">N_I = 50</annotation></semantics></math>
-</li>
+<strong>Stage I</strong> — simple random sample without replacement of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>I</mi></msub><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">n_I = 5</annotation></semantics></math> PSUs (clusters) from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>I</mi></msub><mo>=</mo><mn>50</mn></mrow><annotation encoding="application/x-tex">N_I = 50</annotation></semantics></math> total PSUs</li>
 <li>
 <strong>Stage II</strong> — simple random sample without replacement of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>i</mi></msub><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">n_i = 3</annotation></semantics></math> municipalities from each selected PSU</li>
 </ul>
 <p>This gives <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>15</mn></mrow><annotation encoding="application/x-tex">n = 15</annotation></semantics></math> sampled municipalities per survey. Each row has a <code>sample_weight</code> reflecting the inverse of its selection probability.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">surveybootstrap</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dfeehan.github.io/surveybootstrap/">surveybootstrap</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">MU284.complex.surveys</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">survey</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LABEL"</span>, <span class="st">"CL"</span>, <span class="st">"S82"</span>, <span class="st">"RMT85"</span>, <span class="st">"P85"</span>, <span class="st">"sample_weight"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
@@ -128,9 +129,15 @@
 <span><span class="co">#&gt; 5    18  4  61   532  59      16.66667</span></span>
 <span><span class="co">#&gt; 6    19  4  41   250  27      16.66667</span></span></code></pre></div>
 <hr>
+<p>There are two ways to use the package:</p>
+<ul>
+<li><a href="#Path-1">Path 1: specifying a function to produce and estimate from data with bootstrap weights</a></li>
+<li><a href="#Path-2">Path 2: getting a matrix of bootstrap weights</a></li>
+</ul>
+<hr>
 </div>
 <div class="section level2">
-<h2 id="path-1-bootstrap-estimates-recommended-for-most-users">Path 1: <code>bootstrap.estimates()</code> — recommended for most users<a class="anchor" aria-label="anchor" href="#path-1-bootstrap-estimates-recommended-for-most-users"></a>
+<h2 id="path-1-bootstrap-estimates">Path 1: <code>bootstrap.estimates()</code> <a name="Path-1"></a><a class="anchor" aria-label="anchor" href="#path-1-bootstrap-estimates"></a>
 </h2>
 <p><code><a href="../../reference/bootstrap.estimates.html">bootstrap.estimates()</a></code> is the highest-level interface. You supply an estimator function and a bootstrap method; it returns bootstrap replicate estimates that you can use to compute standard errors and confidence intervals.</p>
 <div class="section level3">
@@ -148,7 +155,7 @@
 <p>Here <code>total_S82</code> is the Horvitz-Thompson estimator of the population total of <code>S82</code> (total council seats), and <code>ratio_RMT85_P85</code> is a ratio estimator (tax revenue per capita).</p>
 </div>
 <div class="section level3">
-<h3 id="step-2-run-the-bootstrap">Step 2: run the bootstrap<a class="anchor" aria-label="anchor" href="#step-2-run-the-bootstrap"></a>
+<h3 id="step-2-run-the-bootstrap">Step 2: Run the bootstrap<a class="anchor" aria-label="anchor" href="#step-2-run-the-bootstrap"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
@@ -157,523 +164,15 @@
 <span>  survey.data   <span class="op">=</span> <span class="va">survey</span>,</span>
 <span>  survey.design <span class="op">=</span> <span class="op">~</span> <span class="va">CL</span>,            <span class="co"># CL identifies the PSU (cluster)</span></span>
 <span>  num.reps      <span class="op">=</span> <span class="fl">500</span>,</span>
-<span>  estimator.fn  <span class="op">=</span> <span class="va">my_estimator</span>,</span>
+<span>  estimator.fn  <span class="op">=</span> <span class="va">my_estimator</span>,    <span class="co"># we just defined this above</span></span>
 <span>  weights       <span class="op">=</span> <span class="st">"sample_weight"</span>,</span>
 <span>  bootstrap.fn  <span class="op">=</span> <span class="st">"rescaled.bootstrap.sample"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Unquoting language objects with `!!!` is deprecated as of rlang 0.4.0. Please</span></span>
-<span><span class="co">#&gt; use `!!` instead.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Bad: dplyr::select(data, !!!enquo(x))</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Good: dplyr::select(data, !!enquo(x)) # Unquote single quosure</span></span>
-<span><span class="co">#&gt; dplyr::select(data, !!!enquos(x)) # Splice list of quosures</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; Warning: Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span>
-<span><span class="co">#&gt; Unknown or uninitialised column: `weight.scale`.</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The <code>survey.design</code> formula uses the column <code>CL</code> as the PSU identifier. There are no explicit strata here, so the entire sample is treated as a single stratum. See <a href="#describing-your-survey-design">Describing your survey design</a> below for formulas with strata.</p>
 <p><code>boot_res</code> is a list of 500 one-row data frames, one per bootstrap replicate.</p>
 </div>
 <div class="section level3">
-<h3 id="step-3-collect-and-summarise">Step 3: collect and summarise<a class="anchor" aria-label="anchor" href="#step-3-collect-and-summarise"></a>
+<h3 id="step-3-collect-and-summarize">Step 3: Collect and summarize<a class="anchor" aria-label="anchor" href="#step-3-collect-and-summarize"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">boot_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>, <span class="va">boot_res</span><span class="op">)</span></span>
@@ -681,12 +180,12 @@
 <span><span class="co"># Bootstrap standard errors</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">boot_df</span>, <span class="fl">2</span>, <span class="va">sd</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       total_S82 ratio_RMT85_P85 </span></span>
-<span><span class="co">#&gt;               0              NA</span></span>
+<span><span class="co">#&gt;    1638.2395064       0.8185707</span></span>
 <span></span>
 <span><span class="co"># Bootstrap means (should be close to the original point estimates)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">boot_df</span>, <span class="fl">2</span>, <span class="va">mean</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       total_S82 ratio_RMT85_P85 </span></span>
-<span><span class="co">#&gt;               0             NaN</span></span>
+<span><span class="co">#&gt;    15290.525000        8.367827</span></span>
 <span></span>
 <span><span class="co"># Original point estimates for comparison</span></span>
 <span><span class="fu">my_estimator</span><span class="op">(</span><span class="va">survey</span>, <span class="va">survey</span><span class="op">$</span><span class="va">sample_weight</span><span class="op">)</span></span>
@@ -723,7 +222,7 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="path-2-get-rescaled-bootstrap-weights-weight-matrix-api">Path 2: <code>get.rescaled.bootstrap.weights()</code> — weight-matrix API<a class="anchor" aria-label="anchor" href="#path-2-get-rescaled-bootstrap-weights-weight-matrix-api"></a>
+<h2 id="path-2-get-rescaled-bootstrap-weights">Path 2: <code>get.rescaled.bootstrap.weights()</code> <a name="Path-2"></a><a class="anchor" aria-label="anchor" href="#path-2-get-rescaled-bootstrap-weights"></a>
 </h2>
 <p>Sometimes it is more convenient to obtain a matrix of bootstrap weights directly and then apply your estimator(s) yourself. This is useful when:</p>
 <ul>
@@ -852,6 +351,7 @@
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Rao, J.N.K. and Wu, C.F.J. (1988). Resampling inference with complex survey data. <em>Journal of the American Statistical Association</em>, 83(401), 231–241. <a href="https://doi.org/10.1080/01621459.1988.10478591" class="external-link uri">https://doi.org/10.1080/01621459.1988.10478591</a></p>
+<p>Rao, J. N. K., C. F. J. Wu, and Kim Yue. “Some recent work on resampling methods for complex surveys.” <em>Survey Methodology</em> 18.2 (1992): 209-217.</p>
 <p>Rust, K.F. and Rao, J.N.K. (1996). Variance estimation for complex surveys using replication techniques. <em>Statistical Methods in Medical Research</em>, 5(3), 283–310. <a href="https://doi.org/10.1177/096228029600500305" class="external-link uri">https://doi.org/10.1177/096228029600500305</a></p>
 <p>Sarndal, C.-E., Swensson, B. and Wretman, J. (2003). <em>Model Assisted Survey Sampling</em>. Springer. ISBN: 0387406204.</p>
 </div>

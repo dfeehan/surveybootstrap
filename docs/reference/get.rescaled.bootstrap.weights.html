@@ -166,15 +166,7 @@ data." <em>Journal of the American Statistical Association</em>
 <span class="r-in"><span><span class="va">boot_surveys</span> <span class="op">&lt;-</span> <span class="fu">get.rescaled.bootstrap.weights</span><span class="op">(</span>survey.data <span class="op">=</span> <span class="va">survey</span>,</span></span>
 <span class="r-in"><span>                                               survey.design <span class="op">=</span> <span class="op">~</span> <span class="va">CL</span>,</span></span>
 <span class="r-in"><span>                                               num.reps <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unquoting language objects with `!!!` is deprecated as of rlang 0.4.0. Please</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> use `!!` instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> # Bad: dplyr::select(data, !!!enquo(x))</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> # Good: dplyr::select(data, !!enquo(x)) # Unquote single quosure</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> dplyr::select(data, !!!enquos(x)) # Splice list of quosures</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in select(., .internal_id, .cluster_id, any_of(psu.vars), one_of(idvar)):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `one_of(idvar)`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in select(., .internal_id, .cluster_id, any_of(psu.var.names), one_of(idvar)):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `one_of(idvar)`.</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> argument "idvar" is missing, with no default</span>
 <span class="r-in"><span></span></span>
