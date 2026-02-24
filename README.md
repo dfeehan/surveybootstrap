@@ -1,5 +1,8 @@
 
-[![Travis-CI Build Status](https://travis-ci.org/dfeehan/surveybootstrap.svg?branch=master)](https://travis-ci.org/dfeehan/surveybootstrap)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/dfeehan/surveybootstrap/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dfeehan/surveybootstrap/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/dfeehan/surveybootstrap/graph/badge.svg)](https://app.codecov.io/gh/dfeehan/surveybootstrap)
+<!-- badges: end -->
 
 A bootstrap for complex sampling designs
 ----------------------------------------

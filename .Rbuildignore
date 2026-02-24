@@ -19,3 +19,7 @@ vignettes/
 ^\.Rproj\.user$
 ^CRAN-SUBMISSION$
 ^data-raw$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
