@@ -1,61 +1,33 @@
-<div id="main" class="col-md-9" role="main">
-
-Get a variable from a dataframe or vector
-=========================================
-
-<div class="ref-description section level2">
+# Get a variable from a dataframe or vector
 
 This function was written because a few of the estimator functions need
 to use weights, and there are several cases to handle: the user could
 pass in a column name, a vector of weights, or nothing (in which case,
 the weights should default to 1 for each row in the dataset). For the
 special case of getting weights, look at the curried function
-`get.weights()`
+[`get.weights()`](https://dfeehan.github.io/surveybootstrap/reference/get.weights.md)
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 get.var(survey.data, var, default = NA)
 ```
 
-</div>
+## Arguments
 
-</div>
+- survey.data:
 
-<div class="section level2">
+  The survey dataset
 
-Arguments
----------
+- var:
 
--   survey.data:
+  Either `NULL`, a column name, or a vector of values
 
-    The survey dataset
+- default:
 
--   var:
+  The default value to fill in if the variable is not found
 
-    Either `NULL`, a column name, or a vector of values
-
--   default:
-
-    The default value to fill in if the variable is not found
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 A vector of values whose length is the same as the number of rows in
 `survey.data`; if `var` is `NULL`, this has the default values
-
-</div>
-
-</div>

@@ -1,42 +1,19 @@
-<div id="main" class="col-md-9" role="main">
-
-Only prints things out in verbose mode
-======================================
-
-<div class="ref-description section level2">
+# Only prints things out in verbose mode
 
 Only prints things out in verbose mode
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 vcat(verbose = TRUE, ...)
 ```
 
-</div>
+## Arguments
 
-</div>
+- verbose:
 
-<div class="section level2">
+  If `TRUE`, print things out; otherwise, do nothing
 
-Arguments
----------
+- ...:
 
--   verbose:
-
-    If `TRUE`, print things out; otherwise, do nothing
-
--   ...:
-
-    Arguments to pass to cat if verbose is `TRUE`
-
-</div>
-
-</div>
+  Arguments to pass to cat if verbose is `TRUE`

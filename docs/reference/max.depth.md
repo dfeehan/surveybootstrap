@@ -1,48 +1,20 @@
-<div id="main" class="col-md-9" role="main">
-
-Get the height (maximum depth) of a chain
-=========================================
-
-<div class="ref-description section level2">
+# Get the height (maximum depth) of a chain
 
 Get the height (maximum depth) of a chain
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 # S3 method for class 'depth'
 max(chain)
 ```
 
-</div>
+## Arguments
 
-</div>
+- chain:
 
-<div class="section level2">
+  The chain object
 
-Arguments
----------
-
--   chain:
-
-    The chain object
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 The maximum depth of the chain
-
-</div>
-
-</div>

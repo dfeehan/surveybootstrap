@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">surveybootstrap</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="dropdown-item" href="../news/index.html">Version 0.2.1</a></li>
     <li><a class="dropdown-item" href="../news/index.html">Version 0.2.0</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../news/index.html">Changelog</a></li>
@@ -100,25 +101,25 @@ are needed for jackknife after bootstrap calculations</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>A list with entries<span class="sc">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> <span class="st">`</span><span class="at">orig_weights</span><span class="st">`</span> <span class="sc">-</span> A dataframe with rows corresponding to the original</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">`</span><span class="at">survey.data</span><span class="st">`</span> and a column with the <span class="fu">original</span> (un rescaled) weight <span class="cf">for</span> the obs.</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>   Can be useful <span class="cf">for</span> debugging.</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">boot_weights</span><span class="st">`</span> <span class="sc">-</span> A dataframe with rows corresponding to the original</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   <span class="st">`</span><span class="at">survey.data</span><span class="st">`</span> and one column <span class="cf">for</span> each bootstrap rep. The entries have</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>   the rescaled bootstrap weights <span class="cf">for</span> each row and bootstrap rep.</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">weight_scaling_factor</span><span class="st">`</span> <span class="sc">-</span> (<span class="cf">if</span> <span class="st">`</span><span class="at">include_scaling_factors</span><span class="st">`</span> is <span class="st">`</span><span class="at">TRUE</span><span class="st">`</span>). A dataframe with rows corresponding to the original</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>   <span class="st">`</span><span class="at">survey.data</span><span class="st">`</span> and one column <span class="cf">for</span> each bootstrap rep. The entries have</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>   the values by which the original weights were scaled to produce <span class="st">`</span><span class="at">boot_weights</span><span class="st">`</span>.</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>   You typically won<span class="st">'t need to use this dataframe, but it can be helpful for debugging.</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="st">* `cluster_counts` - (if `include_cc` is `TRUE`). A list with `num.reps` entries.</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="st">  Each entry is a dataset which has the variable '</span>.cluster_id<span class="st">',</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="st">  the values of columns that specify the PSU (from the `survey.design` formula),</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="st">  and `cluster_count` (the number of times the given PSU was resampled))</span></span></code></pre><p></p></div>
+    <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>A list with entries<span class="sc">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="er">*</span> <span class="st">`</span><span class="at">orig_weights</span><span class="st">`</span> <span class="sc">-</span> A dataframe with rows corresponding to the original</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>   <span class="st">`</span><span class="at">survey.data</span><span class="st">`</span> and a column with the <span class="fu">original</span> (un rescaled) weight <span class="cf">for</span> the obs.</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>   Can be useful <span class="cf">for</span> debugging.</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">boot_weights</span><span class="st">`</span> <span class="sc">-</span> A dataframe with rows corresponding to the original</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>   <span class="st">`</span><span class="at">survey.data</span><span class="st">`</span> and one column <span class="cf">for</span> each bootstrap rep. The entries have</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>   the rescaled bootstrap weights <span class="cf">for</span> each row and bootstrap rep.</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">weight_scaling_factor</span><span class="st">`</span> <span class="sc">-</span> (<span class="cf">if</span> <span class="st">`</span><span class="at">include_scaling_factors</span><span class="st">`</span> is <span class="st">`</span><span class="at">TRUE</span><span class="st">`</span>). A dataframe with rows corresponding to the original</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>   <span class="st">`</span><span class="at">survey.data</span><span class="st">`</span> and one column <span class="cf">for</span> each bootstrap rep. The entries have</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>   the values by which the original weights were scaled to produce <span class="st">`</span><span class="at">boot_weights</span><span class="st">`</span>.</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>   You typically won<span class="st">'t need to use this dataframe, but it can be helpful for debugging.</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="st">* `cluster_counts` - (if `include_cc` is `TRUE`). A list with `num.reps` entries.</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="st">  Each entry is a dataset which has the variable '</span>.cluster_id<span class="st">',</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="st">  the values of columns that specify the PSU (from the `survey.design` formula),</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="st">  and `cluster_count` (the number of times the given PSU was resampled))</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

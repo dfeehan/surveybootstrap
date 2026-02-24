@@ -15,7 +15,7 @@ a bunch of bootstrap samples for the rescaled bootstrap estimator
 
     <a class="navbar-brand me-2" href="../index.html">surveybootstrap</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,7 @@ a bunch of bootstrap samples for the rescaled bootstrap estimator
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="dropdown-item" href="../news/index.html">Version 0.2.1</a></li>
     <li><a class="dropdown-item" href="../news/index.html">Version 0.2.0</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../news/index.html">Changelog</a></li>
@@ -97,26 +98,26 @@ are needed for jackknife after bootstrap calculations</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>The return value will depend on whether or not you ask <span class="cf">for</span> the cluster <span class="fu">counts</span> (using <span class="st">`</span><span class="at">include_cc</span><span class="st">`</span>).</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>If <span class="st">`</span><span class="at">include_cc</span><span class="st">`</span> is <span class="st">`</span><span class="at">FALSE</span><span class="st">`</span> (the default), return</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  A list with <span class="st">`</span><span class="at">num.reps</span><span class="st">`</span> entries. Each entry is a dataset which</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  has at least the variables <span class="st">`</span><span class="at">index</span><span class="st">`</span> (the row index of the original</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  dataset that was resampled) and <span class="st">`</span><span class="at">weight.scale</span><span class="st">`</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  (the factor by which to multiply the sampling weights</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">in</span> the original dataset).</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a> If <span class="st">`</span><span class="at">include_cc</span><span class="st">`</span> is <span class="st">`</span><span class="at">TRUE</span><span class="st">`</span>, then return a list with two entries<span class="sc">:</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> <span class="st">`</span><span class="at">weight_scaling_factor</span><span class="st">`</span> <span class="sc">-</span> A list with <span class="st">`</span><span class="at">num.reps</span><span class="st">`</span> entries.</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>   Each entry is a dataset which</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  has at least the variables <span class="st">`</span><span class="at">index</span><span class="st">`</span> (the row index of the original</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  dataset that was resampled) and <span class="st">`</span><span class="at">weight.scale</span><span class="st">`</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  (the factor by which to multiply the sampling weights</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">in</span> the original dataset).</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">cluster_counts</span><span class="st">`</span> <span class="sc">-</span> A list with <span class="st">`</span><span class="at">num.reps</span><span class="st">`</span> entries.</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  Each entry is a dataset which has the variable <span class="st">'.cluster_id'</span>,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  the values of columns that specify the <span class="fu">PSU</span> (from the <span class="st">`</span><span class="at">survey.design</span><span class="st">`</span> formula),</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  and <span class="st">`</span><span class="at">cluster_count</span><span class="st">`</span> (the number of times the given PSU was resampled)<span class="er">)</span></span></code></pre><p></p></div>
+    <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>The return value will depend on whether or not you ask <span class="cf">for</span> the cluster <span class="fu">counts</span> (using <span class="st">`</span><span class="at">include_cc</span><span class="st">`</span>).</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>If <span class="st">`</span><span class="at">include_cc</span><span class="st">`</span> is <span class="st">`</span><span class="at">FALSE</span><span class="st">`</span> (the default), return</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  A list with <span class="st">`</span><span class="at">num.reps</span><span class="st">`</span> entries. Each entry is a dataset which</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  has at least the variables <span class="st">`</span><span class="at">index</span><span class="st">`</span> (the row index of the original</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  dataset that was resampled) and <span class="st">`</span><span class="at">weight.scale</span><span class="st">`</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  (the factor by which to multiply the sampling weights</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="cf">in</span> the original dataset).</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a> If <span class="st">`</span><span class="at">include_cc</span><span class="st">`</span> is <span class="st">`</span><span class="at">TRUE</span><span class="st">`</span>, then return a list with two entries<span class="sc">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="er">*</span> <span class="st">`</span><span class="at">weight_scaling_factor</span><span class="st">`</span> <span class="sc">-</span> A list with <span class="st">`</span><span class="at">num.reps</span><span class="st">`</span> entries.</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>   Each entry is a dataset which</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  has at least the variables <span class="st">`</span><span class="at">index</span><span class="st">`</span> (the row index of the original</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  dataset that was resampled) and <span class="st">`</span><span class="at">weight.scale</span><span class="st">`</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>  (the factor by which to multiply the sampling weights</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="cf">in</span> the original dataset).</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">cluster_counts</span><span class="st">`</span> <span class="sc">-</span> A list with <span class="st">`</span><span class="at">num.reps</span><span class="st">`</span> entries.</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  Each entry is a dataset which has the variable <span class="st">'.cluster_id'</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  the values of columns that specify the <span class="fu">PSU</span> (from the <span class="st">`</span><span class="at">survey.design</span><span class="st">`</span> formula),</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>  and <span class="st">`</span><span class="at">cluster_count</span><span class="st">`</span> (the number of times the given PSU was resampled)<span class="er">)</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

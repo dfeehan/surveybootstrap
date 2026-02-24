@@ -1,47 +1,19 @@
-<div id="main" class="col-md-9" role="main">
-
-Get the size of a chain
-=======================
-
-<div class="ref-description section level2">
+# Get the size of a chain
 
 Count the total number of respondents in the chain and return it
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 chain.size(chain)
 ```
 
-</div>
+## Arguments
 
-</div>
+- chain:
 
-<div class="section level2">
+  The chain object
 
-Arguments
----------
-
--   chain:
-
-    The chain object
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 The number of respondents involved in the chain
-
-</div>
-
-</div>

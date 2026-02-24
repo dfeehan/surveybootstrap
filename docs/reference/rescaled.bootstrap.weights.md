@@ -1,21 +1,9 @@
-<div id="main" class="col-md-9" role="main">
-
-rescaled.bootstrap.weights
-==========================
-
-<div class="ref-description section level2">
+# rescaled.bootstrap.weights
 
 This function creates a dataset with rescaled bootstrap weights; it can
 be a helpful alternative to `bootstrap.estimates` in some situations
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 rescaled.bootstrap.weights(
@@ -31,85 +19,62 @@ rescaled.bootstrap.weights(
 )
 ```
 
-</div>
+## Arguments
 
-</div>
+- survey.data:
 
-<div class="section level2">
+  The dataset to use
 
-Arguments
----------
+- survey.design:
 
--   survey.data:
+  A formula describing the design of the survey (see Details in
+  [`bootstrap.estimates()`](https://dfeehan.github.io/surveybootstrap/reference/bootstrap.estimates.md)
+  help page)
 
-    The dataset to use
+- num.reps:
 
--   survey.design:
+  the number of bootstrap replication samples to draw
 
-    A formula describing the design of the survey (see Details in
-    `bootstrap.estimates()` help page)
+- weights:
 
--   num.reps:
+  weights to use in estimation (or NULL, if none)
 
-    the number of bootstrap replication samples to draw
+- idvar:
 
--   weights:
+  the name of the column in `survey.data` that has the respondent id
 
-    weights to use in estimation (or NULL, if none)
+- verbose:
 
--   idvar:
+  if TRUE, produce lots of feedback about what is going on
 
-    the name of the column in `survey.data` that has the respondent id
+- include_cc:
 
--   verbose:
+  if TRUE, include cluster counts (see `rescaled_bootstrap`)
 
-    if TRUE, produce lots of feedback about what is going on
+- parallel:
 
--   include\_cc:
+  if TRUE, use the plyr library's .parallel argument to produce
+  bootstrap resamples and estimates in parallel
 
-    if TRUE, include cluster counts (see `rescaled_bootstrap`)
+- paropts:
 
--   parallel:
+  if not NULL, additional arguments to pass along to the parallelization
+  routine
 
-    if TRUE, use the plyr library's .parallel argument to produce
-    bootstrap resamples and estimates in parallel
-
--   paropts:
-
-    if not NULL, additional arguments to pass along to the
-    parallelization routine
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 if no summary.fn is specified, then return the list of estimates
 produced by estimator.fn; if summary.fn is specified, then return its
 output
 
-</div>
-
-<div class="section level2">
-
-Details
--------
+## Details
 
 The formula describing the survey design should have the form
 `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`, where
 `psu_v1, ...` are the variables identifying primary sampling units
 (PSUs) and `strata_v1, ...` identify the strata
 
-</div>
-
-<div class="section level2">
-
-Examples
---------
-
-<div class="sourceCode">
+## Examples
 
 ``` r
 survey <- MU284.complex.surveys[[1]]
@@ -152,9 +117,3 @@ bootweights <- rescaled.bootstrap.weights(
 
 } # }
 ```
-
-</div>
-
-</div>
-
-</div>

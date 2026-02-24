@@ -1,21 +1,9 @@
-<div id="main" class="col-md-9" role="main">
-
-rescaled.bootstrap.sample.pureR
-===============================
-
-<div class="ref-description section level2">
+# rescaled.bootstrap.sample.pureR
 
 (this is the pure R version; it has been supplanted by
 `rescaled.bootstrap.sample`, which is partially written in C++)
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 rescaled.bootstrap.sample.pureR(
@@ -27,54 +15,37 @@ rescaled.bootstrap.sample.pureR(
 )
 ```
 
-</div>
+## Arguments
 
-</div>
+- survey.data:
 
-<div class="section level2">
+  the dataset to use
 
-Arguments
----------
+- survey.design:
 
--   survey.data:
+  a formula describing the design of the survey (see below - TODO)
 
-    the dataset to use
+- parallel:
 
--   survey.design:
+  if TRUE, use parallelization (via `plyr`)
 
-    a formula describing the design of the survey (see below - TODO)
+- paropts:
 
--   parallel:
+  an optional list of arguments passed on to `plyr` to control details
+  of parallelization
 
-    if TRUE, use parallelization (via `plyr`)
+- num.reps:
 
--   paropts:
+  the number of bootstrap replication samples to draw
 
-    an optional list of arguments passed on to `plyr` to control details
-    of parallelization
-
--   num.reps:
-
-    the number of bootstrap replication samples to draw
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 a list with `num.reps` entries. each entry is a dataset which has at
 least the variables `index` (the row index of the original dataset that
 was resampled) and `weight.scale` (the factor by which to multiply the
 sampling weights in the original dataset).
 
-</div>
-
-<div class="section level2">
-
-Details
--------
+## Details
 
 given a survey dataset and a description of the survey design (ie, which
 combination of vars determines primary sampling units, and which
@@ -96,14 +67,10 @@ returned results, but its weight will be set to 0. It is therefore
 important to use estimators that make use of the estimation weights on
 the resampled datasets.
 
-We always take m\_i = n\_i - 1, according to the advice presented in Rao
+We always take m_i = n_i - 1, according to the advice presented in Rao
 and Wu (1988) and Rust and Rao (1996).
 
 `survey.design` is a formula of the form  
-weight \~ psu\_vars + strata(strata\_vars), where weight is the variable
+weight ~ psu_vars + strata(strata_vars), where weight is the variable
 with the survey weights and psu is the variable denoting the primary
 sampling unit
-
-</div>
-
-</div>

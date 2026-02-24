@@ -1,21 +1,9 @@
-<div id="main" class="col-md-9" role="main">
-
-bootstrap.estimates
-===================
-
-<div class="ref-description section level2">
+# bootstrap.estimates
 
 Use a given bootstrap method to estimate sampling uncertainty from a
 given estimator.
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 bootstrap.estimates(
@@ -33,95 +21,71 @@ bootstrap.estimates(
 )
 ```
 
-</div>
+## Arguments
 
-</div>
+- survey.data:
 
-<div class="section level2">
+  The dataset to use
 
-Arguments
----------
+- survey.design:
 
--   survey.data:
+  A formula describing the design of the survey (see Details below)
 
-    The dataset to use
+- bootstrap.fn:
 
--   survey.design:
+  Name of the method to be used to take bootstrap resamples
 
-    A formula describing the design of the survey (see Details below)
+- estimator.fn:
 
--   bootstrap.fn:
+  The name of a function which, given a dataset like `survey.data` and
+  arguments in `...`, will produce an estimate of interest
 
-    Name of the method to be used to take bootstrap resamples
+- num.reps:
 
--   estimator.fn:
+  The number of bootstrap replication samples to draw
 
-    The name of a function which, given a dataset like `survey.data` and
-    arguments in `...`, will produce an estimate of interest
+- weights:
 
--   num.reps:
+  Weights to use in estimation (or `NULL`, if none)
 
-    The number of bootstrap replication samples to draw
+- ...:
 
--   weights:
+  additional arguments which will be passed on to `estimator.fn`
 
-    Weights to use in estimation (or `NULL`, if none)
+- summary.fn:
 
--   ...:
+  (Optional) Name of a function which, given the set of estimates
+  produced by `estimator.fn`, summarizes them. If not specified, all of
+  the estimates are returned in a list.
 
-    additional arguments which will be passed on to `estimator.fn`
+- verbose:
 
--   summary.fn:
+  If `TRUE`, produce lots of feedback about what is going on
 
-    (Optional) Name of a function which, given the set of estimates
-    produced by `estimator.fn`, summarizes them. If not specified, all
-    of the estimates are returned in a list.
+- parallel:
 
--   verbose:
+  If `TRUE`, use the `plyr` library's `.parallel` argument to produce
+  bootstrap resamples and estimates in parallel
 
-    If `TRUE`, produce lots of feedback about what is going on
+- paropts:
 
--   parallel:
+  If not `NULL`, additional arguments to pass along to the
+  parallelization routine
 
-    If `TRUE`, use the `plyr` library's `.parallel` argument to produce
-    bootstrap resamples and estimates in parallel
-
--   paropts:
-
-    If not `NULL`, additional arguments to pass along to the
-    parallelization routine
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 If `summary.fn` is not specified, then return the list of estimates
 produced by `estimator.fn`; if `summary.fn` is specified, then return
 its output
 
-</div>
-
-<div class="section level2">
-
-Details
--------
+## Details
 
 The formula describing the survey design should have the form
 `~ psu_v1 + psu_v2 + ... + strata(strata_v1 + strata_v2 + ...)`, where
 `psu_v1, ...` are the variables identifying primary sampling units
 (PSUs) and `strata_v1, ...` identifies the strata
 
-</div>
-
-<div class="section level2">
-
-Examples
---------
-
-<div class="sourceCode">
+## Examples
 
 ``` r
 # example using a simple random sample
@@ -170,9 +134,3 @@ idu.est <- bootstrap.estimates(
 
 } # }
 ```
-
-</div>
-
-</div>
-
-</div>

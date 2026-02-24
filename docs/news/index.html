@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">surveybootstrap</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,6 +19,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-news"><li><h6 class="dropdown-header" data-toc-skip>Releases</h6></li>
+    <li><a class="dropdown-item" href="../news/index.html">Version 0.2.1</a></li>
     <li><a class="dropdown-item" href="../news/index.html">Version 0.2.0</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../news/index.html">Changelog</a></li>
@@ -37,6 +38,16 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.1" id="surveybootstrap-021">surveybootstrap 0.2.1<a class="anchor" aria-label="anchor" href="#surveybootstrap-021"></a></h2>
+<ul><li>Fixed a warning (“Unknown or uninitialised column: <code>weight.scale</code>”) that appeared when using <code><a href="../reference/bootstrap.estimates.html">bootstrap.estimates()</a></code> with <code><a href="../reference/rescaled.bootstrap.sample.html">rescaled.bootstrap.sample()</a></code>: the index column was being extracted as a one-column tibble instead of a plain vector, causing tibble’s <code>$</code> accessor to misreport the column as missing</li>
+<li>Fixed a deprecation warning from rlang (“Unquoting language objects with <code>!!!</code> is deprecated”): replaced <code>!!!psu.vars</code> with <code>across(all_of(...))</code> / <code>all_of(...)</code> throughout <code><a href="../reference/rescaled.bootstrap.sample.html">rescaled.bootstrap.sample()</a></code> and <code><a href="../reference/get.rescaled.bootstrap.weights.html">get.rescaled.bootstrap.weights()</a></code>
+</li>
+<li>Fixed <code><a href="../reference/rescaled.bootstrap.weights.html">rescaled.bootstrap.weights()</a></code> producing column names <code>boot_weight_rep.1</code>, <code>boot_weight_rep.2</code>, … instead of the documented <code>boot_weight_1</code>, <code>boot_weight_2</code>, …</li>
+<li>Added vignette “The rescaled bootstrap” illustrating the main workflow with the MU284 example data</li>
+<li>Added pkgdown site</li>
+<li>Added regression tests covering the above bug fixes</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="surveybootstrap-020">surveybootstrap 0.2.0<a class="anchor" aria-label="anchor" href="#surveybootstrap-020"></a></h2>
 <ul><li>Added <code><a href="../reference/get.rescaled.bootstrap.weights.html">get.rescaled.bootstrap.weights()</a></code>: new function that returns rescaled bootstrap weights (and optionally cluster counts and scaling factors) in a wide data frame, making it straightforward to use the rescaled bootstrap for jackknife-after-bootstrap (JAB) variance estimation</li>
 <li>
@@ -45,7 +56,9 @@
 </li>
 <li>Expanded test suite: added structural and semantic tests for <code><a href="../reference/rescaled.bootstrap.sample.html">rescaled.bootstrap.sample()</a></code>, <code><a href="../reference/srs.bootstrap.sample.html">srs.bootstrap.sample()</a></code>, <code><a href="../reference/get.rescaled.bootstrap.weights.html">get.rescaled.bootstrap.weights()</a></code>, and <code><a href="../reference/rescaled.bootstrap.weights.html">rescaled.bootstrap.weights()</a></code>; added a regression test that directly catches the <code>weight.scale</code> naming bug; added tests for the <code><a href="../reference/weighted.mean.html">weighted.mean()</a></code> helper</li>
 </ul></div>
-    <div class="section level2"><h2 class="pkg-version" data-toc-text="0.1.0.9000" id="surveybootstrap-0109000">surveybootstrap 0.1.0.9000<a class="anchor" aria-label="anchor" href="#surveybootstrap-0109000"></a></h2></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9000" id="surveybootstrap-0109000">surveybootstrap 0.1.0.9000<a class="anchor" aria-label="anchor" href="#surveybootstrap-0109000"></a></h2>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.3" id="surveybootstrap-003">surveybootstrap 0.0.3<a class="anchor" aria-label="anchor" href="#surveybootstrap-003"></a></h2><p class="text-muted">CRAN release: 2023-01-09</p>
 <ul><li>fixed some dependency errors that suddenly arose (explicitly use plyr:: in a few places)</li>
@@ -62,7 +75,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="surveybootstrap-001">surveybootstrap 0.0.1<a class="anchor" aria-label="anchor" href="#surveybootstrap-001"></a></h2><p class="text-muted">CRAN release: 2016-05-02</p>
-<ul><li>first CRAN version, May 2016</li></ul></div>
+<ul><li>first CRAN version, May 2016</li>
+</ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

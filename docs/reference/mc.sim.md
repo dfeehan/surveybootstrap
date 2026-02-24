@@ -1,66 +1,35 @@
-<div id="main" class="col-md-9" role="main">
-
-Run a markov model
-==================
-
-<div class="ref-description section level2">
+# Run a markov model
 
 Run a given markov model for n time steps, starting at a specified
 state.
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 mc.sim(mm, start, n)
 ```
 
-</div>
+## Arguments
 
-</div>
+- mm:
 
-<div class="section level2">
+  The markov model object returned by
+  [`estimate.mixing()`](https://dfeehan.github.io/surveybootstrap/reference/estimate.mixing.md)
 
-Arguments
----------
+- start:
 
--   mm:
+  The name of the state to start in
 
-    The markov model object returned by `estimate.mixing()`
+- n:
 
--   start:
+  The number of time-steps to run through
 
-    The name of the state to start in
-
--   n:
-
-    The number of time-steps to run through
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 A vector with the state visited at each time step. the first entry has
 the starting state
 
-</div>
+## Details
 
-<div class="section level2">
-
-Details
--------
-
-This uses the markov model produced by `estimate.mixing()`
-
-</div>
-
-</div>
+This uses the markov model produced by
+[`estimate.mixing()`](https://dfeehan.github.io/surveybootstrap/reference/estimate.mixing.md)

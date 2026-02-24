@@ -1,68 +1,41 @@
-<div id="main" class="col-md-9" role="main">
-
-Draw RDS bootstrap resamples
-============================
-
-<div class="ref-description section level2">
+# Draw RDS bootstrap resamples
 
 Draw bootstrap resamples for an RDS dataset, using the algorithm
 described in the supporting online material of Weir et al 2012 (see
-`rds.boot.draw.chain()` ).
+[`rds.boot.draw.chain()`](https://dfeehan.github.io/surveybootstrap/reference/rds.boot.draw.chain.md)
+).
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 rds.chain.boot.draws(chains, mm, dd, num.reps, keep.vars = NULL)
 ```
 
-</div>
+## Arguments
 
-</div>
+- chains:
 
-<div class="section level2">
+  A list whose entries are the chains we want to resample
 
-Arguments
----------
+- mm:
 
--   chains:
+  The mixing model
 
-    A list whose entries are the chains we want to resample
+- dd:
 
--   mm:
+  The degree distributions
 
-    The mixing model
+- num.reps:
 
--   dd:
+  The number of bootstrap resamples we want
 
-    The degree distributions
+- keep.vars:
 
--   num.reps:
+  If not `NULL`, then the names of variables from the original dataset
+  we want appended to each bootstrap resampled dataset (default is
+  `NULL`)
 
-    The number of bootstrap resamples we want
-
--   keep.vars:
-
-    If not `NULL`, then the names of variables from the original dataset
-    we want appended to each bootstrap resampled dataset (default is
-    `NULL`)
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 A list of length `num.reps`; each entry in the list has one
 bootstrap-resampled dataset
-
-</div>
-
-</div>

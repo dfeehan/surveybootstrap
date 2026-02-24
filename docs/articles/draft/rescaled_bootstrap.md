@@ -1,12 +1,6 @@
-<div id="main" class="col-md-9" role="main">
+# The rescaled bootstrap
 
-The rescaled bootstrap
-======================
-
-<div class="section level2">
-
-Introduction
-------------
+## Introduction
 
 This vignette demonstrates the basic functionality of the
 `surveybootstrap` package. The goal is to illustrate how to use the
@@ -17,8 +11,8 @@ complex design.
 The **rescaled bootstrap** handles complex designs by resampling at the
 level of the primary sampling unit (PSU) and adjusting the sampling
 weights of every observation in each bootstrap replicate. Specifically,
-for each bootstrap resample, we draw *m*_(*i*) = *n*_(*i*) − 1 PSUs with
-replacement from the *n*_(*i*) PSUs in stratum *i*, and rescales the
+for each bootstrap resample, we draw $`m_i = n_i - 1`$ PSUs with
+replacement from the $`n_i`$ PSUs in stratum $`i`$, and rescales the
 observation weights to reflect how many times each PSU was selected.  
 This package implements the rescaled bootstrap in C++ (via Rcpp) for
 speed.
@@ -29,12 +23,7 @@ clusters or strata, use `srs.bootstrap.sample` instead.
 
 ------------------------------------------------------------------------
 
-</div>
-
-<div class="section level2">
-
-The MU284 example data
-----------------------
+## The MU284 example data
 
 The `MU284` dataset (Sarndal, Swensson, and Wretman 2003, pg. 652)
 describes 284 Swedish municipalities. Relevant columns include:
@@ -51,15 +40,13 @@ describes 284 Swedish municipalities. Relevant columns include:
 population using the two-stage design from Example 4.3.2 of Sarndal et
 al.:
 
--   **Stage I** — simple random sample without replacement of
-    *n*_(*I*) = 5 PSUs (clusters) from *N*_(*I*) = 50 total PSUs
--   **Stage II** — simple random sample without replacement of
-    *n*_(*i*) = 3 municipalities from each selected PSU
+- **Stage I** — simple random sample without replacement of $`n_I = 5`$
+  PSUs (clusters) from $`N_I = 50`$ total PSUs
+- **Stage II** — simple random sample without replacement of $`n_i = 3`$
+  municipalities from each selected PSU
 
-This gives *n* = 15 sampled municipalities per survey. Each row has a
+This gives $`n = 15`$ sampled municipalities per survey. Each row has a
 `sample_weight` reflecting the inverse of its selection probability.
-
-<div id="cb1" class="sourceCode">
 
 ``` r
 library(surveybootstrap)
@@ -75,39 +62,28 @@ head(survey[, c("LABEL", "CL", "S82", "RMT85", "P85", "sample_weight")])
 #> 6    19  4  41   250  27      16.66667
 ```
 
-</div>
-
 ------------------------------------------------------------------------
 
 There are two ways to use the package:
 
--   [Path 1: specifying a function to produce and estimate from data
-    with bootstrap weights](#Path-1)
--   [Path 2: getting a matrix of bootstrap weights](#Path-2)
+- [Path 1: specifying a function to produce and estimate from data with
+  bootstrap weights](#Path-1)
+- [Path 2: getting a matrix of bootstrap weights](#Path-2)
 
 ------------------------------------------------------------------------
 
-</div>
+## Path 1: `bootstrap.estimates()` 
 
-<div class="section level2">
-
-Path 1: `bootstrap.estimates()` 
--------------------------------
-
-`bootstrap.estimates()` is the highest-level interface. You supply an
-estimator function and a bootstrap method; it returns bootstrap
-replicate estimates that you can use to compute standard errors and
-confidence intervals.
-
-<div class="section level3">
+[`bootstrap.estimates()`](https://dfeehan.github.io/surveybootstrap/reference/bootstrap.estimates.md)
+is the highest-level interface. You supply an estimator function and a
+bootstrap method; it returns bootstrap replicate estimates that you can
+use to compute standard errors and confidence intervals.
 
 ### Step 1: define an estimator
 
 Your estimator must accept two arguments — `survey.data` (the resampled
 dataset) and `weights` (a vector of rescaled sampling weights) — and
 return a named data frame with one row.
-
-<div id="cb2" class="sourceCode">
 
 ``` r
 my_estimator <- function(survey.data, weights) {
@@ -119,19 +95,11 @@ my_estimator <- function(survey.data, weights) {
 }
 ```
 
-</div>
-
 Here `total_S82` is the Horvitz-Thompson estimator of the population
 total of `S82` (total council seats), and `ratio_RMT85_P85` is a ratio
 estimator (tax revenue per capita).
 
-</div>
-
-<div class="section level3">
-
 ### Step 2: Run the bootstrap
-
-<div id="cb3" class="sourceCode">
 
 ``` r
 set.seed(12345)
@@ -146,8 +114,6 @@ boot_res <- bootstrap.estimates(
 )
 ```
 
-</div>
-
 The `survey.design` formula uses the column `CL` as the PSU identifier.
 There are no explicit strata here, so the entire sample is treated as a
 single stratum. See [Describing your survey
@@ -156,13 +122,7 @@ design](#describing-your-survey-design) below for formulas with strata.
 `boot_res` is a list of 500 one-row data frames, one per bootstrap
 replicate.
 
-</div>
-
-<div class="section level3">
-
 ### Step 3: Collect and summarize
-
-<div id="cb4" class="sourceCode">
 
 ``` r
 boot_df <- do.call("rbind", boot_res)
@@ -183,13 +143,10 @@ my_estimator(survey, survey$sample_weight)
 #> 1     15400        8.765395
 ```
 
-</div>
-
-You can also pass `summary.fn` to `bootstrap.estimates()` to get a
-summary computed in a single pass without keeping all replicates in
-memory:
-
-<div id="cb5" class="sourceCode">
+You can also pass `summary.fn` to
+[`bootstrap.estimates()`](https://dfeehan.github.io/surveybootstrap/reference/bootstrap.estimates.md)
+to get a summary computed in a single pass without keeping all
+replicates in memory:
 
 ``` r
 boot_summary <- bootstrap.estimates(
@@ -204,15 +161,7 @@ boot_summary <- bootstrap.estimates(
 )
 ```
 
-</div>
-
-</div>
-
-<div class="section level3">
-
 ### Visualising the bootstrap distribution
-
-<div id="cb6" class="sourceCode">
 
 ``` r
 hist(boot_df$total_S82,
@@ -226,8 +175,6 @@ legend("topright", legend = "Point estimate", col = "firebrick",
        lwd = 2, lty = 2, bty = "n")
 ```
 
-</div>
-
 ![Histogram of 500 bootstrap estimates of the total number of municipal
 council seats across all Swedish municipalities. The distribution is
 roughly bell-shaped and centred near the original point
@@ -235,29 +182,18 @@ estimate.](rescaled_bootstrap_files/figure-html/boot-hist-1.png)
 
 ------------------------------------------------------------------------
 
-</div>
-
-</div>
-
-<div class="section level2">
-
-Path 2: `get.rescaled.bootstrap.weights()` 
-------------------------------------------
+## Path 2: `get.rescaled.bootstrap.weights()` 
 
 Sometimes it is more convenient to obtain a matrix of bootstrap weights
 directly and then apply your estimator(s) yourself. This is useful when:
 
--   you want to compute many different estimators from the same set of
-    replicates
--   you need to pass bootstrap weights to external software
--   you are implementing jackknife-after-bootstrap (JAB) variance
-    estimation
-
-<div class="section level3">
+- you want to compute many different estimators from the same set of
+  replicates
+- you need to pass bootstrap weights to external software
+- you are implementing jackknife-after-bootstrap (JAB) variance
+  estimation
 
 ### Obtain bootstrap weights
-
-<div id="cb7" class="sourceCode">
 
 ``` r
 boot_wts <- get.rescaled.bootstrap.weights(
@@ -269,16 +205,12 @@ boot_wts <- get.rescaled.bootstrap.weights(
 )
 ```
 
-</div>
-
 The result is a list with two elements:
 
--   **`orig_weights`** — a data frame with one row per respondent and a
-    `weight` column containing the original sampling weight
--   **`boot_weights`** — a data frame with one row per respondent and
-    columns `LABEL`, `boot_weight_1`, …, `boot_weight_500`
-
-<div id="cb8" class="sourceCode">
+- **`orig_weights`** — a data frame with one row per respondent and a
+  `weight` column containing the original sampling weight
+- **`boot_weights`** — a data frame with one row per respondent and
+  columns `LABEL`, `boot_weight_1`, …, `boot_weight_500`
 
 ``` r
 names(boot_wts)
@@ -294,18 +226,10 @@ boot_wts$boot_weights[1:5, 1:4]
 #> 5    18             0      20.83333      20.83333
 ```
 
-</div>
-
-</div>
-
-<div class="section level3">
-
 ### Compute estimates from bootstrap weights
 
 Join the survey data to the weight matrix, then apply your estimator for
 each replicate:
-
-<div id="cb9" class="sourceCode">
 
 ``` r
 # Merge survey data with bootstrap weights on the respondent id
@@ -323,21 +247,15 @@ sd(boot_totals)
 #> [1] 1607.395
 ```
 
-</div>
-
-</div>
-
-<div class="section level3">
-
 ### Scaling factors
 
 Pass `include_scaling_factors = TRUE` to also get the per-replicate
 weight scaling factors. Each bootstrap weight is the product of the
 original weight and the corresponding scaling factor:
 
-boot\_weight_(*i*, *r*) = orig\_weight_(*i*) × boot\_rep_(*i*, *r*)
-
-<div id="cb10" class="sourceCode">
+``` math
+\text{boot\_weight}_{i,r} = \text{orig\_weight}_i \times \text{boot\_rep}_{i,r}
+```
 
 ``` r
 boot_wts_sf <- get.rescaled.bootstrap.weights(
@@ -351,33 +269,22 @@ boot_wts_sf <- get.rescaled.bootstrap.weights(
 # boot_wts_sf$weight_scaling_factor has columns LABEL, boot_rep_1, ..., boot_rep_500
 ```
 
-</div>
-
 ------------------------------------------------------------------------
 
-</div>
-
-</div>
-
-<div class="section level2">
-
-Describing your survey design
------------------------------
+## Describing your survey design
 
 The `survey.design` argument is a formula that tells `surveybootstrap`
 which columns identify PSUs and strata.
 
-| Formula                           | Meaning                                                         |
-|-----------------------------------|-----------------------------------------------------------------|
-| `~ CL`                            | PSU is `CL`; no strata (one global stratum)                     |
-| `~ psu + strata(region)`          | PSU is `psu`; strata defined by `region`                        |
+| Formula | Meaning |
+|----|----|
+| `~ CL` | PSU is `CL`; no strata (one global stratum) |
+| `~ psu + strata(region)` | PSU is `psu`; strata defined by `region` |
 | `~ psu1 + psu2 + strata(s1 + s2)` | PSU uniquely identified by `(psu1, psu2)`; strata by `(s1, s2)` |
-| `~ 1`                             | Simple random sample — use `srs.bootstrap.sample` instead       |
+| `~ 1` | Simple random sample — use `srs.bootstrap.sample` instead |
 
 For a simple random sample, use `bootstrap.fn = "srs.bootstrap.sample"`
 and `survey.design = ~ 1`:
-
-<div id="cb11" class="sourceCode">
 
 ``` r
 srs_survey <- MU284.surveys[[1]]
@@ -392,16 +299,9 @@ boot_srs <- bootstrap.estimates(
 )
 ```
 
-</div>
-
 ------------------------------------------------------------------------
 
-</div>
-
-<div class="section level2">
-
-References
-----------
+## References
 
 Rao, J.N.K. and Wu, C.F.J. (1988). Resampling inference with complex
 survey data. *Journal of the American Statistical Association*, 83(401),
@@ -416,7 +316,3 @@ Research*, 5(3), 283–310. <https://doi.org/10.1177/096228029600500305>
 
 Sarndal, C.-E., Swensson, B. and Wretman, J. (2003). *Model Assisted
 Survey Sampling*. Springer. ISBN: 0387406204.
-
-</div>
-
-</div>

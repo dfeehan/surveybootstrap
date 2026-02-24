@@ -1,20 +1,8 @@
-<div id="main" class="col-md-9" role="main">
-
-rescaled.bootstrap.weights
-==========================
-
-<div class="ref-description section level2">
+# rescaled.bootstrap.weights
 
 Get a dataset of rescaled bootstrap weights.
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 get.rescaled.bootstrap.weights(
@@ -30,61 +18,47 @@ get.rescaled.bootstrap.weights(
 )
 ```
 
-</div>
+## Arguments
 
-</div>
+- survey.data:
 
-<div class="section level2">
+  The dataset to use
 
-Arguments
----------
+- survey.design:
 
--   survey.data:
+  A formula describing the design of the survey (see Details)
 
-    The dataset to use
+- idvar:
 
--   survey.design:
+  the name of the column in `survey.data` that has the respondent id
 
-    A formula describing the design of the survey (see Details)
+- weights:
 
--   idvar:
+  Survey weights to be rescaled (or `NULL`, if none)
 
-    the name of the column in `survey.data` that has the respondent id
+- parallel:
 
--   weights:
+  If `TRUE`, use parallelization (via `plyr`)
 
-    Survey weights to be rescaled (or `NULL`, if none)
+- paropts:
 
--   parallel:
+  An optional list of arguments passed on to `plyr` to control details
+  of parallelization
 
-    If `TRUE`, use parallelization (via `plyr`)
+- num.reps:
 
--   paropts:
+  The number of bootstrap replication samples to draw
 
-    An optional list of arguments passed on to `plyr` to control details
-    of parallelization
+- include_scaling_factors:
 
--   num.reps:
+  If `TRUE`, include `weight_scaling_factor` in the output
 
-    The number of bootstrap replication samples to draw
+- include_cc:
 
--   include\_scaling\_factors:
+  If `TRUE`, include cluster counts in the output. These cluster counts
+  are needed for jackknife after bootstrap calculations
 
-    If `TRUE`, include `weight_scaling_factor` in the output
-
--   include\_cc:
-
-    If `TRUE`, include cluster counts in the output. These cluster
-    counts are needed for jackknife after bootstrap calculations
-
-</div>
-
-<div class="section level2">
-
-Value
------
-
-<div class="sourceCode">
+## Value
 
     A list with entries:
 
@@ -106,14 +80,7 @@ Value
       the values of columns that specify the PSU (from the `survey.design` formula),
       and `cluster_count` (the number of times the given PSU was resampled))
 
-</div>
-
-</div>
-
-<div class="section level2">
-
-Details
--------
+## Details
 
 This is a new function being added as part of a refactor in v.0.2. This
 function focuses on being able to return a dataframe with bootstrap
@@ -126,13 +93,13 @@ counts.
 
 where:
 
--   `weight` is the variable with the survey weights
+- `weight` is the variable with the survey weights
 
--   `psu_vars` has the form `psu_v1 + psu_v2 + ...`, where primary
-    sampling units (PSUs) are determined by `psu_v1`, etc
+- `psu_vars` has the form `psu_v1 + psu_v2 + ...`, where primary
+  sampling units (PSUs) are determined by `psu_v1`, etc
 
--   `strata_vars` has the form `strata_v1 + strata_v2 + ...`, which
-    determine strata
+- `strata_vars` has the form `strata_v1 + strata_v2 + ...`, which
+  determine strata
 
 Note that we assume that the formula uniquely specifies PSUs. This will
 always be true if the PSUs were selected without replacement. If they
@@ -148,30 +115,24 @@ returned results, but its weight will be set to 0. It is therefore
 important to use estimators that make use of the estimation weights on
 the resampled datasets.
 
-We always take m\_i = n\_i - 1, according to the advice presented in Rao
+We always take m_i = n_i - 1, according to the advice presented in Rao
 and Wu (1988) and Rust and Rao (1996).
 
 (This is a C++ version; a previous version, written in pure R, is called
-`rescaled.bootstrap.sample.pureR()` )
+[`rescaled.bootstrap.sample.pureR()`](https://dfeehan.github.io/surveybootstrap/reference/rescaled.bootstrap.sample.pureR.md)
+)
 
 References:
 
--   Rust, Keith F., and J. N. K. Rao. "Variance estimation for complex
-    surveys using replication techniques." *Statistical methods in
-    medical research* 5.3 (1996): 283-310.
+- Rust, Keith F., and J. N. K. Rao. "Variance estimation for complex
+  surveys using replication techniques." *Statistical methods in medical
+  research* 5.3 (1996): 283-310.
 
--   Rao, Jon NK, and C. F. J. Wu. "Resampling inference with complex
-    survey data." *Journal of the American Statistical Association*
-    83.401 (1988): 231-241.
+- Rao, Jon NK, and C. F. J. Wu. "Resampling inference with complex
+  survey data." *Journal of the American Statistical Association* 83.401
+  (1988): 231-241.
 
-</div>
-
-<div class="section level2">
-
-Examples
---------
-
-<div class="sourceCode">
+## Examples
 
 ``` r
 survey <- MU284.complex.surveys[[1]]
@@ -182,9 +143,3 @@ boot_surveys <- get.rescaled.bootstrap.weights(survey.data = survey,
 #> Caused by error:
 #> ! argument "idvar" is missing, with no default
 ```
-
-</div>
-
-</div>
-
-</div>

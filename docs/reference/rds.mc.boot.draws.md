@@ -1,9 +1,4 @@
-<div id="main" class="col-md-9" role="main">
-
-Draw RDS bootstrap resamples using the algorithm in Salganik 2006 (see Details below)
-=====================================================================================
-
-<div class="ref-description section level2">
+# Draw RDS bootstrap resamples using the algorithm in Salganik 2006 (see Details below)
 
 This algorithm picks a respondent from the survey to be a seed uniformly
 at random. it then generates a bootstrap draw by simulating the markov
@@ -14,68 +9,39 @@ original dataset other than the traits and degree, then you must specify
 this when you construct `dd` using the '`estimate.degree.distns`
 function.
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 rds.mc.boot.draws(chains, mm, dd, num.reps)
 ```
 
-</div>
+## Arguments
 
-</div>
+- chains:
 
-<div class="section level2">
+  A list with the chains constructed from the survey using `make.chain`
 
-Arguments
----------
+- mm:
 
--   chains:
+  The mixing model
 
-    A list with the chains constructed from the survey using
-    `make.chain`
+- dd:
 
--   mm:
+  The degree distributions
 
-    The mixing model
+- num.reps:
 
--   dd:
+  The number of bootstrap resamples we want
 
-    The degree distributions
-
--   num.reps:
-
-    The number of bootstrap resamples we want
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 A list of length `num.reps`; each entry in the list has one
 bootstrap-resampled dataset
 
-</div>
-
-<div class="section level2">
-
-Details
--------
+## Details
 
 See:
 
--   Salganik, Matthew J. "Variance estimation, design effects, and
-    sample size calculations for respondent-driven sampling." *Journal
-    of Urban Health* 83.1 (2006): 98-112.
-
-</div>
-
-</div>
+- Salganik, Matthew J. "Variance estimation, design effects, and sample
+  size calculations for respondent-driven sampling." *Journal of Urban
+  Health* 83.1 (2006): 98-112.

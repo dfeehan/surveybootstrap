@@ -1,67 +1,39 @@
-<div id="main" class="col-md-9" role="main">
-
-Take a set of traits and turn into a string
-===========================================
-
-<div class="ref-description section level2">
+# Take a set of traits and turn into a string
 
 This is a helper function that is useful when we wish to make several
 traits into one variable
 
-</div>
-
-<div class="section level2">
-
-Usage
------
-
-<div class="sourceCode">
+## Usage
 
 ``` r
 traits.to.string(data, traits, na.action = "drop", sep = ".")
 ```
 
-</div>
+## Arguments
 
-</div>
+- data:
 
-<div class="section level2">
+  The respondent info
 
-Arguments
----------
+- traits:
 
--   data:
+  The names of the traits to build the model on
 
-    The respondent info
+- na.action:
 
--   traits:
+  Defaults to 'drop' (meaning all rows of data with any missingness on
+  the traits are dropped). Anything else means `NA`s are treated like
+  any other value.
 
-    The names of the traits to build the model on
+- sep:
 
--   na.action:
+  The separator character used to combine values
 
-    Defaults to 'drop' (meaning all rows of data with any missingness on
-    the traits are dropped). Anything else means `NA`s are treated like
-    any other value.
-
--   sep:
-
-    The separator character used to combine values
-
-</div>
-
-<div class="section level2">
-
-Value
------
+## Value
 
 A list whose entries are
 
--   `used.idx`, which indicates which rows from the original dataset
-    were used (may not be all of them if there is missingness); and
+- `used.idx`, which indicates which rows from the original dataset were
+  used (may not be all of them if there is missingness); and
 
--   `traits`, which has the string version of the traits
-
-</div>
-
-</div>
+- `traits`, which has the string version of the traits
