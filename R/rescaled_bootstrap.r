@@ -462,7 +462,7 @@ rescaled.bootstrap.sample <- function(survey.data,
   # NB: this is now returning a list of tibbles, instead of
   #     a list of data frames
   res_wf <- purrr::map(wf_all_strata[,-1],
-                       ~ tibble(index = wf_all_strata[,1],
+                       ~ tibble(index = wf_all_strata[[1]],
                                 weight.scale = .x))
 
   # if we are supposed to return cluster counts as well as weight factors...                                
