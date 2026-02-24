@@ -95,7 +95,7 @@
 #'
 get.rescaled.bootstrap.weights <- function(survey.data,
                                            survey.design,
-                                           idvar,
+                                           idvar=NULL,
                                            weights=NULL,
                                            parallel=FALSE,
                                            paropts=NULL,
@@ -120,6 +120,9 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   }
   psu.var.names <- all.vars(psu.vars)
 
+  ## idvar is optional; normalise to character(0) when not supplied
+  if (is.null(idvar)) idvar <- character(0)
+
   ## get the weights
   weights <- get.weights(survey.data, weights)
 
@@ -135,7 +138,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   # original weights
   ## can be useful for debugging
   orig_weights <- survey.data %>%
-    select(.internal_id, .cluster_id, any_of(psu.var.names), one_of(idvar))
+    select(.internal_id, .cluster_id, any_of(psu.var.names), any_of(idvar))
   orig_weights$weight <- weights
 
   ## save the cluster mapping to return
@@ -160,7 +163,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
   #     - the bootstrap resamples (see the note for the inner llply call below)
   #     - the cluster counts
   #bs <- plyr::llply(strata,
-  bs <- purrr:::map(strata,
+  bs <- purrr::map(strata,
             function(stratum.data) {
 
               n_psu <- length(unique(stratum.data$.cluster_id))
@@ -232,7 +235,7 @@ get.rescaled.bootstrap.weights <- function(survey.data,
 
     wf_all_strata <- wf_all_strata %>%
       # put the original id back on
-      left_join(orig_weights %>% select(index=.internal_id, one_of(idvar)), by='index') %>%
+      left_join(orig_weights %>% select(index=.internal_id, any_of(idvar)), by='index') %>%
       select(any_of(idvar), everything(), -index)
 
     # rename "rep.1", "rep.2", ... cols -> "boot_rep_1", "boot_rep_2", ...
@@ -417,7 +420,7 @@ rescaled.bootstrap.sample <- function(survey.data,
   #     - the bootstrap resamples (see the note for the inner llply call below)
   #     - the cluster counts
   #bs <- plyr::llply(strata,
-  bs <- purrr:::map(strata,
+  bs <- purrr::map(strata,
             function(stratum.data) {
 
               n_psu <- length(unique(stratum.data$.cluster_id))

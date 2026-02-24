@@ -7,7 +7,7 @@
 get.rescaled.bootstrap.weights(
   survey.data,
   survey.design,
-  idvar,
+  idvar = NULL,
   weights = NULL,
   parallel = FALSE,
   paropts = NULL,

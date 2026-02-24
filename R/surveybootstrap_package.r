@@ -16,3 +16,5 @@
 ##' @importFrom Rcpp sourceCpp
 NULL
 
+utils::globalVariables(c(".internal_id", ".cluster_id", "index", "psu_index"))
+

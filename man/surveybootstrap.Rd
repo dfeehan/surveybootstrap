@@ -11,6 +11,16 @@
 using network reporting techniques. It includes estimators appropriate for
 the simple bootstrap and the rescaled bootstrap.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://dfeehan.github.io/surveybootstrap/}
+  \item \url{https://github.com/dfeehan/surveybootstrap}
+  \item \url{http://dennisfeehan.org/surveybootstrap/}
+  \item Report bugs at \url{https://github.com/dfeehan/surveybootstrap/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Dennis M. Feehan \email{feehan@berkeley.edu}
 

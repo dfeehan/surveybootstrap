@@ -13,8 +13,6 @@ cran-comments.md
 surveybootstrap-dev.r
 
 
-vignettes/draft
-vignettes/
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^CRAN-SUBMISSION$
@@ -23,3 +21,4 @@ vignettes/
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.claude$
