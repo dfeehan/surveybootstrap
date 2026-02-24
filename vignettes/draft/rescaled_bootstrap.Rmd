@@ -1,6 +1,8 @@
 ---
 title: "The rescaled bootstrap"
-author: "Dennis M. Feehan"
+author: 
+  - "Dennis M. Feehan"
+  - 'with assistance from Calude Opus 4.6'
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -22,10 +24,11 @@ This vignette demonstrates the basic functionality of the `surveybootstrap`
 package.  The goal is to illustrate how to use the **rescaled bootstrap** (Rao
 and Wu 1988; Rust and Rao 1996) to take bootstrap resamples from a survey
 dataset when the survey sample has a complex design.
-The **rescaled bootstrap** handles complex
-designs by resampling at the level of the primary sampling unit (PSU) and
-adjusting the sampling weights of every observation in each bootstrap replicate.
-Specifically, in each replicate it draws $m_i = n_i - 1$ PSUs with replacement
+
+The **rescaled bootstrap** handles complex designs by resampling at the level of
+the primary sampling unit (PSU) and adjusting the sampling weights of every
+observation in each bootstrap replicate.
+Specifically, for each bootstrap resample, we draw $m_i = n_i - 1$ PSUs with replacement
 from the $n_i$ PSUs in stratum $i$, and rescales the observation weights to
 reflect how many times each PSU was selected.  
 This package implements the rescaled bootstrap in C++ (via Rcpp) for speed.
@@ -45,7 +48,7 @@ municipalities.  Relevant columns include:
 |---------|-------------|
 | `LABEL` | Municipality ID |
 | `S82`   | Total seats in municipal council |
-| `RMT85` | Municipal tax revenue, 1985 |
+| `RMT85` | Municipal tax revenue, 1985 (in millions of Kronor) |
 | `P85`   | Population, 1985 (in thousands) |
 | `CL`    | Cluster indicator (a set of neighboring municipalities) |
 
@@ -69,7 +72,14 @@ head(survey[, c("LABEL", "CL", "S82", "RMT85", "P85", "sample_weight")])
 
 ---
 
-## Path 1: `bootstrap.estimates()` 
+There are two ways to use the package:
+
+* [Path 1: specifying a function to produce and estimate from data with bootstrap weights](#Path-1) 
+* [Path 2: getting a matrix of bootstrap weights](#Path-2) 
+
+---
+
+## Path 1: `bootstrap.estimates()`  <a name="Path-1"></a>
 
 `bootstrap.estimates()` is the highest-level interface.  You supply an estimator
 function and a bootstrap method; it returns bootstrap replicate estimates that you
@@ -164,7 +174,7 @@ legend("topright", legend = "Point estimate", col = "firebrick",
 
 ---
 
-## Path 2: `get.rescaled.bootstrap.weights()` — weight-matrix API
+## Path 2: `get.rescaled.bootstrap.weights()`  <a name="Path-2"></a>
 
 Sometimes it is more convenient to obtain a matrix of bootstrap weights directly
 and then apply your estimator(s) yourself.  This is useful when:
