@@ -61,3 +61,5 @@ Wishlist
 
 * update to use the `purrr` package, instead of `plyr` (but we'll probably need to wait until `purrr` supports parallelization)
 
+* there are two functions: `rescaled.bootstrap.weights` and `get.rescaled.bootstrap.weights`; only need the first one - cleanly remove the second
+
